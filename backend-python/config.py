@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 class Config:
     DEBUG = True
     SQLALCHEMY_DATABASE_URI = 'sqlite:///dinehub.db'
