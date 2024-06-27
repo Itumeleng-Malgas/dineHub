@@ -3,12 +3,14 @@ import React, { useState, useEffect } from 'react';
 import { Input, Row, Col, Select, Button } from 'antd';
 import { EnvironmentOutlined, SearchOutlined } from '@ant-design/icons';
 import { Country, State, City } from 'country-state-city';
+import RestaurantList from './RestaurantList';
+import { Restaurant } from './data/restaurants';
+import { mockRestaurants } from './data/restaurants';
 
 const { Option } = Select;
 
 export interface SearchCriteria {
-  restaurantName: string;
-  cuisine: string;
+  restaurantNameCuisine: string;
   location: {
     selectedCountry: string;
     selectedState: string;
@@ -21,13 +23,15 @@ interface SearchBarProps {
 }
 
 const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
-  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [restaurantNameCuisine, setRestaurantNameCuisine] = useState<string>('');
   const [selectedCountry, setSelectedCountry] = useState<string>('');
   const [selectedState, setSelectedState] = useState<string>('');
   const [selectedCity, setSelectedCity] = useState<string>('');
   const [countries, setCountries] = useState<any[]>([]);
   const [states, setStates] = useState<any[]>([]);
   const [cities, setCities] = useState<any[]>([]);
+  const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
+  const [filteredRestaurants, setFilteredRestaurants] = useState<Restaurant[]>([]);
 
   useEffect(() => {
     setCountries(Country.getAllCountries());
@@ -46,7 +50,27 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
   }, [selectedState]);
 
   const handleSearch = () => {
-    onSearch({ restaurantName: searchQuery, cuisine: searchQuery, location: { selectedCountry, selectedState, selectedCity } });
+    const searchCriteria: SearchCriteria = {
+      restaurantNameCuisine,
+      location: { selectedCountry, selectedState, selectedCity }
+    };
+
+    const filteredRestaurants = mockRestaurants.filter((restaurant) => {
+      const matchesNameCuisine = restaurant.name
+        .toLowerCase()
+        .includes(restaurantNameCuisine.toLowerCase()) ||
+        restaurant.cuisine.toLowerCase().includes(restaurantNameCuisine.toLowerCase());
+
+      const matchesLocation = restaurant.city === selectedCity ||
+        restaurant.state === selectedState ||
+        restaurant.country === selectedCountry;
+
+
+      return matchesNameCuisine && matchesLocation;
+    });
+
+    setRestaurants(filteredRestaurants);
+    onSearch(searchCriteria);
   };
 
   return (
@@ -57,8 +81,8 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
           <Input
             size="large"
             placeholder="Search for restaurants, cuisines, etc."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            value={restaurantNameCuisine}
+            onChange={(e) => setRestaurantNameCuisine(e.target.value)}
             className="w-full"
             prefix={<SearchOutlined />}
           />
@@ -123,6 +147,9 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
       >
         Search
       </Button>
+      <RestaurantList restaurants={restaurants} onRestaurantClick={function (): void {
+        throw new Error('Function not implemented.');
+      }} />
     </div>
   );
 };

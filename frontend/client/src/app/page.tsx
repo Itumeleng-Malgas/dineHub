@@ -24,17 +24,17 @@ export default function Home() {
     setIsModalVisible(false);
   };
 
-  const handleSearch = ({ restaurantName, cuisine, location }: SearchCriteria) => {
+  const handleSearch = ({ restaurantNameCuisine, location }: SearchCriteria) => {
     const { selectedCountry, selectedState, selectedCity } = location;
     const filtered = mockRestaurants.filter((restaurant) => {
       return (
-        (restaurantName ? restaurant.name.toLowerCase().includes(restaurantName.toLowerCase()) : true) &&
-        (cuisine ? restaurant.cuisine.toLowerCase().includes(cuisine.toLowerCase()) : true) &&
+        (restaurantNameCuisine ? restaurant.name.toLowerCase().includes(restaurantNameCuisine.toLowerCase()) : true) &&
         (selectedCountry ? restaurant.country === selectedCountry : true) &&
         (selectedState ? restaurant.state === selectedState : true) &&
         (selectedCity ? restaurant.city === selectedCity : true)
       );
     });
+    
     setFilteredRestaurants(filtered);
   };
 
