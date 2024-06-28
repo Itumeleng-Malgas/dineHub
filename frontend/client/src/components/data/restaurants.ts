@@ -87,7 +87,7 @@ export const mockRestaurants: Restaurant[] = [
         state: "GP",
         city: "Johannesburg",
         imageUrl: "/wors.png",
-        gallery: ["/Sbraa.png", "/beef.jpeg", "/grill.png", "steak.png"],
+        gallery: ["/Sbraai.png", "/beef.jpeg", "/sal.png", "steak.png"],
         rating: 4.5,
         preview: "Step into the vibrant heart of South Africa at Braai Republic. Indulge in the smoky aromas and delectable flavors of our world-renowned braai (barbecue) dishes, prepared with the finest local ingredients and traditional recipes.",
         menu: [
