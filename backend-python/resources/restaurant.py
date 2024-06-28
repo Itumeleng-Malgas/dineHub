@@ -32,6 +32,16 @@ class RestaurantResource(Resource):
         return {'id': str(restaurant_id), 'name': data['name'], 'location': data['location'], 'contact_info': data['contact_info']}, 201
 
     def put(self, restaurant_id):
+        """
+        Updates a restaurant with the given `restaurant_id` with the provided `data`.
+
+        Parameters:
+            restaurant_id (str): The ID of the restaurant to update.
+
+        Returns:
+            dict: A dictionary containing the updated restaurant's ID, name, location, and contact info.
+                  If the restaurant is not found, a dictionary with a 'message' key and a 404 status code is returned.
+        """
         data = request.get_json()
         updated_restaurant = db.restaurants.find_one_and_update(
             {"_id": ObjectId(restaurant_id)},

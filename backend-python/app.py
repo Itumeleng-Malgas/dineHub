@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from flask import Flask
+from flask_cors import CORS
 from flask_restful import Api
 from config import Config
 from resources.restaurant import RestaurantResource
@@ -11,6 +12,8 @@ from resources.menu import MenuResource
 app = Flask(__name__)
 app.config.from_object(Config)
 api = Api(app)
+
+cors=CORS(app, resources={r"/*": {"origins": "*"}})
 
 # Endpoint to get a specific restaurant by ID
 api.add_resource(RestaurantResource, '/restaurants', '/restaurants/<string:restaurant_id>')
