@@ -4,18 +4,17 @@
 from flask import Flask
 from flask_restful import Api
 from config import Config
-from models import db
 from resources.restaurant import RestaurantResource
+from resources.menu import MenuResource
+
 
 app = Flask(__name__)
 app.config.from_object(Config)
 api = Api(app)
-db.init_app(app)
 
-with app.app_context():
-    db.create_all()
-
-api.add_resource(RestaurantResource, '/restaurants')
+# Endpoint to get a specific restaurant by ID
+api.add_resource(RestaurantResource, '/restaurants', '/restaurants/<string:restaurant_id>')
+api.add_resource(MenuResource, '/menus', '/menus/<string:menu_id>')
 
 if __name__ == '__main__':
     app.run(debug=True)
