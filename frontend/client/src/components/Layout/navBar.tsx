@@ -12,6 +12,8 @@ import { NavMenu } from './navMenu'
 export const NavBar = () => {
   const router = useRouter();
   const { userId } = useAuth();
+
+
   return (
     <div className='sticky top-0 border border-b primary/10 bg-secondary z-20'>
       <Container>

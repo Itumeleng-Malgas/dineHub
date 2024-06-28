@@ -35,7 +35,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
 
   useEffect(() => {
     setCountries(Country.getAllCountries());
-  }, []);
+  }, [selectedCountry]);
 
   useEffect(() => {
     if (selectedCountry) {
@@ -47,8 +47,9 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
     if (selectedState) {
       setCities(City.getCitiesOfState(selectedCountry, selectedState));
     }
-  }, [selectedState]);
+  }, [selectedCountry, selectedState]);
 
+  
   const handleSearch = () => {
     const searchCriteria: SearchCriteria = {
       restaurantNameCuisine,

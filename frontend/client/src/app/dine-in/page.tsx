@@ -3,6 +3,10 @@ import { Layout, Input, Button, Row, Col, Card, Modal } from 'antd';
 import { EnvironmentOutlined, HeartOutlined } from '@ant-design/icons';
 import React, { useState } from 'react';
 import FooterComponent from '@/components/Layout/Footer';
+import Image from 'next/image';
+
+import dynamic from 'next/dynamic';
+import LazySection from '@/components/LazySection';
 
 const { Header, Content, Footer } = Layout;
 const { Search } = Input;
@@ -59,7 +63,7 @@ const mockRestaurants: Restaurant[] = [
         imageUrl: "/wors.png",
         gallery: ["/Sbraa.png", "/beef.jpeg", "/grill.png", "steak.png"],
         rating: 4.5,
-        preview:  "Step into the vibrant heart of South Africa at Braai Republic. Indulge in the smoky aromas and delectable flavors of our world-renowned braai (barbecue) dishes, prepared with the finest local ingredients and traditional recipes.",
+        preview: "Step into the vibrant heart of South Africa at Braai Republic. Indulge in the smoky aromas and delectable flavors of our world-renowned braai (barbecue) dishes, prepared with the finest local ingredients and traditional recipes.",
         menu: [
             { item: "Boerewors Suasage Platter", price: 250 },
             { item: "Grilled Ostrich Steak", price: 200 },
@@ -70,7 +74,7 @@ const mockRestaurants: Restaurant[] = [
             { user: "Kuhle", rating: 5, comment: "Absolutely amazing! The best BBQ I've ever had." },
             { user: "Themba", rating: 4.9, comment: "The boerewors sausage is the best I've ever tasted, just like back home in South Africa!" },
             { user: "Nicole", rating: 4, comment: "Great food, but the service could be better." },
-            { user: "Inno", rating: 4.5, comment: "The grilled ostrich steak was a delightful surprise. The flavors are truly authentic."},
+            { user: "Inno", rating: 4.5, comment: "The grilled ostrich steak was a delightful surprise. The flavors are truly authentic." },
         ],
     },
 
@@ -79,7 +83,7 @@ const mockRestaurants: Restaurant[] = [
         description: "Best BBQ in town",
         location: "456 Maple St, Sandton",
         imageUrl: "/thee.jpeg",
-        gallery: ["/dd.jpeg", "/steak.jpeg", "/two.jpeg", "/grill.jpeg"],
+        gallery: ["/dd.jpeg", "/steak.jpeg", "/two.jpeg", "/grill.png"],
         rating: 4.5,
         preview: "Experience the finest grilled meats and authentic BBQ flavors at House of Grill. Our chefs use only the freshest ingredients to create mouthwatering dishes that will leave you craving more.",
         menu: [
@@ -95,7 +99,7 @@ const mockRestaurants: Restaurant[] = [
             { user: "tekoh", rating: 4.5, comment: "Highly recommended for any meat lover!" },
         ],
     },
-    
+
     {
         name: "Pasta Paradise",
         description: "Fresh sushi rolls and sashimi",
@@ -112,7 +116,7 @@ const mockRestaurants: Restaurant[] = [
         ],
         reviews: [
             { user: "Ebuka", rating: 5, comment: "This is the best Italian food I've had outside of Italy. The pasta is cooked to perfection!" },
-            { user: "Noble", rating: 4.5, comment: "The tiramisu was absolutely divine. I will be back for more!"},
+            { user: "Noble", rating: 4.5, comment: "The tiramisu was absolutely divine. I will be back for more!" },
             { user: "Nonku", rating: 4, comment: "Great food, but the service could be better." },
             { user: "Amanda", rating: 4.5, comment: "The atmosphere is so cozy and authentic. The service was also top-notch." },
         ],
@@ -129,18 +133,18 @@ const mockRestaurants: Restaurant[] = [
             { item: "Jallof Rice", price: 80 },
             { item: "Fries Rice", price: 100 },
             { item: "Egusi", price: 120 },
-            { item: "Kelewele (Fried Plantains", price : 90 },
+            { item: "Kelewele (Fried Plantains", price: 90 },
             { item: "Beef Suya", price: 100 },
         ],
         reviews: [
             { user: "Ayomide", rating: 5, comment: "The flavors at Afro Fusion are simply divine. It's like a culinary journey through Africa." },
             { user: "Simie", rating: 4, comment: "Great food and service. Highly recommend Egusi soup!" },
             { user: "Ebube", rating: 4.5, comment: "This place captures the essence of African cuisine perfectly. Highly recommended!" },
-            { user: "Joe", rating: 4, comment:  "The atmosphere is warm and inviting, and the staff is extremely knowledgeable and helpful." },
+            { user: "Joe", rating: 4, comment: "The atmosphere is warm and inviting, and the staff is extremely knowledgeable and helpful." },
         ],
     },
-    
-   
+
+
     // ... other restaurant objects
 ];
 
@@ -195,7 +199,7 @@ export default function Home() {
                                 hoverable
                                 cover={
                                     <div className="relative">
-                                        <img alt={restaurant.name} src={restaurant.imageUrl} className="w-full h-48 object-cover" />
+                                        <Image alt={restaurant.name} src={restaurant.imageUrl} className="w-full h-48 object-cover" />
                                         <HeartOutlined className="absolute top-2 right-2 text-white text-2xl bg-black bg-opacity-50 rounded-full p-2 cursor-pointer" />
                                     </div>
                                 }
@@ -218,6 +222,7 @@ export default function Home() {
                         </Col>
                     ))}
                 </Row>
+                <LazySection />
             </Content>
             <Footer className="text-center bg-indigo-900 text-white p-4">
                 <FooterComponent />
@@ -233,7 +238,7 @@ export default function Home() {
                 >
                     <div className="grid grid-cols-2 gap-8">
                         <div>
-                            <img src={selectedRestaurant.imageUrl} alt={selectedRestaurant.name} className="w-full h-full object-cover" />
+                            <Image src={selectedRestaurant.imageUrl} alt={selectedRestaurant.name} className="w-full h-full object-cover" />
                         </div>
                         <div>
                             <h2 className="text-2xl font-bold mb-4">{selectedRestaurant.name}</h2>
@@ -245,7 +250,7 @@ export default function Home() {
                             <h3 className="text-lg font-bold mb-4">Restaurant Gallery</h3>
                             <div className="grid grid-cols-2 gap-4">
                                 {selectedRestaurant.gallery.map((image, index) => (
-                                    <img key={index} src={image} alt={`Gallery ${index}`} className="w-full h-32 object-cover" />
+                                    <Image key={index} src={image} alt={`Gallery ${index}`}  className="w-full h-32 object-cover" />
                                 ))}
                             </div>
                             <h3 className="text-lg font-bold mb-4 mt-4">Menu</h3>

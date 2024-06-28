@@ -2,6 +2,7 @@ import React from 'react';
 import { Modal, Button } from 'antd';
 import { EnvironmentOutlined } from '@ant-design/icons';
 import { Restaurant } from '@/components/data/restaurants';
+import Image from 'next/image';
 
 interface RestaurantModalProps {
     restaurant: Restaurant | null;
@@ -22,7 +23,7 @@ const RestaurantModal: React.FC<RestaurantModalProps> = ({ restaurant, isVisible
         >
             <div className="grid grid-cols-2 gap-8">
                 <div>
-                    <img src={restaurant.imageUrl} alt={restaurant.name} className="w-full h-full object-cover" />
+                    <Image src={restaurant.imageUrl} alt={restaurant.name} className="w-full h-full object-cover" />
                 </div>
                 <div>
                     <h2 className="text-2xl font-bold mb-4">{restaurant.name}</h2>
@@ -34,7 +35,7 @@ const RestaurantModal: React.FC<RestaurantModalProps> = ({ restaurant, isVisible
                     <h3 className="text-lg font-bold mb-4">Restaurant Gallery</h3>
                     <div className="grid grid-cols-2 gap-4">
                         {restaurant.gallery.map((image, index) => (
-                            <img key={index} src={image} alt={`Gallery ${index}`} className="w-full h-32 object-cover" />
+                            <Image key={index} src={image} alt={`Gallery ${index}`} className="w-full h-32 object-cover" />
                         ))}
                     </div>
                     <h3 className="text-lg font-bold mb-4 mt-4">Menu</h3>

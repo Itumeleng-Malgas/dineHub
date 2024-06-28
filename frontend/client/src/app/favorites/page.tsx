@@ -4,6 +4,7 @@ import { EnvironmentOutlined, SearchOutlined, HeartOutlined } from '@ant-design/
 import React, { useState } from 'react';
 import FooterComponent from '@/components/Layout/Footer';
 import { UploadButton } from '@/utils/uploadthing';
+import Image from 'next/image';
 
 const { Header, Content, Footer } = Layout;
 const { Search } = Input;
@@ -77,7 +78,7 @@ export default function Home() {
                         <Col xs={24} sm={12} md={8} key={index}>
                             <Card
                                 hoverable
-                                cover={<img alt={restaurant.name} src={restaurant.imageUrl} />}
+                                cover={<Image alt={restaurant.name} src={restaurant.imageUrl} />}
                                 className="mb-5 shadow-md"
                             >
                                 <Card.Meta

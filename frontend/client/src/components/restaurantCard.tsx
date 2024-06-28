@@ -1,6 +1,7 @@
 'use client';
 import React from 'react';
 import { Card, Button } from 'antd';
+import Image from 'next/image';
 import { HeartOutlined } from '@ant-design/icons';
 import { Restaurant } from '@/components/data/restaurants';
 
@@ -15,7 +16,7 @@ const RestaurantCard: React.FC<RestaurantCardProps> = ({ restaurant, onClick }) 
       hoverable
       cover={
         <div className="relative">
-          <img alt={restaurant.name} src={restaurant.imageUrl} className="w-full h-48 object-cover" />
+          <Image alt={restaurant.name} src={restaurant.imageUrl} className="w-full h-48 object-cover" />
           <HeartOutlined className="absolute top-2 right-2 text-white text-2xl bg-black bg-opacity-50 rounded-full p-2 cursor-pointer" />
         </div>
       }
