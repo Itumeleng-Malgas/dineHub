@@ -5,6 +5,7 @@ import { Card, Button } from 'antd';
 import Image from 'next/image';
 import { HeartFilled, HeartOutlined } from '@ant-design/icons';
 import { Restaurant } from '@/components/data/restaurants';
+import { useRouter } from 'next/navigation';
 
 interface RestaurantCardProps {
   restaurant: Restaurant;
@@ -14,12 +15,19 @@ interface RestaurantCardProps {
 }
 
 const RestaurantCard: React.FC<RestaurantCardProps> = ({ restaurant, onClick, isFavorite, onFavoriteClick }) => {
+  const router = useRouter();
+
+  const handleBookNowClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    router.push('/booking');
+  };
+  
   return (
     <Card
       hoverable
       cover={
         <div className="relative">
-          <Image alt={restaurant.name} src={restaurant.imageUrl} width={500} height={300} className="w-full h-48 object-cover" />
+          <Image alt={restaurant.name} src={restaurant.imageUrl} width={100} height={200} className="w-full h-48 object-cover" />
           <div onClick={(e) => { e.stopPropagation(); onFavoriteClick(restaurant); }}>
             {isFavorite ? (
               <HeartFilled className="absolute top-2 right-2 text-white text-2xl bg-white bg-opacity-50 rounded-full p-2 cursor-pointer" />
@@ -41,7 +49,7 @@ const RestaurantCard: React.FC<RestaurantCardProps> = ({ restaurant, onClick, is
           </div>
         }
       />
-      <Button type="primary" className="mt-4 bg-indigo-900 border-indigo-900">
+      <Button type="primary" className="mt-4 bg-indigo-900 border-indigo-900" onClick={handleBookNowClick}>
         Book Tonight
       </Button>
     </Card>

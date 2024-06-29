@@ -37,7 +37,7 @@ export const mockRestaurants: Restaurant[] = [
         state: "GP",
         city: "Sandton",
         imageUrl: "/dd.jpeg",
-        gallery: ["/sushi.jpeg", "/mainpic.jpeg", "/wine.jpeg", "th.jpeg"],
+        gallery: ["/sushi.jpeg", "/mainpic.jpeg", "/wine.jpeg", "/th.jpeg"],
         rating: 4.5,
         preview: "Experience the finest grilled meats and authentic BBQ flavors at House of Grill. Our chefs use only the freshest ingredients to create mouthwatering dishes that will leave you craving more.",
         menu: [
