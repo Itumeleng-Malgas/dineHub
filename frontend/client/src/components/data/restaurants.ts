@@ -11,6 +11,7 @@ export interface Review {
 
 export interface Restaurant {
     [x: string]: any;
+    id: number;
     name: string;
     description: string;
     location: string;
@@ -28,6 +29,7 @@ export interface Restaurant {
 
 export const mockRestaurants: Restaurant[] = [
     {
+        id: 1,
         name: "House of Grill",
         description: "Best BBQ in town",
         location: "123 Main St, Sandton",
@@ -54,6 +56,7 @@ export const mockRestaurants: Restaurant[] = [
         county: ""
     },
     {
+        id: 2,
         name: "Solo Pizza",
         description: "Authentic Italian pizza and pasta",
         location: "13 Vista St, Rosebank",
@@ -80,6 +83,7 @@ export const mockRestaurants: Restaurant[] = [
 
     },
     {
+        id: 3,
         name: "Braai Master's",
         description: "Authentic South African braai experience",
         location: "159 Jacaranda Blvd, Rietfontein, Pretoria",
@@ -107,6 +111,7 @@ export const mockRestaurants: Restaurant[] = [
     },
 
     {
+        id: 4,
         name: "LIFE GRAND",
         description: "Best BBQ in town",
         location: "456 Maple St, Sandton",
@@ -133,6 +138,7 @@ export const mockRestaurants: Restaurant[] = [
     },
 
     {
+        id: 5,
         name: "Ebuka's Corner",
         description: "Best BBQ in town",
         location: "456 Maple St, Sandton",
@@ -160,6 +166,7 @@ export const mockRestaurants: Restaurant[] = [
 
 
     {
+        id: 6,
         name: "Pasta Paradise",
         description: "Fresh sushi rolls and sashimi",
         location: "789 Oak St, Durban",
@@ -186,6 +193,7 @@ export const mockRestaurants: Restaurant[] = [
 
     },
     {
+        id: 7,
         name: "Afro Fusion",
         description: "Authentic African cuisine with a modern twist",
         location: "45 7th street, Randburg",

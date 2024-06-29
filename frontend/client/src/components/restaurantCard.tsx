@@ -1,3 +1,4 @@
+
 'use client';
 import React from 'react';
 import { Card, Button } from 'antd';
@@ -7,35 +8,25 @@ import { Restaurant } from '@/components/data/restaurants';
 
 interface RestaurantCardProps {
   restaurant: Restaurant;
+  onClick: (restaurant: Restaurant) => void;
   isFavorite: boolean;
   onFavoriteClick: (restaurant: Restaurant) => void;
-  onClick: (restaurant: Restaurant) => void;
 }
 
-const RestaurantCard: React.FC<RestaurantCardProps> = ({ restaurant, isFavorite, onFavoriteClick, onClick }) => {
-  const handleFavoriteClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    onFavoriteClick(restaurant);
-  };
-  
+const RestaurantCard: React.FC<RestaurantCardProps> = ({ restaurant, onClick, isFavorite, onFavoriteClick }) => {
   return (
     <Card
       hoverable
       cover={
         <div className="relative">
-          <Image alt={restaurant.name} src={restaurant.imageUrl} width={300}
-            height={200}  className="w-full h-48 object-cover" />
-          {isFavorite ? (
-            <HeartFilled
-              className="absolute top-2 right-2 text-red-500 text-2xl bg-white bg-opacity-75 rounded-full p-2 cursor-pointer"
-              onClick={handleFavoriteClick}
-            />
-          ) : (
-            <HeartOutlined
-              className="absolute top-2 right-2 text-white text-2xl bg-black bg-opacity-50 rounded-full p-2 cursor-pointer"
-              onClick={handleFavoriteClick}
-            />
-          )}
+          <Image alt={restaurant.name} src={restaurant.imageUrl} width={500} height={300} className="w-full h-48 object-cover" />
+          <div onClick={(e) => { e.stopPropagation(); onFavoriteClick(restaurant); }}>
+            {isFavorite ? (
+              <HeartFilled className="absolute top-2 right-2 text-white text-2xl bg-white bg-opacity-50 rounded-full p-2 cursor-pointer" />
+            ) : (
+              <HeartOutlined className="absolute top-2 right-2 text-white text-2xl bg-black bg-opacity-50 rounded-full p-2 cursor-pointer" />
+            )}
+          </div>
         </div>
       }
       className="mb-5 shadow-md"
