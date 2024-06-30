@@ -1,0 +1,9 @@
+from models.base_model import BaseModel
+from models.client import Client
+from models.normal_client import Normal_client
+from models.registered_client import Registered_client, Diet_Type, Meal_Preference, Drink_Preference
+from datetime import datetime
+nc = {'email':'tekohpalma@gmail.com', 'telephone':'679800261', 'first_name':'tekoh', 'last_name':'Palma'}
+rc  = {'email':'tekohpalma@gmail.com', 'telephone':'679800261', 'first_name':'tekoh', 'last_name':'Palma', 'password': "cyanide", 'diet_type' : "vegan" , "meal_preference" : "traditional", "drink_preference" : "natural"}
+
+rcc  = {'email':'tekohpalma@gmail.com', 'telephone':'679800261', 'first_name':'tekoh', 'last_name':'Palma', 'password': "cyanide", 'diet_type' : Diet_Type.VEGAN.value, "meal_preference" : Meal_Preference.TRADITIONAL.value, "drink_preference" : Drink_Preference.NATURAL.value}

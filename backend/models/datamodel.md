@@ -1,0 +1,20 @@
+## Relational Data Model of Dine-Hub
+- User { user_id, date_created, last_updated }
+- Admin { admin_id, user_id, date_created, last_updated, status(Active, Inactive), email, password, first_name, last_name,last_checkin}
+- Client {client_id, user_id, date_created, last_updated, last_checkin, first_checkin }
+- Normal_client { normal_client_id, cleint_id, email, telephone, first_name, last_name }
+- Registered_client {registered_cleint_id, client_id, email, telephone, first_name, last_name, password, diet_type(vegan, pescatarian, flexitarian, paleo, keto, mediterranean), meal_preference(Local, international, traditional), drink_preference(natural, synthetic, alcoholic, Non-alcoholic, cocktails)}
+- Restaurant {restaurant_id, user_id, name, email, password, location, capacity, type, status (open, closed), date_created, telephone, state (closed, active)}
+- Menu {menu_id, restaurant_id, created_at, updated_at, status (active, inactive)}
+- Reservation {reservation_id, restaurant_id, created_at, updated_at, status (active, inactive)}
+- Table {table_id, table_type(vip, standard), reservation_id, number_of_seats, table_number }
+- Reserves {client_id, table_id, date_reserved, status (accepted, canceled, pending)}
+- Menu {menu_id, restaurant_id, created_at, updated_at}
+- Drink {drink_id, menu_id, name, description, price, created_at, updated_at}
+- Menu_drinks { menu_id, drink_id }
+- Meal { meal_id, restaurant_id ,name, description, price, created_at, updated_at, meal_category(Local, international, traditional), , diet_type(vegan, pescatarian, flexitarian, paleo, keto, mediterranean)} 
+- Menu_meal {menu_id, meal_id}
+- OrderItem{orderItem_id, order_id, item_id, itemtype(Drink, Meal)}
+- Order {order_id, client_id, status(Accepted, Rejected, Pending), created_at, total_amount}
+- Payment {payment_id, order_id, amount, payment_date, status (success, failure) }
+- Review { restaurant_id, client_id, text }
