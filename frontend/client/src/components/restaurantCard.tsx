@@ -1,4 +1,4 @@
-
+// src/components/restaurantCard.tsx
 'use client';
 import React from 'react';
 import { Card, Button } from 'antd';
@@ -19,9 +19,9 @@ const RestaurantCard: React.FC<RestaurantCardProps> = ({ restaurant, onClick, is
 
   const handleBookNowClick = (e: React.MouseEvent) => {
     e.stopPropagation();
-    router.push('/booking');
+    router.push(`/booking/${restaurant.id}`);
   };
-  
+
   return (
     <Card
       hoverable

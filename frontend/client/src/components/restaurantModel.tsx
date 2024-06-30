@@ -3,15 +3,21 @@ import { Modal, Button } from 'antd';
 import { EnvironmentOutlined } from '@ant-design/icons';
 import { Restaurant } from '@/components/data/restaurants';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 interface RestaurantModalProps {
     restaurant: Restaurant | null;
     isVisible: boolean;
     onClose: () => void;
 }
-
 const RestaurantModal: React.FC<RestaurantModalProps> = ({ restaurant, isVisible, onClose }) => {
+    const router = useRouter();
+
     if (!restaurant) return null;
+
+    const handleBookNowClick = () => {
+        router.push(`/booking/${restaurant.id}`);
+    };
 
     return (
         <Modal
@@ -56,7 +62,9 @@ const RestaurantModal: React.FC<RestaurantModalProps> = ({ restaurant, isVisible
                             <p className="text-gray-500">{review.comment}</p>
                         </div>
                     ))}
-                    <Button type="primary" className="mt-4 bg-indigo-900 border-indigo-900">
+                    <Button type="primary" className="mt-4 bg-indigo-900 border-indigo-900"
+                    onClick={handleBookNowClick}
+                    >
                         Book Now
                     </Button>
                 </div>

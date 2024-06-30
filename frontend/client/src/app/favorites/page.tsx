@@ -4,34 +4,73 @@ import React, { useEffect, useState } from 'react';
 import { Row, Col } from 'antd';
 import RestaurantCard from '@/components/restaurantCard';
 import { Restaurant } from '@/components/data/restaurants';
+import { useUser } from '@clerk/nextjs';
 
 const FavoritesPage: React.FC = () => {
   const [favorites, setFavorites] = useState<Restaurant[]>([]);
+  const { user } = useUser();
+  const userId = user?.id;
 
   useEffect(() => {
     const fetchFavorites = async () => {
-      const response = await fetch('/api/favorites');
-      const data = await response.json();
-      setFavorites(data.favorites);
+      if (userId) {
+        const response = await fetch('/api/favorites', {
+          headers: { 'user-id': userId }
+        });
+
+        const data = await response.json();
+        setFavorites(data.favorites);
+      }
     };
 
     fetchFavorites();
-  }, []);
+  }, [userId]);
 
-  const handleRestaurantClick = (restaurant: Restaurant) => {
-    // Handle restaurant card click, if needed
-  };
-
-  const handleFavoriteClick = async (restaurant: Restaurant) => {
-    const updatedFavorites = favorites.filter(fav => fav.id !== restaurant.id);
-    setFavorites(updatedFavorites);
+  const addToFavorites = async (restaurantId: number, userId: string) => {
+    if (!userId) return;
 
     await fetch('/api/favorites', {
-      method: 'DELETE',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id: restaurant.id }),
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'user-id': userId,
+      },
+      body: JSON.stringify({ id: restaurantId }),
     });
+    const response = await fetch('/api/favorites', {
+      headers: { 'user-id': userId }
+    });
+
+    const data = await response.json();
+    setFavorites(data.favorites);
   };
+  
+  const handleFavoriteClick = async (restaurant: Restaurant) => {
+    if (!userId) return;
+    
+    const isFavorite = favorites.some(fav => fav.id === restaurant.id);
+    if (isFavorite) {
+      const updatedFavorites = favorites.filter(fav => fav.id !== restaurant.id);
+      setFavorites(updatedFavorites);
+
+      if (userId) {
+        await fetch('/api/favorites', {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+            'user-id': userId
+          },
+          body: JSON.stringify({ id: restaurant.id }),
+        });
+      }
+    } else {
+      await addToFavorites(restaurant.id, userId);
+    }
+  };
+
+  if (!userId) {
+    return <div>Please log in to view your favorite restaurants.</div>;
+  }
 
   return (
     <div className="container mx-auto">
@@ -41,9 +80,9 @@ const FavoritesPage: React.FC = () => {
           <Col xs={24} sm={12} md={8} key={restaurant.id}>
             <RestaurantCard
               restaurant={restaurant}
-              onClick={handleRestaurantClick}
-              isFavorite={true}
-              onFavoriteClick={() => handleFavoriteClick(restaurant)}
+              onClick={() => {}}
+              isFavorite={favorites.some(fav => fav.id === restaurant.id)}
+              onFavoriteClick={handleFavoriteClick}
             />
           </Col>
         ))}
