@@ -22,7 +22,7 @@ export function NavMenu() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem className="cursor-pointer flex gap-2 items-center" onClick={() => router.push('/page')}>
+        <DropdownMenuItem className="cursor-pointer flex gap-2 items-center" onClick={() => router.push('/')}>
           <HomeOutlined size={15} className="mr-2" />
           <span>Home</span>
         </DropdownMenuItem>
@@ -30,7 +30,7 @@ export function NavMenu() {
           <HandPlatter size={15} className="mr-2" />
           <span>Restaurants</span>
         </DropdownMenuItem>
-        <DropdownMenuItem className="cursor-pointer flex gap-2 items-center" onClick={() => router.push('/restaurants/bookings')}>
+        <DropdownMenuItem className="cursor-pointer flex gap-2 items-center" onClick={() => router.push('/booking')}>
           <BookOpenCheck size={15} className="mr-2" />
           <span>Bookings</span>
         </DropdownMenuItem>
@@ -38,9 +38,9 @@ export function NavMenu() {
           <Heart size={15} className="mr-2" />
           <span>Favorites</span>
         </DropdownMenuItem>
-        <DropdownMenuItem className="cursor-pointer flex gap-2 items-center" onClick={() => router.push('/dine-in')}>
+        <DropdownMenuItem className="cursor-pointer flex gap-2 items-center" onClick={() => router.push('/about')}>
           <User size={15} className="mr-2" />
-          <span>Dine in</span>
+          <span>About Us</span>
         </DropdownMenuItem>
         <DropdownMenuItem className="cursor-pointer flex gap-2 items-center" onClick={() => router.push('/register-restaurants')}>
           <PlusCircle size={15} className="mr-2" />

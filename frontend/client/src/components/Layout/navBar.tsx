@@ -15,14 +15,14 @@ export const NavBar = () => {
 
 
   return (
-    <div className='sticky top-0 border border-b primary/10 bg-secondary z-20'>
+    <div className='sticky top-0 border border-b primary/10 bg-blue-300 z-20'>
       <Container>
         <div className='flex gap-3 justify-between items-center'>
           <div className='flex items-center gap-1 cursor-pointer' onClick={() => router.push('/')}>
             <Image src='/logo.png' alt='logo' width={50} height={50} />
             <div className='font-extra-bold text-xl'>DineHub</div>
           </div>
-          <Searchinput />
+
           <div className='flex gap-3 items-center'>
             <div>
               <ModeToggle />
