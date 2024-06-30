@@ -21,12 +21,19 @@ export const NavBar = () => {
           <div className='flex items-center gap-1 cursor-pointer' onClick={() => router.push('/')}>
             <Image src='/logo.png' alt='logo' width={50} height={50} />
             <div className='font-extra-bold text-xl'>DineHub</div>
+            <NavMenu />
           </div>
 
           <div className='flex gap-3 items-center'>
             <div>
+            
+              <a
+                href="/register-restaurant"
+                className="text-sm text-gray-700 hover:text-gray-900"
+              >
+                Register Your Restaurant
+              </a>
               <ModeToggle />
-              <NavMenu />
             </div>
             <UserButton afterSignOutUrl='/' />
             {!userId && <>
