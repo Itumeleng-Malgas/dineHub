@@ -6,13 +6,31 @@ import os
 from models.base_model import BaseModel
 from models.client import Client
 from models.normal_client import Normal_client
+from models.drink import Drink
+from models.meal import Meal
+from models.menu import Menu
+from models.order_item import Order_item
+from models.registered_client import Registered_client
+from models.reservation import Reservation
+from models.restaurant import Restaurant
+from models.review import Review
+from models.table import Table
+from models.user import User
+from models.orders import Orders
+
 
 class FileStorage:
     __file_path = 'dine_hub_file_db.json'
     __objects = {}
     
-    def all(self):
-        """returns all objects in storage ie __objects"""
+    def all(self, cls=None):
+        """returns all objects of cls if cls is not None in storage ie __objects"""
+        if cls:
+            cls_objs = []
+            for value in FileStorage.__objects.values():
+                if value['__class__'] == cls:
+                    cls_objs.append(value)
+            return cls_objs
         return FileStorage.__objects
     def new(self, obj):
         """ sets in __objects the obj with key <obj class name>.id"""
@@ -54,3 +72,6 @@ class FileStorage:
     def close(self):
         """calls reload method for deserializing the json file to objects"""
         self.reload()
+        
+    def get(self):
+        """method to get an instance of an object from storage"""

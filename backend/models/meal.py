@@ -29,3 +29,7 @@ class Meal(BaseModel):
     meal_category: MealCategory = None
     diet_type: DietType = None
     
+    def __init__(self, *args, **kwargs):
+        """constructor for meal"""
+        super().__init__(*args, **kwargs)
+    
