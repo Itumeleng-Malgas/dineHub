@@ -11,6 +11,7 @@ const FavoritesPage: React.FC = () => {
   const { user } = useUser();
   const userId = user?.id;
 
+  // fetch favorites on page load from the backend
   useEffect(() => {
     const fetchFavorites = async () => {
       if (userId) {

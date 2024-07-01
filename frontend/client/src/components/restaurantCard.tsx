@@ -7,6 +7,7 @@ import { HeartFilled, HeartOutlined } from '@ant-design/icons';
 import { Restaurant } from '@/components/data/restaurants';
 import { useRouter } from 'next/navigation';
 
+// Props interface for the RestaurantCard component
 interface RestaurantCardProps {
   restaurant: Restaurant;
   onClick: (restaurant: Restaurant) => void;
@@ -14,11 +15,13 @@ interface RestaurantCardProps {
   onFavoriteClick: (restaurant: Restaurant) => void;
 }
 
+// RestaurantCard component
 const RestaurantCard: React.FC<RestaurantCardProps> = ({ restaurant, onClick, isFavorite, onFavoriteClick }) => {
   const router = useRouter();
 
+  // Handle "Book Now" button click
   const handleBookNowClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
+    e.stopPropagation(); // Prevent the click event from bubbling up to the parent element
     router.push(`/booking/${restaurant.id}`);
   };
 

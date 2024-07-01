@@ -21,20 +21,39 @@ const RestaurantModal: React.FC<RestaurantModalProps> = ({ restaurant, isVisible
 
     if (!restaurant) return null;
 
+    // Handle "Book Now" button click
     const handleBookNowClick = () => {
         router.push(`/booking/${restaurant.id}`);
     };
 
+    // Handle adding a new review
     const handleAddReview = (review: Review) => {
+        // Send the new review to the backend
+        await fetch('/api/reviews', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ ...review, restaurantId: restaurant.id }),
+        });
+
+        // Update the local state with the new review
         setReviews([...reviews, { ...review, id: Date.now() }]);
         setEditingReview(null);
     };
 
+    // Handle updating an existing review
     const handleUpdateReview = (updatedReview: Review) => {
+        // Send the updated review to the backend
+        await fetch(`/api/reviews/${updatedReview.id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(updatedReview),
+        });
+        // Update the local state with the updated review
         setReviews(reviews.map(review => review.id === updatedReview.id ? updatedReview : review));
         setEditingReview(null);
     };
 
+    // Handle clicking the "Edit" button for a review
     const handleEditClick = (review: Review) => {
         setEditingReview(review);
     };

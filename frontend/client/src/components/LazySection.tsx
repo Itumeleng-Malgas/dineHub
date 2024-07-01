@@ -4,6 +4,7 @@ const LazySection = () => {
   const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef<HTMLDivElement | null>(null);
 
+  
   useEffect(() => {
     const currentRef = sectionRef.current;
     const observer = new IntersectionObserver(
@@ -18,10 +19,12 @@ const LazySection = () => {
       }
     );
 
+    // Observe the section
     if (currentRef) {
       observer.observe(currentRef);
     }
 
+    // Remove the observer when the component unmounts
     return () => {
       if (currentRef) {
         observer.unobserve(currentRef);

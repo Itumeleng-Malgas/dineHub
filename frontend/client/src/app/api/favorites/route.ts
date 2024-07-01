@@ -5,6 +5,7 @@ import { auth } from '@clerk/nextjs/server';
 
 let userFavorites: { [key: string]: Set<number> } = {}; // Object to store user favorites
 
+// 1. GET /api/favorites
 export async function GET(request: NextRequest) {
   const { userId } = auth()
   if (!userId) {
@@ -16,6 +17,7 @@ export async function GET(request: NextRequest) {
   return NextResponse.json({ favorites: favoriteRestaurants });
 }
 
+// 2. POST /api/favorites
 export async function POST(request: NextRequest) {
 
   const { userId } = auth()

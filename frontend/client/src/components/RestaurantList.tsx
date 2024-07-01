@@ -11,8 +11,10 @@ interface RestaurantListProps {
 }
 
 const RestaurantList: React.FC<RestaurantListProps> = ({ restaurants, onRestaurantClick }) => {
+   // State to keep track of favorite restaurants
   const [favorites, setFavorites] = useState<Set<number>>(new Set());
 
+  // Fetch favorite restaurants from the server when the component mounts
   useEffect(() => {
     fetch('/api/favorites')
       .then((res) => res.json())
@@ -25,18 +27,21 @@ const RestaurantList: React.FC<RestaurantListProps> = ({ restaurants, onRestaura
   const handleFavoriteClick = async (restaurant: Restaurant) => {
     const isFavorite = favorites.has(restaurant.id);
 
+     // If it is a favorite, send a DELETE request to remove it from favorites
     if (isFavorite) {
       await fetch('/api/favorites', {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id: restaurant.id }),
       });
+       // Remove the restaurant from the favorite set
       setFavorites((prev) => {
         const newFavorites = new Set(prev);
         newFavorites.delete(restaurant.id);
         return newFavorites;
       });
     } else {
+      // If it is not a favorite, send a POST request to add it to favorites
       await fetch('/api/favorites', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -47,6 +52,7 @@ const RestaurantList: React.FC<RestaurantListProps> = ({ restaurants, onRestaura
   };
 
   return (
+    // Render the restaurant list using antd's Row and Col components
     <Row gutter={[16, 16]} className="mt-10">
       {restaurants.map((restaurant) => (
         <Col xs={24} sm={12} md={8} key={restaurant.id}>

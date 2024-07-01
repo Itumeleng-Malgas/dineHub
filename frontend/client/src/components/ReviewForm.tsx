@@ -11,9 +11,12 @@ interface ReviewFormProps {
 }
 
 const ReviewForm: React.FC<ReviewFormProps> = ({ review, onSubmit, onCancel }) => {
+  // Initialize form instance from Ant Design
   const [form] = Form.useForm();
+  // Storing the rating in state
   const [rating, setRating] = useState(review?.rating || 0);
 
+  // Handle form submission
   const handleFinish = (values: any) => {
     const newReview = { ...review, ...values, rating } as Review;
     onSubmit(newReview);

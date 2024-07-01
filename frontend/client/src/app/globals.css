@@ -26,7 +26,7 @@
   /* Custom theme colors */
   --customPrimary: #41467e;
   --customSecondary: #f5f5f5;
-  --customAccent: #ffd700;
+  --customAccent: #21ced4;
   --customBackground: #fff;
   --customText: #333;
 }
@@ -54,9 +54,9 @@
     --card: 222.2 84% 94%;
     --card-foreground: 210 40% 10%;
     /* Custom theme colors */
-    --customPrimary: #888;
+    --customPrimary: #858383;
     --customSecondary: #222;
-    --customAccent: rgb(156, 156, 49);
+    --customAccent: rgb(49, 149, 156);
     --customBackground: #333;
     --customText: #f0f0f0;
   }
