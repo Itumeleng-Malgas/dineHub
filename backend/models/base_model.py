@@ -62,3 +62,7 @@ class BaseModel:
         instance_dict['created_at'] = self.created_at.strftime('%Y-%m-%d %H:%M:%S')
         instance_dict.pop('_sa_instance_state', None)
         return instance_dict
+
+    def delete(self):
+        """deletes the current instance from storage"""
+        models.storage.delete(self)

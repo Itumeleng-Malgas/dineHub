@@ -1,9 +1,13 @@
 #!/usr/bin/python3
 """module to handle registered client"""
 
-from models.base_model import BaseModel
+from models.base_model import BaseModel, Base
+from sqlalchemy import Column, String, Integer
 from models.client import Client
 from enum import Enum
+import models
+
+storage_type = models.storage_type
 
 class Diet_Type(Enum):
     """class to handle enum of diet type"""
@@ -28,21 +32,33 @@ class Drink_Preference(Enum):
     NON_ALCOHOLIC = "Non_alcoholic"
     COCKTAILS = "Cocktails"
 
-class Registered_client(Client):
+class Registered_client(Client, Base):
     """class to handle registered clinets"""
-    registered_client_id = ""
-    # client_id = Client.client_id
-    email = ""
-    telephone = ""
-    first_name = ""
-    last_name = ""
-    password = ""
-    # diet_type = ""
-    # meal_preference = ""
-    # drink_preference = ""
-    diet_type : Diet_Type = None
-    meal_preference : Meal_Preference = None
-    drink_preference : Drink_Preference = None
+    if storage_type == 'db':
+        registered_client_id = Column(String(36), nullable=False, primary_key=True)
+        email = Column(String(128), nullable=False)
+        telephone = Column(String(20), nullable=False)
+        first_name = Column(String(128), nullable=False)
+        last_name = Column(String(128), nullable=False)
+        password = Column(String(128), nullable=False)
+        diet_type = Column(String(20), nullable=True)
+        meal_preference = Column(String(20), nullable=True)
+        drink_preference = Column(String(20), nullable=True)
+        
+    else: 
+        registered_client_id = ""
+        # client_id = Client.client_id
+        email = ""
+        telephone = ""
+        first_name = ""
+        last_name = ""
+        password = ""
+        # diet_type = ""
+        # meal_preference = ""
+        # drink_preference = ""
+        diet_type : Diet_Type = None
+        meal_preference : Meal_Preference = None
+        drink_preference : Drink_Preference = None
 
     
     def __init__(self, *args, **kwargs):
