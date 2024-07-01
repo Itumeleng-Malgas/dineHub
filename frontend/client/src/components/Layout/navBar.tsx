@@ -19,21 +19,20 @@ export const NavBar = () => {
       <Container>
         <div className='flex gap-3 justify-between items-center'>
           <div className='flex items-center gap-1 cursor-pointer' onClick={() => router.push('/')}>
-            <Image src='/logo.png' alt='logo' width={50} height={50} />
-            <div className='font-extra-bold text-xl'>DineHub</div>
+            <Image src='/logo.jpeg' alt='logo' width={50} height={50} />
+            <h1 className='text-3xl font-bold'>Dinehub</h1>
             <NavMenu />
           </div>
 
           <div className='flex gap-3 items-center'>
             <div>
-            
               <a
-                href="/register-restaurant"
+                href="localhost:8000/register"
+                target="_blank"
                 className="text-sm text-gray-700 hover:text-gray-900"
               >
                 Register Your Restaurant
               </a>
-              <ModeToggle />
             </div>
             <UserButton afterSignOutUrl='/' />
             {!userId && <>

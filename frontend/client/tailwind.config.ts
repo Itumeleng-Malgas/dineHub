@@ -2,7 +2,7 @@ import type { Config } from "tailwindcss";
 import { withUt } from "uploadthing/tw";
 
 export default withUt({
-  darkMode: ["class"],
+  darkMode: 'media',
   content: [
     './pages/**/*.{ts,tsx}',
     './components/**/*.{ts,tsx}',
@@ -53,12 +53,7 @@ export default withUt({
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        // Custom theme colors
-        customPrimary: '#41467e',
-        customSecondary: '#f5f5f5',
-        customAccent: '#ffd700',
-        customBackground: '#fff',
-        customText: '#333',
+        
       },
       borderRadius: {
         lg: "var(--radius)",

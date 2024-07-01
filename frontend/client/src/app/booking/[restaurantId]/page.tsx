@@ -2,7 +2,7 @@
 'use client';
 import React from 'react';
 import { useParams } from 'next/navigation';
-import { Button, Form, Input, DatePicker, TimePicker, InputNumber } from 'antd';
+import { Button, Form, Input, DatePicker, TimePicker, InputNumber, message } from 'antd';
 import { mockRestaurants } from '@/components/data/restaurants';
 import Image from 'next/image';
 
@@ -28,11 +28,14 @@ const BookingPage: React.FC = () => {
       if (response.ok) {
         // Booking successful, you can display a success message or redirect the user to a confirmation page
         console.log('Booking successful');
+        message.success('Booking successful'); // You can use a notification library like react-toastify or antd message
       } else {
         console.error('Booking failed');
+        message.error('Booking failed'); // You can use a notification library like react-toastify or antd message
       }
     } catch (error) {
       console.error('Error booking:', error);
+      message.error('Error booking'); // You can use a notification library like react-toastify or antd message
     }
   };
 
