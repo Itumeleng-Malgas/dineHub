@@ -4,6 +4,9 @@
 from models.base_model import BaseModel
 from enum import Enum
 from datetime import datetime
+import os
+
+storage_type = os.getenv('DINEHUB_TYPE_STORAGE', None)
 
 class PaymentStatus(Enum):
     SUCCESS = "success"

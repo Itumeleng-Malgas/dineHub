@@ -5,8 +5,9 @@ from models.base_model import BaseModel
 from models.restaurant import Status
 from sqlalchemy import Column, String, Integer
 import models
+import os
 
-storage_type = models.storage_type
+storage_type = os.getenv('DINEHUB_TYPE_STORAGE', None)
 
 class Menu(BaseModel):
     """class to handle Menu"""

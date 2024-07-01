@@ -4,7 +4,9 @@ from models.base_model import BaseModel
 from sqlalchemy import Column, String, Integer
 import models
 from enum import Enum
-storage_type = models.storage_type
+import os
+
+storage_type = os.getenv('DINEHUB_TYPE_STORAGE', None)
 
 
 class OrderStatus(Enum):

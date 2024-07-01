@@ -4,6 +4,7 @@
 from models.base_model import BaseModel
 from enum import Enum
 
+
 class MealCategory(Enum):
     """Enum class for meal category"""
     LOCAL = "Local"

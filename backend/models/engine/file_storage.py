@@ -17,6 +17,12 @@ from models.review import Review
 from models.table import Table
 from models.user import User
 from models.orders import Orders
+from models.payment import Payment
+
+classes = {"Normal_client": Normal_client, "Client": Client, "Registered_client": Registered_client,
+            "Drink": Drink, "Meal": Meal, "Menu": Menu, "Orders": Orders, "Order_item": Order_item,
+            "Payment": Payment, "Reservation": Reservation, "Restaurant": Restaurant, "Review": Review,
+            "User": User, "Table": Table}
 
 
 class FileStorage:
@@ -73,5 +79,33 @@ class FileStorage:
         """calls reload method for deserializing the json file to objects"""
         self.reload()
         
-    def get(self):
+    def get(self, cls, id):
         """method to get an instance of an object from storage"""
+        for obj_key in FileStorage.__objects.keys():
+            cls_name, obj_id = obj_key.split('.')
+            if cls and id:
+                if (cls_name == cls) and (obj_id == id):
+                    return FileStorage[obj_key]
+    def get_session(self):
+        """method to get the current storage session"""
+        return self
+    
+    def count(self, cls=None):
+        """method to return the number of objects in fs"""
+        self.reload()
+        count = 0
+        result = {}
+        if cls is None:
+            return len(self.__objects)
+        available_clsses = [obj.split(".")[0] for obj in self.__objects.keys()]
+        if cls in classes.values():
+            for item in available_clsses:
+                if cls.__name__ == item:
+                    count += 1
+            return count
+        if cls in classes.keys():
+            for item in available_clsses:
+                if cls == item:
+                    count += 1
+            return count
+        return 0

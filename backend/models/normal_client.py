@@ -3,13 +3,14 @@
 
 # from models.base_model import BaseModel
 from models.client import Client
-from models.base_model import Base
+from models.base_model import BaseModel,Base
 from sqlalchemy import Column, String, Integer
 import models
+import os
 
-storage_type = models.storage_type
+storage_type = os.getenv('DINEHUB_TYPE_STORAGE', None)
 
-class Normal_client(Client, Base):
+class Normal_client(BaseModel):
     """class to handle baseModel"""
     if storage_type == 'db':
         __tablename__ = "normal_clients"

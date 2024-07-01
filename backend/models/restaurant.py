@@ -5,14 +5,15 @@ from models.base_model import BaseModel, Base
 import models
 from sqlalchemy import Column, String, DateTime, Integer
 from enum import Enum
+import os
 
+storage_type = os.getenv('DINEHUB_TYPE_STORAGE', None)
 
-storage_type = models.storage_type
 class Status(Enum):
     OPEN = "open"
     CLOSED = "closed"
 
-class Restaurant(BaseModel, Base):
+class Restaurant(BaseModel):
     """class to handle restaurant"""
     if storage_type == 'db':
         __tablename__ = "restaurants"
