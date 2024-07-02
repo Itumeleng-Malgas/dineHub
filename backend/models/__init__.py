@@ -7,10 +7,10 @@ from os import getenv
 
 storage_type = getenv('DINEHUB_TYPE_STORAGE', None)
 if storage_type:
-    if storage_type == 'fs':
-        storage = FileStorage()
+    if storage_type == 'db':
+        storage = DBStorage()
         storage.reload()
     else:
-        storage = DBStorage()
+        storage = FileStorage()
         storage.reload()
 

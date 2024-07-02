@@ -6,16 +6,19 @@ from datetime import datetime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String, DateTime
 import models
+import os
 
+storage_type = os.getenv('DINEHUB_TYPE_STORAGE', None)
 # create an instance of declarative base
 Base = declarative_base()
 
 class BaseModel:
     """Base model class"""
-    id = Column(String(60), unique= True, nullable= False, primary_key= True)
-    created_at = Column(DateTime, nullable=False, default=datetime.utcnow())
-    updated_at = Column(DateTime, nullable=False, default=datetime.utcnow())
-    
+    if storage_type == 'db':
+        id = Column(String(60), unique= True, nullable= False, primary_key= True)
+        created_at = Column(DateTime, nullable=False, default=datetime.utcnow())
+        updated_at = Column(DateTime, nullable=False, default=datetime.utcnow())
+
     def __init__(self, *args, **kwargs):
         """Base model constructor"""
         if kwargs:
