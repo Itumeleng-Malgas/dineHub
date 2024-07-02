@@ -25,6 +25,8 @@ class Restaurant(BaseModel):
         capacity = Column(Integer, nullable=False)
         type = Column(String(60), nullable=False)
         status = Column(String(8), nullable=True)
+        role = Column(String(18), nullable=True)
+        profileImageUrl = Column(String(255), nullable=True)
         # status = Column(Enum(Status), nullable=True)  # Using the Enum type here
     else:
         restaurant_id = ""
@@ -34,7 +36,9 @@ class Restaurant(BaseModel):
         location = ""
         capacity = ""
         type = ""
-        status : Status = None
+        status  = None
+        role = ""
+        profileImageUrl = ""
     
     def __init__(self, *args, **kwargs):
         """constructor for restaurant"""

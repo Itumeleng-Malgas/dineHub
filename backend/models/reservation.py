@@ -2,7 +2,7 @@
 """module to handle reservations"""
 
 from models.base_model import BaseModel
-from models.restaurant import Status
+# from models.restaurant import Status
 from sqlalchemy import Column, String, Integer
 import models
 import os
@@ -19,7 +19,7 @@ class Reservation(BaseModel):
     else:
         reservation_id = ""
         restaurant_id = ""
-        status = Status.OPEN.value
+        status = " "
     
     def __init__(self, *args, **kwargs):
         """constructor for reservation"""

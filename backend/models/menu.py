@@ -2,7 +2,7 @@
 """module to handle menu"""
 
 from models.base_model import BaseModel
-from models.restaurant import Status
+# from models.restaurant import Status
 from sqlalchemy import Column, String, Integer
 import models
 import os
@@ -20,7 +20,7 @@ class Menu(BaseModel):
     else:
         menu_id = ""
         restaurant_id = ""
-        status: Status = ""
+        status = ""
     
     def __init__(self, *args, **kwargs):
         """Constructor for Menu"""
