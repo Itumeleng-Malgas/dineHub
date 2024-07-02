@@ -1,105 +1,95 @@
-"use client";
-import { Layout, Input, Button, Row, Col, Card } from 'antd';
-import { EnvironmentOutlined, SearchOutlined, HeartOutlined } from '@ant-design/icons';
-import React, { useState } from 'react';
-import FooterComponent from '@/components/Layout/Footer';
-import { UploadButton } from '@/utils/uploadthing';
+// src/app/favorites/page.tsx
+'use client';
+import React, { useEffect, useState } from 'react';
+import { Row, Col } from 'antd';
+import RestaurantCard from '@/components/restaurantCard';
+import { Restaurant } from '@/components/data/restaurants';
+import { useUser } from '@clerk/nextjs';
 
-const { Header, Content, Footer } = Layout;
-const { Search } = Input;
+const FavoritesPage: React.FC = () => {
+  const [favorites, setFavorites] = useState<Restaurant[]>([]);
+  const { user } = useUser();
+  const userId = user?.id;
 
-const mockRestaurants = [
-    {
-        name: "House of Grill",
-        description: "Best BBQ in town",
-        location: "123 Main St, Sandton",
-        imageUrl: "/sushi.jpeg",
-    },
-    {
-        name: "Solo Pizza",
-        description: "Authentic Italian pizza and pasta",
-        location: "456 Maple St, Sandton",
-        imageUrl: "/th.jpeg",
-    },
-    {
-        name: "Sushi Spot",
-        description: "Fresh sushi rolls and sashimi",
-        location: "78 jan St, Sandton",
-        imageUrl: "/mainpic.jpeg",
-    },
-    {
-        name: "Pasta Paradise",
-        description: "Delicious Italian pasta",
-        location: "456 Elm St, Sandton",
-        imageUrl: "/wine.jpeg",
-    },
-    {
-        name: "Sushi World",
-        description: "Fresh sushi and sashimi",
-        location: "789 Oak St, Sandton",
-        imageUrl: "th.jpeg",
-    },
-];
+  // fetch favorites on page load from the backend
+  useEffect(() => {
+    const fetchFavorites = async () => {
+      if (userId) {
+        const response = await fetch('/api/favorites', {
+          headers: { 'user-id': userId }
+        });
 
-export default function Home() {
-    return (
-        <Layout className="min-h-screen">
-            <Header className="flex justify-between items-center bg-white shadow-md p-4 z-10">
-                <div className="text-indigo-900 font-bold text-xl">Restaurant Reservation</div>
-                <Button type="primary" shape="round" icon={<HeartOutlined />} className="bg-indigo-900 border-indigo-900">
-                    Favorites
-                </Button>
-            </Header>
-            <Content className="p-12 text-center z-10">
-                <div className="max-w-4xl mx-auto">
-                    <h1 className="text-3xl font-bold mb-4 text-indigo-900">From Casual Eats to Fine Dining: Reserve Your Perfect Spot!</h1>
-                    <Row gutter={[16, 16]} className="mt-5">
-                        <Col xs={24} md={8}>
-                            <Input
-                                size="large"
-                                placeholder="Sandton"
-                                prefix={<EnvironmentOutlined />}
-                                className="w-full bg-gray-100 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
-                            />
-                        </Col>
-                        <Col xs={24} md={16}>
-                            <Search
-                                size="large"
-                                placeholder="Cuisine, restaurant name..."
-                                enterButton={<Button type="primary" icon={<SearchOutlined />} className="bg-indigo-900 border-indigo-900" />}
-                                className="w-full bg-gray-100 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
-                            />
-                        </Col>
-                    </Row>
-                </div>
-                <Row gutter={[16, 16]} className="mt-10">
-                    {mockRestaurants.map((restaurant, index) => (
-                        <Col xs={24} sm={12} md={8} key={index}>
-                            <Card
-                                hoverable
-                                cover={<img alt={restaurant.name} src={restaurant.imageUrl} />}
-                                className="mb-5 shadow-md"
-                            >
-                                <Card.Meta
-                                    title={restaurant.name}
-                                    description={
-                                        <div>
-                                            <p className="text-gray-500">{restaurant.description}</p>
-                                            <p className="text-gray-500">{restaurant.location}</p>
-                                        </div>
-                                    }
-                                />
-                                <Button type="primary" className="mt-4 bg-indigo-900 border-indigo-900">
-                                    Book Tonight
-                                </Button>
-                            </Card>
-                        </Col>
-                    ))}
-                </Row>
-            </Content>
-            <Footer className="text-center bg-indigo-900 text-white p-4">
-                <FooterComponent />
-            </Footer>
-        </Layout>
-    );
-}
+        const data = await response.json();
+        setFavorites(data.favorites);
+      }
+    };
+
+    fetchFavorites();
+  }, [userId]);
+
+  const addToFavorites = async (restaurantId: number, userId: string) => {
+    if (!userId) return;
+
+    await fetch('/api/favorites', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'user-id': userId,
+      },
+      body: JSON.stringify({ id: restaurantId }),
+    });
+    const response = await fetch('/api/favorites', {
+      headers: { 'user-id': userId }
+    });
+
+    const data = await response.json();
+    setFavorites(data.favorites);
+  };
+  
+  const handleFavoriteClick = async (restaurant: Restaurant) => {
+    if (!userId) return;
+    
+    const isFavorite = favorites.some(fav => fav.id === restaurant.id);
+    if (isFavorite) {
+      const updatedFavorites = favorites.filter(fav => fav.id !== restaurant.id);
+      setFavorites(updatedFavorites);
+
+      if (userId) {
+        await fetch('/api/favorites', {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+            'user-id': userId
+          },
+          body: JSON.stringify({ id: restaurant.id }),
+        });
+      }
+    } else {
+      await addToFavorites(restaurant.id, userId);
+    }
+  };
+
+  if (!userId) {
+    return <div>Please log in to view your favorite restaurants.</div>;
+  }
+
+  return (
+    <div className="container mx-auto">
+      <h1 className="text-2xl font-bold mb-4">Favorite Restaurants</h1>
+      <Row gutter={[16, 16]}>
+        {favorites.map((restaurant) => (
+          <Col xs={24} sm={12} md={8} key={restaurant.id}>
+            <RestaurantCard
+              restaurant={restaurant}
+              onClick={() => {}}
+              isFavorite={favorites.some(fav => fav.id === restaurant.id)}
+              onFavoriteClick={handleFavoriteClick}
+            />
+          </Col>
+        ))}
+      </Row>
+    </div>
+  );
+};
+
+export default FavoritesPage;
