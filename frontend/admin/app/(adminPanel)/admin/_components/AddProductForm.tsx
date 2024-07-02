@@ -1,9 +1,12 @@
-import { Form, Input, Upload, Button, message, FormInstance, UploadProps, UploadFile, GetProp, App } from 'antd';
+import { Form, Input, Upload, Button, message, FormInstance, UploadProps, UploadFile, GetProp, Select } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import React, { Dispatch, SetStateAction } from 'react';
 import { useToggle } from '@/context/ToggleContext';
 import { addProduct } from '../_actions/product';
 import { revalidatePath } from 'next/cache';
+import { restaurantProfileValidationRules } from '@/components/adminPanel/_utils/validationRules';
+
+const { Option } = Select;
 
 interface AddProductFormProps {
   form: FormInstance;
@@ -71,23 +74,53 @@ const AddProductForm: React.FC<AddProductFormProps> = ({ form, fileList, setFile
       <Form.Item name="desc" label="Description">
         <Input.TextArea placeholder="Input product description" />
       </Form.Item>
-      <Form.Item
-        name="price"
-        label="Price"
-        rules={[{ required: true, message: 'Please enter product price' }]}
-      >
-        <Input style={{ maxWidth: '200px' }} placeholder="Price" />
-      </Form.Item>
-      <Form.Item
-        name="picture"
-        label="Product Picture"
-        valuePropName="fileList"
-        getValueFromEvent={e => Array.isArray(e) ? e : e && e.fileList}
-      >
-        <Upload {...props} >
-          <Button icon={<UploadOutlined />}>Click to Upload</Button>
-        </Upload>
-      </Form.Item>
+      <div className='flex gap-1'>
+        <div className='flex-1'>
+          <Form.Item
+          name="price"
+          label="Price"
+          rules={[{ required: true, message: 'Please enter product price' }]}
+          >
+            <Input style={{ maxWidth: '300px' }} placeholder="Price" />
+          </Form.Item>
+          <Form.Item
+            name="cuisine"
+            label="Cuisine Type"
+            rules={restaurantProfileValidationRules.cuisine}
+          >
+            <Select style={{ maxWidth: '300px' }} placeholder="Select cuisine type">
+              <Option value="italian">Italian</Option>
+              <Option value="chinese">Chinese</Option>
+              <Option value="indian">Indian</Option>
+              {/* Add more options as needed */}
+            </Select>
+          </Form.Item>
+        </div>
+        <div className='flex-1'>
+          <Form.Item
+            name="menu"
+            label="Menu"
+            rules={[{ required: true, message: 'Please select an appropriate menu' }]}
+          >
+            <Select placeholder="Select a menu">
+              <Option value="breakfast">Breakfast</Option>
+              <Option value="lunch">Lunch</Option>
+              <Option value="dinner">Dinner</Option>
+              <Option value="dessert">Dessert</Option>
+            </Select>
+          </Form.Item>
+          <Form.Item
+            name="picture"
+            label="Product Picture"
+            valuePropName="fileList"
+            getValueFromEvent={e => Array.isArray(e) ? e : e && e.fileList}
+          >
+            <Upload {...props} >
+              <Button icon={<UploadOutlined />}>Click to Upload</Button>
+            </Upload>
+          </Form.Item>
+        </div>
+      </div>
     </Form>
   );
 };

@@ -2,15 +2,21 @@
 
 import React from "react";
 import Link from 'next/link';
-import { Layout, Typography, Button, Form, Input, Divider } from "antd";
+import { Layout, Typography, Button, Form, Input, Divider, FormProps } from "antd";
 import SocialLogin from "@/components/authentication/SocialLogin";
-import { registerValidationRules } from './_utils/validationRules';  // Import validation rules
+import { registerValidationRules } from './_utils/validationRules';
+
+export type RegisterFieldType = {
+    name?: string;
+    email?: string;
+    password?: string;
+};
 
 const { Content } = Layout;
 const { Title } = Typography;
 
 const RegisterComponent = () => {
-    const onFinish = (values: any) => {
+    const onFinish: FormProps<RegisterFieldType>['onFinish'] = (values) => {
         console.log('Success:', values);
     };
 

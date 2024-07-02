@@ -11,6 +11,9 @@ type User = {
 };
 
 async function getUser(email: string): Promise<User | null> {
+
+  //checkemail will verify if email exist
+  //handle encryption
   try {
     // Mock user data
     return {
