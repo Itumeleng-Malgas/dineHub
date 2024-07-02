@@ -24,7 +24,8 @@ class Restaurant(BaseModel):
         location = Column(String(60), nullable=False)
         capacity = Column(Integer, nullable=False)
         type = Column(String(60), nullable=False)
-        status = Column(Enum(Status), nullable=True)  # Using the Enum type here
+        status = Column(String(8), nullable=True)
+        # status = Column(Enum(Status), nullable=True)  # Using the Enum type here
     else:
         restaurant_id = ""
         name = ""

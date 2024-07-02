@@ -22,7 +22,8 @@ class Orders(BaseModel):
         __tablename__ = 'orders'
         order_id = Column(String(60), nullable=False)
         client_id = Column(String(60), nullable=False)
-        status = Column(Enum(OrderStatus), nullable=False, default=OrderStatus.PENDING)
+        status = Column(String(80), nullable=False, default='Pending')
+        # status = Column(Enum(OrderStatus), nullable=False, default=OrderStatus.PENDING)
         
     else:
         order_id = ""
