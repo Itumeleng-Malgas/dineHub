@@ -1,6 +1,6 @@
-import GoogleProvider from "next-auth/providers/google";
-import NextAuth from 'next-auth';
+import GoogleProvider from 'next-auth/providers/google';
 import CredentialsProvider from 'next-auth/providers/credentials';
+import NextAuth, { AuthOptions } from 'next-auth';
 import bcrypt from 'bcryptjs';
 
 type User = {
@@ -11,9 +11,6 @@ type User = {
 };
 
 async function getUser(email: string): Promise<User | null> {
-
-  //checkemail will verify if email exist
-  //handle encryption
   try {
     // Mock user data
     return {
@@ -27,17 +24,17 @@ async function getUser(email: string): Promise<User | null> {
   }
 }
 
-const handler = NextAuth({
+export const authOptions: AuthOptions = {
   pages: {
     signIn: '/login',
   },
   session: {
-    strategy: 'jwt'
+    strategy: 'jwt',
   },
   secret: process.env.NEXTAUTH_SECRET,
   providers: [
     CredentialsProvider({
-      name: "credentials",
+      name: 'credentials',
       credentials: {
         email: { label: 'Email', type: 'text' },
         password: { label: 'Password', type: 'password' },
@@ -48,13 +45,13 @@ const handler = NextAuth({
         }
 
         const user = await getUser(credentials.email as string);
-        
+
         if (!user) {
           return null;
         }
 
         const passwordsMatch = await bcrypt.compare(credentials.password as string, user.password);
-        
+
         if (passwordsMatch) {
           return user;
         }
@@ -67,13 +64,15 @@ const handler = NextAuth({
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
       authorization: {
         params: {
-          prompt: "consent",
-          access_type: "offline",
-          response_type: "code",
+          prompt: 'consent',
+          access_type: 'offline',
+          response_type: 'code',
         },
       },
     }),
   ],
-});
+};
+
+const handler = NextAuth(authOptions);
 
 export { handler as GET, handler as POST };
