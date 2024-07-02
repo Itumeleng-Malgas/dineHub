@@ -1,9 +1,37 @@
 from models.base_model import BaseModel
 from models.client import Client
 from models.normal_client import Normal_client
-from models.registered_client import Registered_client, Diet_Type, Meal_Preference, Drink_Preference
+from models.registered_client import Registered_client
 from datetime import datetime
 nc = {'email':'tekohpalma@gmail.com', 'telephone':'679800261', 'first_name':'tekoh', 'last_name':'Palma'}
 rc  = {'email':'tekohpalma@gmail.com', 'telephone':'679800261', 'first_name':'tekoh', 'last_name':'Palma', 'password': "cyanide", 'diet_type' : "vegan" , "meal_preference" : "traditional", "drink_preference" : "natural"}
 
 rcc  = {'email':'tekohpalma@gmail.com', 'telephone':'679800261', 'first_name':'tekoh', 'last_name':'Palma', 'password': "cyanide", 'diet_type' : Diet_Type.VEGAN.value, "meal_preference" : Meal_Preference.TRADITIONAL.value, "drink_preference" : Drink_Preference.NATURAL.value}
+
+
+
+
+Environmental variables
+DINEHUB_ENV: running environment. It can be “dev” or “test” for the moment (“production” soon!)
+DINEHUB_MYSQL_USER: the username of your MySQL
+DINEHUB_MYSQL_PWD: the password of your MySQL
+DINEHUB_MYSQL_HOST: the hostname of your MySQL
+DINEHUB_MYSQL_DB: the database name of your MySQL
+DINEHUB_TYPE_STORAGE: the type of storage used. It can be “file” (using FileStorage) or db (using DBStorage) or mongo_db(using MongoDBStorage)
+
+
+
+ To do with emergency 
+- endpoint to register restaurant, 
+{
+  "restaurantId": "r123", 
+  "restaurantName": "John's Diner",
+  "email": "john@example.com",
+  "password": "securepassword",
+  "profileImageUrl": "http://example.com/images/john.jpg",
+  "role": "restaurant_owner"
+}
+- login {email and password}
+ 
+ 
+ 

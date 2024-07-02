@@ -4,8 +4,9 @@
 from models.base_model import BaseModel
 from sqlalchemy import Integer, String, Column
 import models
+import os
 
-storage_type = models.storage_type
+storage_type = os.getenv('DINEHUB_TYPE_STORAGE', None)
 
 class Review(BaseModel):
     """class to handle client reviews"""

@@ -1,0 +1,25 @@
+
+Environmental variables
+DINEHUB_ENV: running environment. It can be “dev” or “test” for the moment (“production” soon!)
+DINEHUB_MYSQL_USER: the username of your MySQL
+DINEHUB_MYSQL_PWD: the password of your MySQL
+DINEHUB_MYSQL_HOST: the hostname of your MySQL
+DINEHUB_MYSQL_DB: the database name of your MySQL
+DINEHUB_TYPE_STORAGE: the type of storage used. It can be “file” (using FileStorage) or db (using DBStorage) or mongo_db(using MongoDBStorage)
+
+run in the root folder of backend
+start api server with db_stroage
+DINEHUB_MYSQL_PWD='dinehub_dev_pwd' DINEHUB_MYSQL_USER='dine_hub_dev' DINEHUB_TYPE_STORAGE='db' DINEHUB_MYSQL_DB='dineHub_dev_db' DINEHUB_MYSQL_HOST='localhost' python3 -m api.v1.app
+
+start api server with fs_storage
+DINEHUB_TYPE_STORAGE='fs' python3 -m api.v1.app
+ 
+ 
+# api POST parameters
+restaurants
+{"name":"Alibaba", "email":"alibaba@gmail.com", "password":"12345", "location":"downtown beach", "capacity":52, "type":"VIP", "status":"Closed", "role":"admin", "profileImageUrl": "http://example.com/images/john.jpg"}
+login
+{"email":"tekohpalma@gmail.com", "password":"12345"}
+verify
+{"email":"tekohpalma@gmail.com"}
+

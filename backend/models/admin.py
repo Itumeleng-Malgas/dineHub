@@ -5,8 +5,9 @@ from models.base_model import BaseModel
 from sqlalchemy import Column, String, Integer
 import Enum
 import models
+import os
 
-storage_type = models.storage_type
+storage_type = os.getenv('DINEHUB_TYPE_STORAGE', None)
 
 class Admin_status(Enum):
     Active = "Active"

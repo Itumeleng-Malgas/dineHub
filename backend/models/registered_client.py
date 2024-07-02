@@ -6,8 +6,9 @@ from sqlalchemy import Column, String, Integer
 from models.client import Client
 from enum import Enum
 import models
+import os
 
-storage_type = models.storage_type
+storage_type = os.getenv('DINEHUB_TYPE_STORAGE', None)
 
 class Diet_Type(Enum):
     """class to handle enum of diet type"""
@@ -32,7 +33,7 @@ class Drink_Preference(Enum):
     NON_ALCOHOLIC = "Non_alcoholic"
     COCKTAILS = "Cocktails"
 
-class Registered_client(Client, Base):
+class Registered_client(Client):
     """class to handle registered clinets"""
     if storage_type == 'db':
         registered_client_id = Column(String(36), nullable=False, primary_key=True)

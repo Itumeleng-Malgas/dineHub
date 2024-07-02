@@ -17,6 +17,12 @@ from models.review import Review
 from models.table import Table
 from models.user import User
 from models.orders import Orders
+from models.payment import Payment
+
+classes = {"Normal_client": Normal_client, "Client": Client, "Registered_client": Registered_client,
+            "Drink": Drink, "Meal": Meal, "Menu": Menu, "Orders": Orders, "Order_item": Order_item,
+            "Payment": Payment, "Reservation": Reservation, "Restaurant": Restaurant, "Review": Review,
+            "User": User, "Table": Table}
 
 
 class FileStorage:
@@ -24,14 +30,27 @@ class FileStorage:
     __objects = {}
     
     def all(self, cls=None):
-        """returns all objects of cls if cls is not None in storage ie __objects"""
+        """returns all objects in storage"""
         if cls:
-            cls_objs = []
-            for value in FileStorage.__objects.values():
-                if value['__class__'] == cls:
-                    cls_objs.append(value)
-            return cls_objs
+            available_classes_names= [class_.split('.')[0] for class_ in FileStorage.__objects.keys()]
+            # this represents the string of the class names
+            res = {}
+            # if the cls is not a recognized classes type
+            if not (cls in classes.values()):
+                return {}
+            # if the cls is a recognized class type we convert to string name of the class
+            if type(cls) != str:
+                cls = cls.__name__
+            if cls in available_classes_names:
+                for key, obj in FileStorage.__objects.items():
+                    if cls == key.split('.')[0]:
+                        res[key] = obj
+                        # res.append(obj)
+                return res
+            else:
+                return {}
         return FileStorage.__objects
+
     def new(self, obj):
         """ sets in __objects the obj with key <obj class name>.id"""
         if obj:
@@ -58,6 +77,8 @@ class FileStorage:
             res_objs = {}
             for obj_key, obj in json_objects.items():
                 res_objs[obj_key] = eval(obj["__class__"])(**obj)
+            # for k, v in res_objs.items():
+            #     res_objs[k] = v.to_dict()
             FileStorage.__objects = res_objs
             
     def delete(self, obj=None):
@@ -73,5 +94,39 @@ class FileStorage:
         """calls reload method for deserializing the json file to objects"""
         self.reload()
         
-    def get(self):
+    def get(self, cls, id):
         """method to get an instance of an object from storage"""
+        # if the cls is not a recognized classes type
+        if not (cls in classes.values()):
+            return {}
+        # if the cls is a recognized class type we convert to string name of the class
+        if type(cls) != str:
+            cls = cls.__name__
+        for obj_key in FileStorage.__objects.keys():
+            cls_name, obj_id = obj_key.split('.')
+            if cls and id:
+                if (cls_name == cls) and (obj_id == id):
+                    return FileStorage.__objects[obj_key]
+    def get_session(self):
+        """method to get the current storage session"""
+        return self
+    
+    def count(self, cls=None):
+        """method to return the number of objects in fs"""
+        self.reload()
+        count = 0
+        result = {}
+        if cls is None:
+            return len(self.__objects)
+        available_clsses = [obj.split(".")[0] for obj in self.__objects.keys()]
+        if cls in classes.values():
+            for item in available_clsses:
+                if cls.__name__ == item:
+                    count += 1
+            return count
+        if cls in classes.keys():
+            for item in available_clsses:
+                if cls == item:
+                    count += 1
+            return count
+        return 0

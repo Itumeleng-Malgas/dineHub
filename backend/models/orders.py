@@ -4,7 +4,9 @@ from models.base_model import BaseModel
 from sqlalchemy import Column, String, Integer
 import models
 from enum import Enum
-storage_type = models.storage_type
+import os
+
+storage_type = os.getenv('DINEHUB_TYPE_STORAGE', None)
 
 
 class OrderStatus(Enum):
@@ -20,7 +22,8 @@ class Orders(BaseModel):
         __tablename__ = 'orders'
         order_id = Column(String(60), nullable=False)
         client_id = Column(String(60), nullable=False)
-        status = Column(Enum(OrderStatus), nullable=False, default=OrderStatus.PENDING)
+        status = Column(String(80), nullable=False, default='Pending')
+        # status = Column(Enum(OrderStatus), nullable=False, default=OrderStatus.PENDING)
         
     else:
         order_id = ""
