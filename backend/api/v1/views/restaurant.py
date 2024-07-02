@@ -31,3 +31,29 @@ def all_restaurants():
             storage.new(new_restaurant)
             storage.save()
             return jsonify({"Message": "Resource Created Successfully"}), 200
+
+@app_views.route("/restaurant/<id>", strict_slashes=False, methods=['GET'])
+def get_restaurant(id):
+    """route to get all the restaurants"""
+    restaurants = [restaurant.to_dict() for restaurant in storage.all(Restaurant).values()]
+    print(restaurants)
+    for restaurant in restaurants:
+        if restaurant['id'] == id:
+            return jsonify(restaurant), 200
+    return jsonify({"Message": f"No Restaurant found with that id {id}"}), 404
+
+@app_views.route("/restaurant", strict_slashes=False, methods=['POST'])
+def get_restaurant_via_param():
+    """route to get all the restaurants"""
+    data = request.get_json()
+    if data is None or not isinstance(data, dict):
+            abort(404, "Not a valid JSON")
+    id = data.get('id', None)
+    if not id:
+        abort(404, "id attribute not found in data")
+    restaurants = [restaurant.to_dict() for restaurant in storage.all(Restaurant).values()]
+    print(restaurants)
+    for restaurant in restaurants:
+        if restaurant['id'] == id:
+            return jsonify(restaurant), 200
+    return jsonify({"Message": f"No Restaurant found with that id {id}"}), 404

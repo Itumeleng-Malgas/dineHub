@@ -24,7 +24,7 @@ def login():
         abort(404, "expecting email and password")
     for user in all_users:
         if (user.get('email',None) == email) and (user.get('password',None)== password):
-            return jsonify({"code": 1, "message":"success", "userType":user.get('__class__', None)})
+            return jsonify(user)
     return jsonify({"code": 0, "message":"verification failed"}), 404
 
 @app_views.route('/auth/verify', strict_slashes=False, methods=['POST'])

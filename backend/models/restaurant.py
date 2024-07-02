@@ -39,6 +39,7 @@ class Restaurant(BaseModel):
         status  = None
         role = ""
         profileImageUrl = ""
+        galleryImage = [] # list of image urls
     
     def __init__(self, *args, **kwargs):
         """constructor for restaurant"""
