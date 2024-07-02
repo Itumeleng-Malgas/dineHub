@@ -7,15 +7,15 @@ const AboutUs: React.FC = () => {
       <p className="text-lg mb-4">
         Welcome to our restaurant booking website! Our mission is to
         help you discover the best dining experiences all around Africa. Whether
-        you're looking for a cozy cafe, a family-friendly restaurant, or a
-        fine-dining establishment, we've got you covered.
+        you&apos;re looking for a cozy cafe, a family-friendly restaurant, or a
+        fine-dining establishment, we&apos;ve got you covered.
       </p>
       <h2 className="text-xl font-bold mb-2">Our Vision</h2>
       <p className="text-lg mb-4">
-        We believe that food is more than just sustenance; it's a way to connect
+        We believe that food is more than just sustenance; it&apos;s a way to connect
         with others, explore new cultures, and create lasting memories. Our
         vision is to make it easy for you to find the perfect restaurant for any
-        occasion, whether you're planning a romantic dinner, a business lunch,
+        occasion, whether you&apos;re planning a romantic dinner, a business lunch,
         or a casual brunch with friends.
       </p>
       <h2 className="text-xl font-bold mb-2">Our Services</h2>
@@ -44,12 +44,12 @@ const AboutUs: React.FC = () => {
       <h2 className="text-xl font-bold mb-2">Our Team</h2>
       <p className="text-lg mb-4">
         Our team is passionate about food and dedicated to providing you with
-        the best possible experience. We're constantly working to improve our
+        the best possible experience. We&apos;re constantly working to improve our
         website and add new features to make your dining experience even better.
       </p>
       <h2 className="text-xl font-bold mb-2">Contact Us</h2>
       <p className="text-lg mb-4">
-        If you have any questions, feedback, or suggestions, we'd love to hear
+        If you have any questions, feedback, or suggestions, we&apos;d love to hear
         from you. Please feel free to reach out to us at
         contact@dinehub.com.
       </p>

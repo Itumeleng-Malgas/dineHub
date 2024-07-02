@@ -14,6 +14,8 @@ const BookingPage: React.FC = () => {
   if (!restaurant) {
     return <div>Restaurant not found</div>;
   }
+
+  // handle the booking form submission
   const handleBooking = async (values: any) => {
     try {
       console.log('handleBooking called with values:', values);

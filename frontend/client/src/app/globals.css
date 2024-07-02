@@ -118,6 +118,21 @@ body {
   background: hsl(var(--muted));
 }
 
+/* Override yellow hover background */
+.menu-icon:hover, .sign-in-button:hover {
+  background-color: transparent !important; 
+}
+
+/* Specific override for menu icon and sign-in button if they have specific classes */
+.menu-icon:hover {
+  background-color: transparent !important; /* Remove or set desired background color */
+}
+
+.sign-in-button:hover {
+  background-color: transparent !important; /* Remove or set desired background color */
+}
+
+
 @media (max-width: 768px) {
   .form-container {
     grid-template-columns: 1fr;

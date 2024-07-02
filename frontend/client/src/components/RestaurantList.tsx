@@ -11,7 +11,7 @@ interface RestaurantListProps {
 }
 
 const RestaurantList: React.FC<RestaurantListProps> = ({ restaurants, onRestaurantClick }) => {
-   // State to keep track of favorite restaurants
+  // State to keep track of favorite restaurants
   const [favorites, setFavorites] = useState<Set<number>>(new Set());
 
   // Fetch favorite restaurants from the server when the component mounts
@@ -19,22 +19,30 @@ const RestaurantList: React.FC<RestaurantListProps> = ({ restaurants, onRestaura
     fetch('/api/favorites')
       .then((res) => res.json())
       .then((data) => {
-        const favoriteIds = data.favorites.map((fav: Restaurant) => fav.id);
-        setFavorites(new Set(favoriteIds));
+        if (data.favorites && Array.isArray(data.favorites)) {
+          const favoriteIds = data.favorites.map((fav: Restaurant) => fav.id);
+          setFavorites(new Set(favoriteIds));
+        } else {
+          setFavorites(new Set());
+        }
+      })
+      .catch((error) => {
+        console.error('Error fetching favorites:', error);
+        setFavorites(new Set());
       });
   }, []);
 
   const handleFavoriteClick = async (restaurant: Restaurant) => {
     const isFavorite = favorites.has(restaurant.id);
 
-     // If it is a favorite, send a DELETE request to remove it from favorites
+    // If it is a favorite, send a DELETE request to remove it from favorites
     if (isFavorite) {
       await fetch('/api/favorites', {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id: restaurant.id }),
       });
-       // Remove the restaurant from the favorite set
+      // Remove the restaurant from the favorite set
       setFavorites((prev) => {
         const newFavorites = new Set(prev);
         newFavorites.delete(restaurant.id);

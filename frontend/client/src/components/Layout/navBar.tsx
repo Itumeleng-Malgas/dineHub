@@ -5,8 +5,6 @@ import Container from '@/components/Container'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { Button } from '../ui/button'
-import Searchinput from '@/components/Searchinput'
-import { ModeToggle } from '@/components/theme-toggle'
 import { NavMenu } from './navMenu'
 
 export const NavBar = () => {
@@ -19,9 +17,15 @@ export const NavBar = () => {
       <Container>
         <div className='flex gap-3 justify-between items-center'>
           <div className='flex items-center gap-1 cursor-pointer' onClick={() => router.push('/')}>
-            <Image src='/logo.jpeg' alt='logo' width={50} height={50} />
+            <Image
+              src='/logo.jpeg'
+              alt='logo'
+              width={70}
+              height={70}
+              className='rounded-full objec-cover'
+            />
             <h1 className='text-3xl font-bold'>Dinehub</h1>
-            <NavMenu />
+            <NavMenu/>
           </div>
 
           <div className='flex gap-3 items-center'>

@@ -27,7 +27,7 @@ const RestaurantModal: React.FC<RestaurantModalProps> = ({ restaurant, isVisible
     };
 
     // Handle adding a new review
-    const handleAddReview = (review: Review) => {
+    const handleAddReview = async (review: Review) => {
         // Send the new review to the backend
         await fetch('/api/reviews', {
             method: 'POST',
@@ -41,7 +41,7 @@ const RestaurantModal: React.FC<RestaurantModalProps> = ({ restaurant, isVisible
     };
 
     // Handle updating an existing review
-    const handleUpdateReview = (updatedReview: Review) => {
+    const handleUpdateReview = async (updatedReview: Review) => {
         // Send the updated review to the backend
         await fetch(`/api/reviews/${updatedReview.id}`, {
             method: 'PUT',
