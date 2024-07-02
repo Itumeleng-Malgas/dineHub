@@ -1,7 +1,7 @@
 'use client'
 import React from 'react'
 import { UserButton, useAuth } from '@clerk/nextjs'
-import Container from '@/components/Container'
+import Container from '../Container'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { Button } from '../ui/button'
