@@ -18,6 +18,11 @@ app.register_blueprint(app_views)
 # upload images
 @app.route('/upload', methods=['POST'])
 def upload():
+    """
+    Uploads a file to Cloudinary.
+    Returns:
+        A JSON response with the upload result or an error status code.
+    """
     print("Request method:", request.method)
     print("Request content type:", request.content_type)
     print("Request files:", request.files)
@@ -34,7 +39,7 @@ def upload():
         upload_result = cloudinary.uploader.upload(file_to_upload)
         return jsonify(upload_result), 200
     
-    return jsonify({"error": "No file uploaded"}), 400 # return 400
+    return jsonify({"error": "No file uploaded"}), 400
 
 @app.teardown_appcontext
 def close_session(Exception):
