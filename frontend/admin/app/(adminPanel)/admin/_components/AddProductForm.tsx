@@ -105,7 +105,7 @@ const AddProductForm: React.FC<AddProductFormProps> = ({ form, fileList, setFile
             <Select placeholder="Select a menu">
               <Option value="breakfast">Breakfast</Option>
               <Option value="lunch">Lunch</Option>
-              <Option value="dinner">Dinner</Option>
+              <Option value="dinner">Drink</Option>
               <Option value="dessert">Dessert</Option>
             </Select>
           </Form.Item>

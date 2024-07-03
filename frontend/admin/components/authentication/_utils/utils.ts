@@ -1,4 +1,5 @@
 import { notification } from "antd";
+import axios from "axios";
 
 export const openNotification = (message: string) => {
     notification.error({
@@ -8,3 +9,9 @@ export const openNotification = (message: string) => {
       placement: 'topRight',
     });
   };
+
+
+  export const Register = async () => {
+    const response = await axios.post('http://127.0.0.1:3001/api/v1/restaurants', {"name":"Alibaba", "email":"alibaba@gmail.com", "password":"12345"});
+    return response;
+  } 

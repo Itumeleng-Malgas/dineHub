@@ -5,6 +5,8 @@ import Link from 'next/link';
 import { Layout, Typography, Button, Form, Input, Divider, FormProps } from "antd";
 import SocialLogin from "@/components/authentication/SocialLogin";
 import { registerValidationRules } from './_utils/validationRules';
+import axios from "axios";
+import { Register } from "./_utils/utils";
 
 export type RegisterFieldType = {
     name?: string;
@@ -16,8 +18,10 @@ const { Content } = Layout;
 const { Title } = Typography;
 
 const RegisterComponent = () => {
-    const onFinish: FormProps<RegisterFieldType>['onFinish'] = (values) => {
+    const onFinish: FormProps<RegisterFieldType>['onFinish'] = async (values) => {
         console.log('Success:', values);
+        Register()
+        
     };
 
     const onFinishFailed = (errorInfo: any) => {
