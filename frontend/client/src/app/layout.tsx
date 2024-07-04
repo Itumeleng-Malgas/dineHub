@@ -4,6 +4,7 @@ import "./globals.css";
 
 import { ClerkProvider } from "@clerk/nextjs";
 import NavBar from "@/components/Layout/navBar";
+import NavMenu from "./test/page";
 import {  ThemeProvider } from "@/components/theme-provider";
 import Container from "@/components/Container";
 
@@ -31,21 +32,17 @@ export default function RootLayout({
       <html lang="en" suppressHydrationWarning>
 
         <body className={inter.className}>
-         <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
+        
           <main className="flex flex-col min-h-screen bg-secondary">
             <NavBar />
+            <NavMenu/>
             <section className="flex-grow">
               <Container>
               {children}
               </Container>
             </section>
           </main>
-          </ThemeProvider>
+         
         </body>
 
       </html>
