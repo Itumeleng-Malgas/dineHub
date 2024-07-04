@@ -5,6 +5,7 @@ from api.v1.views import app_views
 from models import storage
 from models.restaurant import Restaurant
 from flask import jsonify, request, abort
+import bcrypt
 
 
 @app_views.route("/restaurants", strict_slashes=False, methods=['GET', 'POST'])
@@ -26,7 +27,13 @@ def all_restaurants():
                 if key not in allow_attributes:
                     abort(404, f"unsopported attribute {key}")
                 if key not in ['created_at','updated_at','id']:
-                    new_restaurant_dict[key] = value
+                    if key == 'password':
+                    # Encode the password and hash it
+                        encoded_password = value.encode('utf-8')
+                        hashed_password = bcrypt.hashpw(encoded_password, bcrypt.gensalt())
+                        new_restaurant_dict[key] = hashed_password.decode('utf-8')
+                    else:
+                        new_restaurant_dict[key] = value
             new_restaurant = Restaurant(**new_restaurant_dict)
             storage.new(new_restaurant)
             storage.save()
