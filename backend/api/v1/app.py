@@ -2,14 +2,44 @@
 """ Main flask app to handle DineHub API"""
 
 from os import getenv
-from flask import Flask, jsonify
+from flask import Flask, request, jsonify
 from models import storage
 from flask_cors import CORS
 from api.v1.views import app_views
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
+import config
 
 app = Flask(__name__)
-CORS(app, resources={r"/": {"origins": ""}})
+CORS(app, resources={r"/*": {"origins": "*"}})
 app.register_blueprint(app_views)
+
+# upload images
+@app.route('/upload', methods=['POST'])
+def upload():
+    """
+    Uploads a file to Cloudinary.
+    Returns:
+        A JSON response with the upload result or an error status code.
+    """
+    print("Request method:", request.method)
+    print("Request content type:", request.content_type)
+    print("Request files:", request.files)
+    
+    if 'file' not in request.files:
+        return jsonify({"error": "No file part in the request"}), 400
+    
+    file_to_upload = request.files['file']
+    
+    if file_to_upload.filename == '':
+        return jsonify({"error": "No selected file"}), 400
+    
+    if file_to_upload:
+        upload_result = cloudinary.uploader.upload(file_to_upload)
+        return jsonify(upload_result), 200
+    
+    return jsonify({"error": "No file uploaded"}), 400
 
 @app.teardown_appcontext
 def close_session(Exception):
