@@ -43,7 +43,6 @@ def all_restaurants():
 def get_restaurant(id):
     """route to get all the restaurants"""
     restaurants = [restaurant.to_dict() for restaurant in storage.all(Restaurant).values()]
-    print(restaurants)
     for restaurant in restaurants:
         if restaurant['id'] == id:
             return jsonify(restaurant), 200
@@ -59,7 +58,6 @@ def get_restaurant_via_param():
     if not id:
         abort(404, "id attribute not found in data")
     restaurants = [restaurant.to_dict() for restaurant in storage.all(Restaurant).values()]
-    print(restaurants)
     for restaurant in restaurants:
         if restaurant['id'] == id:
             return jsonify(restaurant), 200
