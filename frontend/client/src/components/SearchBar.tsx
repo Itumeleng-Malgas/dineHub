@@ -53,6 +53,16 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
     }
   }, [selectedCountry, selectedState]);
 
+  const checkBackendAvailability = async () => {
+    try {
+      const response = await axios.get('/api/healthcheck'); // Replace with your backend health check endpoint
+      return response.status === 200;
+    } catch (error) {
+      console.error('Backend is not available:', error);
+      return false;
+    }
+  };
+
   // Handle search button click
   const handleSearch = async () => {
     const searchCriteria: SearchCriteria = {
@@ -60,16 +70,44 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
       location: { selectedCountry, selectedState, selectedCity }
     };
 
-    try {
-      // Send search criteria to the server
-      const response = await axios.post('/api/search', searchCriteria);
-      const filteredRestaurants = response.data;
+    const isBackendAvailable = await checkBackendAvailability();
 
-      setRestaurants(filteredRestaurants); // Update the state with the restaurants from the backend
+    if (isBackendAvailable) {
+      try {
+        // Send search criteria to the server
+        const response = await axios.post('/api/search', searchCriteria);
+        const filteredRestaurants = response.data;
+
+        setRestaurants(filteredRestaurants); // Update the state with the restaurants from the backend
+        onSearch(searchCriteria); // Trigger the onSearch callback with search criteria
+      } catch (error) {
+        console.error('Error fetching restaurants:', error);
+      }
+    } else {
+      console.warn('Using mock data due to backend unavailability');
+      // Filter mock restaurants based on search criteria
+      const filteredRestaurants = mockRestaurants.filter((restaurant) => {
+        const matchesNameCuisine = restaurant.name
+          .toLowerCase()
+          .includes(restaurantNameCuisine.toLowerCase()) ||
+          restaurant.cuisine.toLowerCase().includes(restaurantNameCuisine.toLowerCase());
+
+        const matchesLocation = restaurant.city === selectedCity ||
+          restaurant.state === selectedState ||
+          restaurant.country === selectedCountry;
+
+        return matchesNameCuisine && matchesLocation;
+      });
+
+      setRestaurants(filteredRestaurants); // Update the state with the filtered mock restaurants
       onSearch(searchCriteria); // Trigger the onSearch callback with search criteria
-    } catch (error) {
-      console.error('Error fetching restaurants:', error);
     }
+  };
+
+  // Define the function to handle restaurant clicks
+  const handleRestaurantClick = (restaurant: Restaurant) => {
+    console.log(`Restaurant with ID ${restaurant.id} clicked`);
+    // Implement the logic for handling restaurant clicks, e.g., navigating to a restaurant detail page
   };
 
   return (
@@ -146,9 +184,10 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
       >
         Search
       </Button>
-      <RestaurantList restaurants={restaurants} onRestaurantClick={function (): void {
-        throw new Error('Function not implemented.');
-      }} />
+      <RestaurantList
+        restaurants={restaurants}
+        onRestaurantClick={handleRestaurantClick}
+      />
     </div>
   );
 };

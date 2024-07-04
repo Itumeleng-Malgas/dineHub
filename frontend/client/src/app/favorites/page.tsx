@@ -11,16 +11,37 @@ const FavoritesPage: React.FC = () => {
   const { user } = useUser();
   const userId = user?.id;
 
-  // fetch favorites on page load from the backend
+  // Helper function to save favorites to local storage
+  const saveFavoritesToLocal = (favorites: Restaurant[]) => {
+    localStorage.setItem('favorites', JSON.stringify(favorites));
+  };
+
+  // Helper function to load favorites from local storage
+  const loadFavoritesFromLocal = (): Restaurant[] => {
+    const localFavorites = localStorage.getItem('favorites');
+    return localFavorites ? JSON.parse(localFavorites) : [];
+  };
+
+  // Fetch favorites on page load from the backend or local storage
   useEffect(() => {
     const fetchFavorites = async () => {
       if (userId) {
-        const response = await fetch('/api/favorites', {
-          headers: { 'user-id': userId }
-        });
+        try {
+          const response = await fetch('/api/favorites', {
+            headers: { 'user-id': userId }
+          });
 
-        const data = await response.json();
-        setFavorites(data.favorites);
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+
+          const data = await response.json();
+          setFavorites(data.favorites);
+          saveFavoritesToLocal(data.favorites); // Save fetched favorites to local storage
+        } catch (error) {
+          console.error('Fetching favorites failed:', error);
+          setFavorites(loadFavoritesFromLocal()); // Load favorites from local storage if fetch fails
+        }
       }
     };
 
@@ -30,31 +51,39 @@ const FavoritesPage: React.FC = () => {
   const addToFavorites = async (restaurantId: number, userId: string) => {
     if (!userId) return;
 
-    await fetch('/api/favorites', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'user-id': userId,
-      },
-      body: JSON.stringify({ id: restaurantId }),
-    });
-    const response = await fetch('/api/favorites', {
-      headers: { 'user-id': userId }
-    });
+    try {
+      await fetch('/api/favorites', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'user-id': userId,
+        },
+        body: JSON.stringify({ id: restaurantId }),
+      });
 
-    const data = await response.json();
-    setFavorites(data.favorites);
+      const response = await fetch('/api/favorites', {
+        headers: { 'user-id': userId }
+      });
+
+      const data = await response.json();
+      setFavorites(data.favorites);
+      saveFavoritesToLocal(data.favorites); // Save updated favorites to local storage
+    } catch (error) {
+      console.error('Updating favorites failed:', error);
+      // Optionally, handle the error by notifying the user or retrying
+    }
   };
-  
+
   const handleFavoriteClick = async (restaurant: Restaurant) => {
     if (!userId) return;
-    
+
     const isFavorite = favorites.some(fav => fav.id === restaurant.id);
     if (isFavorite) {
       const updatedFavorites = favorites.filter(fav => fav.id !== restaurant.id);
       setFavorites(updatedFavorites);
+      saveFavoritesToLocal(updatedFavorites); // Save updated favorites to local storage
 
-      if (userId) {
+      try {
         await fetch('/api/favorites', {
           method: 'DELETE',
           headers: {
@@ -63,6 +92,9 @@ const FavoritesPage: React.FC = () => {
           },
           body: JSON.stringify({ id: restaurant.id }),
         });
+      } catch (error) {
+        console.error('Removing favorite failed:', error);
+        // Optionally, handle the error by notifying the user or retrying
       }
     } else {
       await addToFavorites(restaurant.id, userId);

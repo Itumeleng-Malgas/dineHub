@@ -23,9 +23,11 @@ export const NavBar = () => {
               width={70}
               height={70}
               className='rounded-full objec-cover'
+              priority
+              style={{ width: 'auto', height: 'auto' }}
             />
             <h1 className='text-3xl font-bold'>Dinehub</h1>
-            <NavMenu/>
+            <NavMenu />
           </div>
 
           <div className='flex gap-3 items-center'>
