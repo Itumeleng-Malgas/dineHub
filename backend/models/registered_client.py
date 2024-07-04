@@ -5,6 +5,7 @@ from models.base_model import BaseModel, Base
 from sqlalchemy import Column, String, Integer
 from models.client import Client
 from enum import Enum
+import uuid
 import models
 import os
 
@@ -33,10 +34,10 @@ class Drink_Preference(Enum):
     NON_ALCOHOLIC = "Non_alcoholic"
     COCKTAILS = "Cocktails"
 
-class Registered_client(Client):
+class Registered_client(BaseModel, Base):
     """class to handle registered clinets"""
     if storage_type == 'db':
-        registered_client_id = Column(String(36), nullable=False, primary_key=True)
+        registered_client_id = Column(String(60), nullable=True, default=lambda: str(uuid.uuid4()))
         email = Column(String(128), nullable=False)
         telephone = Column(String(20), nullable=False)
         first_name = Column(String(128), nullable=False)

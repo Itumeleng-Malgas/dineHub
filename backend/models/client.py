@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Module to handle clients"""
 
-from models.base_model import BaseModel
+from models.base_model import BaseModel, Base
 from uuid import uuid4
 from datetime import datetime
 
