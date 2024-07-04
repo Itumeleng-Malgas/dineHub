@@ -11,7 +11,6 @@ from flask import jsonify, request, abort
 def all_registered_clients():
     """route to get all the restaurants"""
     if request.method == "GET":
-        print("hello")
         registered_clients = [client.to_dict() for client in storage.all(Registered_client).values()]
         return jsonify(registered_clients), 200
     

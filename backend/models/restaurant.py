@@ -1,23 +1,27 @@
 #!/usr/bin/python3
 """module to handle restaurant"""
 
+import uuid
 from models.base_model import BaseModel, Base
 import models
-from sqlalchemy import Column, String, DateTime, Integer
+from sqlalchemy import UUID, Column, String, DateTime, Integer
 from enum import Enum
 import os
 
 storage_type = os.getenv('DINEHUB_TYPE_STORAGE', None)
 
+
 class Status(Enum):
     OPEN = "open"
     CLOSED = "closed"
 
-class Restaurant(BaseModel):
+class Restaurant(BaseModel, Base):
     """class to handle restaurant"""
     if storage_type == 'db':
         __tablename__ = "restaurants"
-        restaurant_id = Column(String(60), nullable= False, primary_key=True, unique= True)
+        # restaurant_id = Column(String(60), nullable= False, primary_key=True, unique= True)
+        # restaurant_id = Column(String(60), nullable=True)
+        restaurant_id = Column(String(60), nullable=True, default=lambda: str(uuid.uuid4()))
         name = Column(String(128), nullable=False)
         email = Column(String(60), nullable=False)
         password = Column(String(60), nullable=False)

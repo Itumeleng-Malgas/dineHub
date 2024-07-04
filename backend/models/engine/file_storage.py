@@ -18,11 +18,12 @@ from models.table import Table
 from models.user import User
 from models.orders import Orders
 from models.payment import Payment
+from models.favorite import Favorite
 
 classes = {"Normal_client": Normal_client, "Client": Client, "Registered_client": Registered_client,
             "Drink": Drink, "Meal": Meal, "Menu": Menu, "Orders": Orders, "Order_item": Order_item,
             "Payment": Payment, "Reservation": Reservation, "Restaurant": Restaurant, "Review": Review,
-            "User": User, "Table": Table}
+            "User": User, "Table": Table, "Favorite": Favorite}
 
 
 class FileStorage:
