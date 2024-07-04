@@ -5,3 +5,13 @@
 # Introduction
 
  DineHub is designed to streamline restaurant operations, making it easier for restaurant owners and managers to register their establishments, manage reservations, menu items, and customer interactions. With a user-friendly interface and powerful backend, DineHub ensures a seamless experience for both restaurant staff and customers.
+
+# Table of Contents
+* Introduction
+* Features
+* Installation
+* Usage
+* Screenshots
+* Contributing
+* License
+* Support
