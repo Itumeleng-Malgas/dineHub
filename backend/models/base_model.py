@@ -9,8 +9,12 @@ import models
 import os
 
 storage_type = os.getenv('DINEHUB_TYPE_STORAGE', None)
-# create an instance of declarative base
-Base = declarative_base()
+
+if storage_type == 'db':
+    # create an instance of declarative base
+    Base = declarative_base()
+else:
+    Base = object
 
 class BaseModel:
     """Base model class"""
