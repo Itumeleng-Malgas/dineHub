@@ -18,8 +18,29 @@ DINEHUB_TYPE_STORAGE='fs' python3 -m api.v1.app
 # api POST parameters
 restaurants
 {"name":"Alibaba", "email":"alibaba@gmail.com", "password":"12345", "location":"downtown beach", "capacity":52, "type":"VIP", "status":"Closed", "role":"admin", "profileImageUrl": "http://example.com/images/john.jpg"}
+return 
+path
 login
 {"email":"tekohpalma@gmail.com", "password":"12345"}
 verify
 {"email":"tekohpalma@gmail.com"}
+review
+endpoint: http://127.0.0.1:6000/api/v1/reviews
+POST
+{"restaurant_id":"xdkdek", "client_id":"xxxx", "text":"its really a nice place I love their services so much"}
+returns the Id of the created review
+GET
+returns all the reviews in the system
 
+Favorites
+/favorites POST
+{"restaurant_id":"xdkdek", "client_id": "xkfdkdkf"}
+/favorite/<client_id> GET
+returns all the favorite restaurants for the client with client_id
+/favorite/ POST
+{"client_id": "clientid value"}
+returns all the favorite restaurants for the client with clientid_value
+/booking/ POST
+
+
+hashing of password
