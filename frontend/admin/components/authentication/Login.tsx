@@ -1,7 +1,8 @@
 "use client"
 
+import React, { useState } from 'react';
 import Link from 'next/link';
-import { Layout, Typography, Button, Form, Input, Divider, Checkbox } from "antd";
+import { Layout, Typography, Button, Form, Input, Divider, Checkbox, Spin } from "antd";
 import SocialLogin from "@/components/authentication/SocialLogin";
 import { FaLock } from "react-icons/fa";
 import { loginValidationRules } from './_utils/validationRules';
@@ -10,8 +11,6 @@ import type { FormProps } from 'antd';
 import { Login, openNotification } from './_utils/utils';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import axios from 'axios';
-import { hashPass } from '@/lib/auth';
 
 export type LoginFieldType = {
     email?: string;
@@ -23,17 +22,19 @@ const { Content } = Layout;
 const { Title } = Typography;
 
 const LoginComponent = () => {
-    const router = useRouter()
+    const [loading, setLoading] = useState(false);
+    const router = useRouter();
 
     const onFinish: FormProps<LoginFieldType>['onFinish'] = async (values) => {
-        const result = await signIn("credentials", { ...values, redirect: false } );
-        if(result?.error) {
-            openNotification(result.error)
+        setLoading(true);
+        const result = await signIn("credentials", { ...values, redirect: false });
+        setLoading(false);
+        if (result?.error) {
+            openNotification(result.error);
         }
         if (result?.ok) {
-            router.push('/admin')
+            router.push('/admin');
         }
-        //await Login(values)
     };
 
     const onFinishFailed: FormProps<LoginFieldType>['onFinishFailed'] = (errorInfo) => {
@@ -75,7 +76,9 @@ const LoginComponent = () => {
                     </div>
                 </Form.Item>
                 <Form.Item>
-                    <Button className="w-full" type="primary" htmlType="submit">Login</Button>
+                    <Button className="w-full" type="primary" htmlType="submit" disabled={loading}>
+                        {loading ? <Spin /> : 'Login'}
+                    </Button>
                 </Form.Item>
             </Form>
             <Typography.Paragraph>

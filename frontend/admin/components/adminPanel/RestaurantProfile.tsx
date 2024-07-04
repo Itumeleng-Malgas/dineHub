@@ -1,33 +1,40 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Layout, Button, Form, Input, Select, Row, Col, Upload, UploadFile } from "antd";
+import { Layout, Button, Form, Input, Select, Row, Col, Upload, UploadFile, message } from "antd";
 import { PlusOutlined, UploadOutlined } from '@ant-design/icons';
 import axios from "axios";
 import { restaurantProfileValidationRules } from "./_utils/validationRules";
-import { useUploadThing } from 'uploadthing/react';
+import { RcFile, UploadChangeParam } from 'antd/lib/upload';
 
 const { Content } = Layout;
 const { TextArea } = Input;
 const { Option } = Select;
 
-const RestaurantProfilePage = () => {
+interface InitialValues {
+  restaurantName: string;
+  email: string;
+  address: string;
+  phone: string;
+  cuisine: string;
+  description: string;
+}
+
+const RestaurantProfilePage: React.FC = () => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
-  const [initialValues, setInitialValues] = useState({
-    restaurantName: 'Test Restaurant',
-    email: 'test@example.com',
-    address: '123 Main St',
-    phone: '+27636994946',
-    cuisine: 'italian',
-    description: 'A great place to eat!',
+  const [initialValues, setInitialValues] = useState<InitialValues>({
+    restaurantName: '',
+    email: '',
+    address: '',
+    phone: '',
+    cuisine: '',
+    description: '',
   });
-  const [fileList, setFileList] = useState<UploadFile[]>([]);
+  const [fileList, setFileList] = useState<UploadFile<RcFile>[]>([]);
   const [restaurantImage, setRestaurantImage] = useState<string | null>(null);
   const [gallery, setGallery] = useState<string[]>([]);
   const router = useRouter();
-
-  const { upload } = useUploadThing();
 
   const uploadButton = (
     <button style={{ border: 0, background: 'none' }} type="button">
@@ -37,10 +44,9 @@ const RestaurantProfilePage = () => {
   );
 
   useEffect(() => {
-    // Fetch restaurant data
     const fetchRestaurantData = async () => {
       try {
-        const response = await axios.get('/api/restaurant-profile');
+        const response = await axios.get('/api/getProfile');
         setInitialValues(response.data);
         form.setFieldsValue(response.data);
       } catch (error) {
@@ -56,15 +62,17 @@ const RestaurantProfilePage = () => {
     const payload = {
       ...values,
       restaurantImage,
-      gallery
+      gallery,
     };
     console.log('Payload:', payload); // Log the data to be posted
     try {
-      const response = await axios.post('/restaurant', payload);
+      const response = await axios.post('/api/saveProfile', payload);
       console.log('Profile updated successfully:', response.data);
+      message.success('Profile updated successfully')
       setLoading(false);
     } catch (error) {
       console.error('Error updating profile:', error);
+      message.error('Error updating profile')
       setLoading(false);
     }
   };
@@ -73,15 +81,28 @@ const RestaurantProfilePage = () => {
     console.log('Failed:', errorInfo);
   };
 
-  const handleUploadChange = async ({ file, fileList, event }, type: 'restaurantImage' | 'gallery') => {
-    if (file.status === 'done') {
-      const uploadedFile = await upload(file.originFileObj);
-      if (type === 'restaurantImage') {
-        setRestaurantImage(uploadedFile.url);
-      } else {
-        setGallery((prevGallery) => [...prevGallery, uploadedFile.url]);
+  const handleUploadChange = async (info: UploadChangeParam<UploadFile<RcFile>>, type: 'restaurantImage' | 'gallery') => {
+    if (info.file.status === 'done' && info.file.originFileObj) {
+      const formData = new FormData();
+      formData.append('file', info.file.originFileObj);
+
+      try {
+        const response = await axios.post('http://localhost:3001/upload', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+        const uploadedFileUrl = response.data.url;
+
+        if (type === 'restaurantImage') {
+          setRestaurantImage(uploadedFileUrl);
+        } else {
+          setGallery((prevGallery) => [...prevGallery, uploadedFileUrl]);
+        }
+        setFileList(info.fileList);
+      } catch (error) {
+        console.error('Error uploading file:', error);
       }
-      setFileList(fileList);
     }
   };
 

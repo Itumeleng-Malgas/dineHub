@@ -36,7 +36,7 @@ const AddFormModal = () => {
         </Button>,
       ]}
     >
-      <AddProductForm form={form} fileList={fileList} setFileList={setFileList} />
+      <AddProductForm email='aaron.tumi@live.co.za' form={form} fileList={fileList} setFileList={setFileList} />
     </Modal>
   );
 };

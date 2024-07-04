@@ -1,4 +1,4 @@
-import { BarChartOutlined, DashboardOutlined, ProductOutlined, SettingOutlined, UserOutlined } from "@ant-design/icons";
+import { DashboardOutlined, ProductOutlined, SettingOutlined, UserOutlined } from "@ant-design/icons";
 import { MenuProps } from "antd";
 import React from "react";
 
@@ -20,11 +20,6 @@ export const siderMenuItems: MenuProps['items'] = [
       key: 'products',
       icon: React.createElement(ProductOutlined),
       label: 'Products Management'
-    },
-    {
-      key: 'analytics',
-      icon: React.createElement(BarChartOutlined),
-      label: 'Analytics',
     },
     {
       key: 'settings',

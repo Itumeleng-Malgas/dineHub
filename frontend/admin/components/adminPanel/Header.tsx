@@ -6,8 +6,8 @@ import { Button, Dropdown, MenuProps, message } from 'antd'
 import { signOut } from 'next-auth/react';
 import React from 'react'
 import { IoAddOutline } from 'react-icons/io5';
-import AddMenu from './AddMenu';
 import { useRouter } from 'next/navigation'
+import { useSession } from 'next-auth/react';
 
 const handleMenuClick: MenuProps['onClick'] = async (e) => {
   await signOut()
@@ -39,7 +39,7 @@ const HeaderComponent = () => {
       </div>
       <AddFormModal />
       <div className='whitespace-nowrap'>
-        <span className='sm:text-sx lg:text-lg md:font-bold mr-2'>Itumeleng&apos;s Dinner</span>
+        <span className='hidden md:inline-block sm:text-sx lg:text-lg md:font-bold mr-2'>Itumeleng&apos;s Dinner</span>
         <Dropdown  menu={menuProps}>
           <Button shape='round' icon={<LogoutOutlined />} />
         </Dropdown>

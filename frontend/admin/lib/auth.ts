@@ -21,11 +21,7 @@ async function verifyPass(password: string, hash: string): Promise<boolean> {
 async function getUser(email: string, password: string): Promise<any> {
   try {
     const user = await axios.post('http://localhost:3001/api/v1/auth/login', { email, password });
-    console.log(user.data)
-    if(await verifyPass(password, user.data.password)){
-      return user;
-    }
-    return null;
+    return user.data ?? null;
   } catch (error) {
     console.error('Error fetching user:', error);
     return null;
@@ -46,6 +42,7 @@ export const authOptions: AuthOptions = {
       credentials: {
         email: { label: 'Email', type: 'text' },
         password: { label: 'Password', type: 'password' },
+        other: { label: 'other', type: 'text' },
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials.password) {
@@ -53,7 +50,10 @@ export const authOptions: AuthOptions = {
         }
 
         const user = await getUser(credentials.email as string, credentials.password as string);
-        return user ?? null;
+        if (user) {
+          return {"id": user.id, "email": user.email}
+        }
+        return null;
       },
     }),
     GoogleProvider({

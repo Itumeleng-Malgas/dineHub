@@ -1,13 +1,12 @@
 "use client"
 
-import React from "react";
+import React, { useState } from "react";
 import Link from 'next/link';
-import { Layout, Typography, Button, Form, Input, Divider, FormProps } from "antd";
+import { Layout, Typography, Button, Form, Input, Divider, FormProps, Spin } from "antd";
 import SocialLogin from "@/components/authentication/SocialLogin";
 import { registerValidationRules } from './_utils/validationRules';
 import axios from "axios";
 import { errorNotification, successNotification } from "./_utils/utils";
-import { hashPass } from "@/lib/auth";
 import { useRouter } from 'next/navigation'
 
 export type RegisterFieldType = {
@@ -20,21 +19,24 @@ const { Content } = Layout;
 const { Title } = Typography;
 
 const RegisterComponent = () => {
+    const [loading, setLoading] = useState(false);
     const router = useRouter();
 
-    const onFinish: FormProps<RegisterFieldType>['onFinish'] = async ({name, email, password}) => {
+    const onFinish: FormProps<RegisterFieldType>['onFinish'] = async ({ name, email, password }) => {
+        setLoading(true);
         try {
-            const response = await axios.post('http://127.0.0.1:3001/api/v1/restaurants', {"name": name, "email": email, "password": await hashPass(password as string)});
-            console.log(await hashPass(password as string))
-            if (response.data.Message){
+            const response = await axios.post('http://127.0.0.1:3001/api/v1/restaurants', { "name": name, "email": email, "password": password });
+            setLoading(false);
+            if (response.data.Message) {
                 successNotification(response.data.Message);
                 router.push('/login')
             }
         } catch (error) {
-            if (error instanceof Error){
+            setLoading(false);
+            if (error instanceof Error) {
                 errorNotification(error.message)
-            } 
-        }        
+            }
+        }
     };
 
     const onFinishFailed = (errorInfo: any) => {
@@ -78,7 +80,9 @@ const RegisterComponent = () => {
                     <Input placeholder="Confirm Password" type="password" />
                 </Form.Item>
                 <Form.Item>
-                    <Button className="w-full" type="primary" htmlType="submit">Create Account</Button>
+                    <Button className="w-full" type="primary" htmlType="submit" disabled={loading}>
+                        {loading ? <Spin /> : 'Create Account'}
+                    </Button>
                 </Form.Item>
             </Form>
             <Typography.Paragraph>

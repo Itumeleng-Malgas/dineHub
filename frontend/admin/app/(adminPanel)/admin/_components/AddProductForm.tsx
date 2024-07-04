@@ -1,65 +1,87 @@
-import { Form, Input, Upload, Button, message, FormInstance, UploadProps, UploadFile, GetProp, Select } from 'antd';
-import { UploadOutlined } from '@ant-design/icons';
 import React, { Dispatch, SetStateAction } from 'react';
+import { Form, Input, Upload, Button, message, Select } from 'antd';
+import { UploadOutlined } from '@ant-design/icons';
+import axios from 'axios';
 import { useToggle } from '@/context/ToggleContext';
-import { addProduct } from '../_actions/product';
-import { revalidatePath } from 'next/cache';
 import { restaurantProfileValidationRules } from '@/components/adminPanel/_utils/validationRules';
+import { RcFile, UploadFile } from 'antd/lib/upload/interface';
 
 const { Option } = Select;
 
 interface AddProductFormProps {
-  form: FormInstance;
-  fileList: UploadFile<any>[];
-  setFileList: Dispatch<SetStateAction<UploadFile<any>[]>>
+  form: any; // FormInstance type is not directly imported here
+  fileList: UploadFile<RcFile>[];
+  setFileList: Dispatch<SetStateAction<UploadFile<RcFile>[]>>;
+  email: string;
 }
 
-type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
-
-const AddProductForm: React.FC<AddProductFormProps> = ({ form, fileList, setFileList }) => {
+const AddProductForm: React.FC<AddProductFormProps> = ({ form, fileList, setFileList, email }) => {
   const { toggleState } = useToggle();
-
-  const props: UploadProps = {
-    onRemove: (file) => {
-      const index = fileList.indexOf(file);
-      const newFileList = fileList.slice();
-      newFileList.splice(index, 1);
-      setFileList(newFileList);
-    },
-    beforeUpload: (file) => {
-      setFileList([...fileList, file]);
-      return false;
-    },
-    fileList,
-    multiple: false,
-  };
 
   const onFinish = async (values: any) => {
     const formData = new FormData();
 
+    // Append form values (excluding picture) to formData
     Object.keys(values).forEach(key => {
       if (key !== 'picture') {
         formData.append(key, values[key]);
       }
     });
+
+    // Append picture file to formData
     if (fileList.length > 0) {
-      fileList.forEach((file) => {
-        formData.append('picture', file as FileType);
-      });
+      formData.append('picture', fileList[0].originFileObj as File);
     }
 
     try {
-      // Call the server-side function
-      const result = await addProduct(formData);
-      message.success(result.message);
-      revalidatePath("/admin/products")
-      
-      form.resetFields();
-      setFileList([]);
-      toggleState();
+      // Upload picture and product data to server
+      const uploadResponse = await axios.post('http://localhost:3001/upload', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      const imageUrl = uploadResponse.data.url;
+
+      // Prepare product data with imageUrl
+      const productData = {
+        ...values,
+        picture: imageUrl,
+        userEmail: email,
+      };
+
+      // Send productData to saveProduct API endpoint
+      const saveResponse = await axios.post('/api/saveRestaurant', productData);
+
+      if (saveResponse.status === 200) {
+        message.success('Product added successfully');
+        form.resetFields();
+        setFileList([]);
+        toggleState();
+      } else {
+        message.error('Failed to add product');
+      }
     } catch (error) {
+      console.error('Error adding product:', error);
       message.error('Failed to add product');
     }
+  };
+
+  const beforeUploadHandler = (file: RcFile): boolean => {
+    setFileList([file as UploadFile<RcFile>]);
+    return false; // Prevent default upload behavior
+  };
+
+  const props = {
+    onRemove: (file: UploadFile<RcFile>) => {
+      const index = fileList.indexOf(file);
+      const newFileList = [...fileList];
+      newFileList.splice(index, 1);
+      setFileList(newFileList);
+    },
+    beforeUpload: beforeUploadHandler,
+    fileList,
+    multiple: false,
   };
 
   return (
@@ -77,9 +99,9 @@ const AddProductForm: React.FC<AddProductFormProps> = ({ form, fileList, setFile
       <div className='flex gap-1'>
         <div className='flex-1'>
           <Form.Item
-          name="price"
-          label="Price"
-          rules={[{ required: true, message: 'Please enter product price' }]}
+            name="price"
+            label="Price"
+            rules={[{ required: true, message: 'Please enter product price' }]}
           >
             <Input style={{ maxWidth: '300px' }} placeholder="Price" />
           </Form.Item>
@@ -92,7 +114,6 @@ const AddProductForm: React.FC<AddProductFormProps> = ({ form, fileList, setFile
               <Option value="italian">Italian</Option>
               <Option value="chinese">Chinese</Option>
               <Option value="indian">Indian</Option>
-              {/* Add more options as needed */}
             </Select>
           </Form.Item>
         </div>
