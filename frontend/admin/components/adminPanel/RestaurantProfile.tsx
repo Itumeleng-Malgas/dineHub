@@ -1,10 +1,11 @@
-"use client"
+"use client";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Layout, Button, Form, Input, Select, Row, Col, Upload, } from "antd";
+import { Layout, Button, Form, Input, Select, Row, Col, Upload, UploadFile } from "antd";
 import { PlusOutlined, UploadOutlined } from '@ant-design/icons';
 import axios from "axios";
 import { restaurantProfileValidationRules } from "./_utils/validationRules";
+import { useUploadThing } from 'uploadthing/react';
 
 const { Content } = Layout;
 const { TextArea } = Input;
@@ -21,8 +22,12 @@ const RestaurantProfilePage = () => {
     cuisine: 'italian',
     description: 'A great place to eat!',
   });
-  const [fileList, setFileList] = useState([]);
+  const [fileList, setFileList] = useState<UploadFile[]>([]);
+  const [restaurantImage, setRestaurantImage] = useState<string | null>(null);
+  const [gallery, setGallery] = useState<string[]>([]);
   const router = useRouter();
+
+  const { upload } = useUploadThing();
 
   const uploadButton = (
     <button style={{ border: 0, background: 'none' }} type="button">
@@ -48,9 +53,15 @@ const RestaurantProfilePage = () => {
 
   const onFinish = async (values: any) => {
     setLoading(true);
+    const payload = {
+      ...values,
+      restaurantImage,
+      gallery
+    };
+    console.log('Payload:', payload); // Log the data to be posted
     try {
-      await axios.put('/api/restaurant-profile', values);
-      console.log('Profile updated successfully');
+      const response = await axios.post('/restaurant', payload);
+      console.log('Profile updated successfully:', response.data);
       setLoading(false);
     } catch (error) {
       console.error('Error updating profile:', error);
@@ -62,7 +73,17 @@ const RestaurantProfilePage = () => {
     console.log('Failed:', errorInfo);
   };
 
-  const handleUploadChange = ({ fileList }) => setFileList(fileList);
+  const handleUploadChange = async ({ file, fileList, event }, type: 'restaurantImage' | 'gallery') => {
+    if (file.status === 'done') {
+      const uploadedFile = await upload(file.originFileObj);
+      if (type === 'restaurantImage') {
+        setRestaurantImage(uploadedFile.url);
+      } else {
+        setGallery((prevGallery) => [...prevGallery, uploadedFile.url]);
+      }
+      setFileList(fileList);
+    }
+  };
 
   return (
     <Content>
@@ -135,7 +156,7 @@ const RestaurantProfilePage = () => {
                   name="image"
                   listType="picture"
                   maxCount={1}
-                  onChange={handleUploadChange}
+                  onChange={(info) => handleUploadChange(info, 'restaurantImage')}
                 >
                   <Button icon={<UploadOutlined />}>Upload Restaurant Image</Button>
                 </Upload>
@@ -150,7 +171,7 @@ const RestaurantProfilePage = () => {
                   name="gallery"
                   listType="picture-card"
                   multiple
-                  onChange={handleUploadChange}
+                  onChange={(info) => handleUploadChange(info, 'gallery')}
                 >
                   {fileList.length >= 8 ? null : uploadButton}
                 </Upload>

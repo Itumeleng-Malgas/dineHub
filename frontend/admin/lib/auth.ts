@@ -2,24 +2,32 @@ import GoogleProvider from 'next-auth/providers/google';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import NextAuth, { AuthOptions } from 'next-auth';
 import bcrypt from 'bcryptjs';
+import axios from 'axios';
 
 type User = {
   id: string;
   name: string;
   email: string;
-  password: string;
 };
 
-async function getUser(email: string): Promise<User | null> {
+export async function hashPass(unHashPass: string) {
+  return await bcrypt.hash(unHashPass, 10);
+}
+
+async function verifyPass(password: string, hash: string): Promise<boolean> {
+  return await bcrypt.compare(password, hash);
+}
+
+async function getUser(email: string, password: string): Promise<any> {
   try {
-    // Mock user data
-    return {
-      id: '1',
-      name: 'test user',
-      email: email,
-      password: "$2y$10$lm1rfrsvUZoIo4C5Wbp17OUY1B7croebOdXcv6m.rgX7BDcZ6KjG.", // hashed password
-    };
+    const user = await axios.post('http://localhost:3001/api/v1/auth/login', { email, password });
+    console.log(user.data)
+    if(await verifyPass(password, user.data.password)){
+      return user;
+    }
+    return null;
   } catch (error) {
+    console.error('Error fetching user:', error);
     return null;
   }
 }
@@ -44,19 +52,8 @@ export const authOptions: AuthOptions = {
           return null;
         }
 
-        const user = await getUser(credentials.email as string);
-
-        if (!user) {
-          return null;
-        }
-
-        const passwordsMatch = await bcrypt.compare(credentials.password as string, user.password);
-
-        if (passwordsMatch) {
-          return user;
-        }
-
-        return null;
+        const user = await getUser(credentials.email as string, credentials.password as string);
+        return user ?? null;
       },
     }),
     GoogleProvider({
