@@ -1,0 +1,34 @@
+/* components/LogoAnimation.module.css */
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #ffffff;
+    text-align: center;
+    z-index: 1000; /* Ensure it appears above other content */
+  }
+  
+  .logo {
+    width: 80%;
+    height: auto;
+    max-width: 800px;
+    animation: fadeIn 2s ease-in-out;
+  }
+  
+  .tagline {
+    margin-top: 20px;
+    font-size: 1.5rem;
+    animation: fadeIn 3s ease-in-out;
+  }
+  
+  @keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+  }
+  
