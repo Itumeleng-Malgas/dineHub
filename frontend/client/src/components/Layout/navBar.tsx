@@ -5,7 +5,7 @@ import Container from '../Container'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { Button } from '../ui/button'
-import { NavMenu } from './navMenu'
+
 
 export const NavBar = () => {
   const router = useRouter();
@@ -23,9 +23,11 @@ export const NavBar = () => {
               width={70}
               height={70}
               className='rounded-full objec-cover'
+              priority
+              style={{ width: 'auto', height: 'auto' }}
             />
             <h1 className='text-3xl font-bold'>Dinehub</h1>
-            <NavMenu/>
+
           </div>
 
           <div className='flex gap-3 items-center'>
