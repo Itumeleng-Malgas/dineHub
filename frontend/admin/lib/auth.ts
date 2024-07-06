@@ -10,6 +10,7 @@ declare module 'next-auth' {
     user: {
       id: string;
       email: string;
+      provider: string;
     } & DefaultSession["user"];
   }
 }
@@ -91,6 +92,7 @@ export const authOptions: AuthOptions = {
           ...session.user,
           id: token.id as string,
           email: token.email as string,
+          provider: "credentials"
         };
       }
       return session;

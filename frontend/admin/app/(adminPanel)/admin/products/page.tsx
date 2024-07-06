@@ -20,7 +20,7 @@ const generateRandomString = (length: number) => {
 
 // Sample data generation
 const products: Product[] = [
-  {
+  /*{
     id: generateRandomString(10),
     key: generateRandomString(10),
     name: "Product 1",
@@ -39,7 +39,7 @@ const products: Product[] = [
     description: "Description for Product 2",
     isAvailableForPurchase: Math.random() < 0.5,
     createdAt: new Date(),
-  }
+  }*/
 ];
 
 const ProductManagement = async () => {
