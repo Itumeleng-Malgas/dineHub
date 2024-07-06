@@ -1,8 +1,18 @@
 import GoogleProvider from 'next-auth/providers/google';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import NextAuth, { AuthOptions } from 'next-auth';
+import NextAuth, { AuthOptions, DefaultSession } from 'next-auth';
 import bcrypt from 'bcryptjs';
 import axios from 'axios';
+
+// Extending the default session to include user id
+declare module 'next-auth' {
+  interface Session {
+    user: {
+      id: string;
+      email: string;
+    } & DefaultSession["user"];
+  }
+}
 
 type User = {
   id: string;
@@ -42,7 +52,6 @@ export const authOptions: AuthOptions = {
       credentials: {
         email: { label: 'Email', type: 'text' },
         password: { label: 'Password', type: 'password' },
-        other: { label: 'other', type: 'text' },
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials.password) {
@@ -51,7 +60,7 @@ export const authOptions: AuthOptions = {
 
         const user = await getUser(credentials.email as string, credentials.password as string);
         if (user) {
-          return {"id": user.id, "email": user.email}
+          return { id: user.id, email: user.email };
         }
         return null;
       },
@@ -68,6 +77,25 @@ export const authOptions: AuthOptions = {
       },
     }),
   ],
+  callbacks: {
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user.id;
+        token.email = user.email;
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      if (token) {
+        session.user = {
+          ...session.user,
+          id: token.id as string,
+          email: token.email as string,
+        };
+      }
+      return session;
+    },
+  },
 };
 
 const handler = NextAuth(authOptions);

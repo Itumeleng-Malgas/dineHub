@@ -12,36 +12,36 @@ interface AddProductFormProps {
   form: any; // FormInstance type is not directly imported here
   fileList: UploadFile<RcFile>[];
   setFileList: Dispatch<SetStateAction<UploadFile<RcFile>[]>>;
-  email: string;
+  email: string | undefined;
 }
 
 const AddProductForm: React.FC<AddProductFormProps> = ({ form, fileList, setFileList, email }) => {
   const { toggleState } = useToggle();
 
-  const onFinish = async (values: any) => {
+  const uploadImage = async (file: RcFile): Promise<string> => {
     const formData = new FormData();
-
-    // Append form values (excluding picture) to formData
-    Object.keys(values).forEach(key => {
-      if (key !== 'picture') {
-        formData.append(key, values[key]);
-      }
-    });
-
-    // Append picture file to formData
-    if (fileList.length > 0) {
-      formData.append('picture', fileList[0].originFileObj as File);
-    }
-
+    formData.append('picture', file);
+    
     try {
-      // Upload picture and product data to server
       const uploadResponse = await axios.post('http://localhost:3001/upload', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
+      return uploadResponse.data.url;
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      throw new Error('Failed to upload image');
+    }
+  };
 
-      const imageUrl = uploadResponse.data.url;
+  const onFinish = async (values: any) => {
+    try {
+      let imageUrl = '';
+      if (fileList.length > 0) {
+        imageUrl = await uploadImage(fileList[0].originFileObj as RcFile);
+        console.log("imageUrl", imageUrl)
+      }
 
       // Prepare product data with imageUrl
       const productData = {
@@ -51,7 +51,7 @@ const AddProductForm: React.FC<AddProductFormProps> = ({ form, fileList, setFile
       };
 
       // Send productData to saveProduct API endpoint
-      const saveResponse = await axios.post('/api/saveRestaurant', productData);
+      const saveResponse = await axios.post('/api/saveProduct', productData);
 
       if (saveResponse.status === 200) {
         message.success('Product added successfully');

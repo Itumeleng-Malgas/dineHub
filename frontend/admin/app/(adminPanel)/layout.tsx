@@ -1,3 +1,4 @@
+"use client"
 import SessionProviderWrapper from "@/components/SessionProviderWrapper";
 import dynamic from "next/dynamic";
 const DynamicLayout = dynamic(() => import("@/components/adminPanel/AdminLayout"),
@@ -6,6 +7,8 @@ const DynamicLayout = dynamic(() => import("@/components/adminPanel/AdminLayout"
 
 export default function SuspendedDashboardLayout({ children }: Readonly<{ children: React.ReactNode; }>) {
   return (
-    <DynamicLayout>{children}</DynamicLayout>
+    <SessionProviderWrapper>
+      <DynamicLayout>{children}</DynamicLayout>
+    </SessionProviderWrapper>
   );
 }

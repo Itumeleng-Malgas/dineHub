@@ -49,6 +49,8 @@ const RestaurantProfilePage: React.FC = () => {
         const response = await axios.get('/api/getProfile');
         setInitialValues(response.data);
         form.setFieldsValue(response.data);
+        setRestaurantImage(response.data.restaurantImage);
+        setGallery(response.data.gallery);
       } catch (error) {
         console.error('Error fetching restaurant data:', error);
       }
@@ -68,11 +70,11 @@ const RestaurantProfilePage: React.FC = () => {
     try {
       const response = await axios.post('/api/saveProfile', payload);
       console.log('Profile updated successfully:', response.data);
-      message.success('Profile updated successfully')
+      message.success('Profile updated successfully');
       setLoading(false);
     } catch (error) {
       console.error('Error updating profile:', error);
-      message.error('Error updating profile')
+      message.error('Error updating profile');
       setLoading(false);
     }
   };
@@ -99,10 +101,13 @@ const RestaurantProfilePage: React.FC = () => {
         } else {
           setGallery((prevGallery) => [...prevGallery, uploadedFileUrl]);
         }
-        setFileList(info.fileList);
       } catch (error) {
         console.error('Error uploading file:', error);
       }
+    }
+    
+    if (type === 'gallery') {
+      setFileList(info.fileList);
     }
   };
 

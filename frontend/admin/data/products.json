@@ -1,0 +1,22 @@
+{
+  "": [
+    {
+      "name": "Itumeleng",
+      "desc": "hmilo",
+      "price": "25",
+      "cuisine": "chinese",
+      "menu": "lunch",
+      "picture": "",
+      "userEmail": "noblegaz@gmail.com"
+    },
+    {
+      "name": "Itumeleng Malgas",
+      "desc": "ftytuyiio;ho;glkjh",
+      "price": "25",
+      "cuisine": "italian",
+      "menu": "lunch",
+      "picture": "",
+      "userEmail": "noblegaz@gmail.com"
+    }
+  ]
+}

@@ -3,12 +3,14 @@ import { useToggle } from '@/context/ToggleContext';
 import { Modal, Button, Form, UploadFile } from 'antd';
 import AddProductForm from './AddProductForm';
 import { useState } from 'react';
+import { useSession } from 'next-auth/react';
 
 const AddFormModal = () => {
   const { isTrue, toggleState } = useToggle();
 
 
   const [fileList, setFileList] = useState<UploadFile[]>([]);
+  const { data: session } = useSession()
   const [form] = Form.useForm();
 
   const handleCancel = () => {
@@ -36,7 +38,7 @@ const AddFormModal = () => {
         </Button>,
       ]}
     >
-      <AddProductForm email='aaron.tumi@live.co.za' form={form} fileList={fileList} setFileList={setFileList} />
+      <AddProductForm email={session?.user.email} form={form} fileList={fileList} setFileList={setFileList} />
     </Modal>
   );
 };
