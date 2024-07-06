@@ -41,7 +41,7 @@ export default function Home() {
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
-      <Header />
+      
       <Content style={{ padding: '50px', textAlign: 'center', zIndex: 10, position: 'relative', marginTop: '64px' }}>
         <SearchBar onSearch={handleSearch} />
         <RestaurantList restaurants={filteredRestaurants} onRestaurantClick={showModal} />

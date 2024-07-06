@@ -35,7 +35,7 @@ export default function RootLayout({
         
           <main className="flex flex-col min-h-screen bg-secondary">
             <NavBar />
-            <NavMenu/>
+           
             <section className="flex-grow">
               <Container>
               {children}
