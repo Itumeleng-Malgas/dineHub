@@ -10,6 +10,8 @@ export interface Order {
     total: string;
     status: string;
     items: OrderedItem[];
+    booking_date: string;
+    num_guests: number;
 }
 
 export interface OrdersTableProps {

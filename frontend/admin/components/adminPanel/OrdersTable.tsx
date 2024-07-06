@@ -13,14 +13,10 @@ interface OrdersTableProps {
 const OrdersTable: React.FC<OrdersTableProps> = ({ data, loading, onAcceptOrder, onRejectOrder }) => {
   const columns = [
     {
-      title: 'Order No',
-      dataIndex: 'order_no',
-      key: 'order_no',
-    },
-    {
-      title: 'Customer',
-      dataIndex: 'customer',
-      key: 'customer',
+      title: 'Booking Date',
+      dataIndex: 'booking_date',
+      key: 'booking_date',
+      render: (booking_date: string) => booking_date,
     },
     {
       title: 'Total',
@@ -28,9 +24,9 @@ const OrdersTable: React.FC<OrdersTableProps> = ({ data, loading, onAcceptOrder,
       key: 'total',
     },
     {
-      title: 'Status',
-      dataIndex: 'status',
-      key: 'status',
+      title: 'Number of Guests',
+      dataIndex: 'num_guests',
+      key: 'num_guests',
     },
     {
       title: 'Actions',
@@ -68,7 +64,7 @@ const OrdersTable: React.FC<OrdersTableProps> = ({ data, loading, onAcceptOrder,
   }
 
   if (data.length === 0) {
-    return <Empty/>;
+    return <Empty />;
   }
 
   return (

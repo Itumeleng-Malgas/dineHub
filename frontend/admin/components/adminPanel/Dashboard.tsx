@@ -1,10 +1,10 @@
-"use client"
+"use client";
 import React, { useEffect, useState } from 'react';
 import OrdersTable from './OrdersTable';
 import { Order } from '@/types/orderTypes';
 
 const hardcoded: Order[] = [
-  /*{
+  {
     order_no: 1,
     key: '1',
     customer: 'John Doe',
@@ -14,18 +14,22 @@ const hardcoded: Order[] = [
       { name: 'Item 1', quantity: 1 },
       { name: 'Item 2', quantity: 2 },
     ],
+    booking_date: '2023-07-01',
+    num_guests: 4,
   },
   {
     order_no: 2,
     key: '2',
-    customer: 'John Doe',
-    total: '100',
+    customer: 'Jane Doe',
+    total: '150',
     status: 'Pending',
     items: [
-      { name: 'Item 1', quantity: 1 },
-      { name: 'Item 2', quantity: 2 },
+      { name: 'Item 3', quantity: 1 },
+      { name: 'Item 4', quantity: 2 },
     ],
-  },*/
+    booking_date: '2023-07-02',
+    num_guests: 2,
+  },
 ];
 
 const getOrders = async () => {
@@ -33,12 +37,8 @@ const getOrders = async () => {
   try {
     await new Promise((resolve) => setTimeout(resolve, 2000));
     orders = hardcoded.map((order: any, index: number) => ({
-      order_no: order.order_no,
+      ...order,
       key: String(index + 1),
-      customer: order.customer,
-      total: order.total,
-      status: order.status,
-      items: order.items,
     }));
   } catch (error) {
     console.error('Error fetching the orders:', error);
@@ -61,13 +61,24 @@ const DashboardComponent: React.FC = () => {
     fetchOrders();
   }, []);
 
+  const handleAcceptOrder = (order: Order) => {
+    console.log('Accepted order:', order);
+    // Add logic to handle accepting the order
+  };
+
+  const handleRejectOrder = (order: Order) => {
+    console.log('Rejected order:', order);
+    // Add logic to handle rejecting the order
+  };
+
   return (
     <>
-      <OrdersTable data={orders} loading={loading} onAcceptOrder={function (order: Order): void {
-        throw new Error('Function not implemented.');
-      } } onRejectOrder={function (order: Order): void {
-        throw new Error('Function not implemented.');
-      } } />
+      <OrdersTable
+        data={orders}
+        loading={loading}
+        onAcceptOrder={handleAcceptOrder}
+        onRejectOrder={handleRejectOrder}
+      />
     </>
   );
 };
