@@ -1,37 +1,37 @@
 #!/usr/bin/python3
 """class to handle admin"""
 
-from models.base_model import BaseModel
-from sqlalchemy import Column, String, Integer
-import Enum
+from models.base_model import BaseModel, Base
+from models.user import User
+from sqlalchemy import Column, String, Integer, ForeignKey
+from enum import Enum
 import models
 import os
 
 storage_type = os.getenv('DINEHUB_TYPE_STORAGE', None)
 
 class Admin_status(Enum):
-    Active = "Active"
-    Inactive = "Inactive"
+   Active = "Active"
+   Inactive = "Inactive"
 
 
-class Admin(BaseModel):
+class Admin(User, Base):
     """class to handle Admin"""
     if storage_type == "db":
-        __tablename__ = 'admins'
-        admin_id = Column(String(60), nullable=False, primary_key=True)
-        status = Column(Enum(Admin_status), nullable=False)
+        __tablename__ = "admins"
+        admin_id = Column(String(60),ForeignKey('users.id'), nullable=False, primary_key=True)
+        status = Column(String(12), nullable=False)
         email = Column(String(60), nullable=False)
         password = Column(String(128), nullable=False)
         first_name = Column(String(60), nullable=False)
         last_name = Column(String(60), nullable=False)
-        last_checkin = Column(String(60), nullable=True)
-    admin_id = ""
-    status: Admin_status = None
-    email = ""
-    password = ""
-    first_name = ""
-    last_name = ""
-    last_checkin = ""
+        
+    elif storage_type == 'fs':
+        status: Admin_status = None
+        email = ""
+        password = ""
+        first_name = ""
+        last_name = ""
     
     def __init__(self, *args, **kwargs):
         """constructor for Admin"""
