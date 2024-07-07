@@ -252,8 +252,8 @@ export const mockRestaurants: Restaurant[] = [
         county: "ZA",
         state: "KZN",
         city: "Durban",
-        imageUrl: "/two.jpeg",
-        gallery: ["/salom.jpeg", "/mainpic.jpeg", "/fi.jpeg", "/spaghetti.jpeg"],
+        imageUrl: "/mainpic.jpeg",
+        gallery: ["/salom.jpeg", "/two.jpeg", "/fi.jpeg", "/spaghetti.jpeg"],
         rating: 4.5,
         preview: "Experience the authentic flavors of Italy at Pasta Paradise. Our handmade pasta and sauces are crafted with the finest ingredients,transporting you to the heart of the Mediterranean.",
         menu: [

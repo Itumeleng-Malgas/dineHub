@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Row, Col } from 'antd';
 import RestaurantCard from '@/components/restaurantCard';
 import { Restaurant } from '@/components/data/restaurants';
@@ -22,7 +22,7 @@ const FavoritesPage: React.FC = () => {
   };
 
   // Function to fetch favorites from the backend
-  const fetchFavorites = async () => {
+  const fetchFavorites = useCallback(async () => {
     if (userId) {
       try {
         const response = await fetch(`http://127.0.0.1:3001/api/v1/favorite/${userId}`, {
@@ -47,7 +47,7 @@ const FavoritesPage: React.FC = () => {
         setFavorites(loadFavoritesFromLocal()); // Load favorites from local storage if fetch fails
       }
     }
-  };
+  }, [userId]);
   
 
   // Function to add a restaurant to favorites
@@ -99,7 +99,7 @@ const FavoritesPage: React.FC = () => {
     if (userId) {
     fetchFavorites();
     }
-  }, [userId]);
+  }, [userId, fetchFavorites]);
 
   if (!userId) {
     return <div>Please log in to view your favorite restaurants.</div>;

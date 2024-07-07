@@ -8,6 +8,9 @@ const AboutUs: React.FC = () => {
       <p className="text-lg mb-4">
         Welcome to our restaurant booking website! Our mission is to help you discover the best dining experiences all around Africa. Whether you&apos;re looking for a cozy cafe, a family-friendly restaurant, or a fine-dining establishment, we&apos;ve got you covered.
       </p>
+      <p className="text-lg mb-4">
+        Our mission is to make dining out easy and enjoyable. Whether you&apos;re looking for a new place to try or want to book your favorite spot, we&apos;ve got you covered!
+      </p>
       <h2 className="text-xl font-bold mb-2">Our Vision</h2>
       <p className="text-lg mb-4">
         We believe that food is more than just sustenance; it&apos;s a way to connect with others, explore new cultures, and create lasting memories. Our vision is to make it easy for you to find the perfect restaurant for any occasion, whether you&apos;re planning a romantic dinner, a business lunch, or a casual brunch with friends.
@@ -37,7 +40,7 @@ const AboutUs: React.FC = () => {
       <div className="team grid grid-cols-2 gap-4">
         <div className="team-member text-center">
           <Image src="/Yandah.jpeg" alt="Yandah" width={150} height={150} className="rounded-full" />
-          <p className="text-lg font-bold mt-2">Nonkuu "Yandah" Khanyile</p>
+          <p className="text-lg font-bold mt-2">Nonkuu &quot;Yandah&quot; Khanyile</p>
           <p className="text-md">Frontend Developer</p>
         </div>
         <div className="team-member text-center">

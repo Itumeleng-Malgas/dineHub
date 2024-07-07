@@ -23,7 +23,7 @@ const RestaurantCard: React.FC<RestaurantCardProps> = ({ restaurant, onClick, is
   // Handle "Book Now" button click
   const handleBookNowClick = (e: React.MouseEvent) => {
     e.stopPropagation(); // Prevent the click event from bubbling up to the parent element
-    router.push(`/booking/${restaurant.id}`);
+    router.push(`/bookings/${restaurant.id}`);
   };
 
   return (

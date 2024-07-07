@@ -24,7 +24,7 @@ const NavMenu: React.FC<NavMenuProps> = () => {
       label: 'Restaurants',
     },
     {
-      key: '/booking/1',
+      key: '/bookings',
       icon: <CheckOutlined size={15} className="mr-2" />,
       label: 'Bookings',
     },

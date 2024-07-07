@@ -1,4 +1,4 @@
-// src/app/booking/[restaurantId]/page.tsx
+// src/app/bookings/[restaurantId]/page.tsx
 'use client';
 import React from 'react';
 import { useParams,  useRouter } from 'next/navigation';

@@ -10,6 +10,7 @@ import { useRouter } from 'next/navigation';
 const RestaurantsPage: React.FC = () => {
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
   const router = useRouter();
+  
 
   useEffect(() => {
     fetch('/api/restaurants')
