@@ -1,22 +1,43 @@
+// src/components/restaurantCard.tsx
 'use client';
 import React from 'react';
 import { Card, Button } from 'antd';
-import { HeartOutlined } from '@ant-design/icons';
+import Image from 'next/image';
+import { HeartFilled, HeartOutlined } from '@ant-design/icons';
 import { Restaurant } from '@/components/data/restaurants';
+import { useRouter } from 'next/navigation';
 
+// Props interface for the RestaurantCard component
 interface RestaurantCardProps {
   restaurant: Restaurant;
   onClick: (restaurant: Restaurant) => void;
+  isFavorite: boolean;
+  onFavoriteClick: (restaurant: Restaurant) => void;
 }
 
-const RestaurantCard: React.FC<RestaurantCardProps> = ({ restaurant, onClick }) => {
+// RestaurantCard component
+const RestaurantCard: React.FC<RestaurantCardProps> = ({ restaurant, onClick, isFavorite, onFavoriteClick }) => {
+  const router = useRouter();
+
+  // Handle "Book Now" button click
+  const handleBookNowClick = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent the click event from bubbling up to the parent element
+    router.push(`/booking/${restaurant.id}`);
+  };
+
   return (
     <Card
       hoverable
       cover={
         <div className="relative">
-          <img alt={restaurant.name} src={restaurant.imageUrl} className="w-full h-48 object-cover" />
-          <HeartOutlined className="absolute top-2 right-2 text-white text-2xl bg-black bg-opacity-50 rounded-full p-2 cursor-pointer" />
+          <Image alt={restaurant.name} src={restaurant.imageUrl} width={100} height={200} className="w-full h-48 object-cover" />
+          <div onClick={(e) => { e.stopPropagation(); onFavoriteClick(restaurant); }}>
+            {isFavorite ? (
+              <HeartFilled className="absolute top-2 right-2 text-white text-2xl bg-white bg-opacity-50 rounded-full p-2 cursor-pointer" />
+            ) : (
+              <HeartOutlined className="absolute top-2 right-2 text-white text-2xl bg-black bg-opacity-50 rounded-full p-2 cursor-pointer" />
+            )}
+          </div>
         </div>
       }
       className="mb-5 shadow-md"
@@ -31,7 +52,7 @@ const RestaurantCard: React.FC<RestaurantCardProps> = ({ restaurant, onClick }) 
           </div>
         }
       />
-      <Button type="primary" className="mt-4 bg-indigo-900 border-indigo-900">
+      <Button type="primary" className="mt-4 bg-indigo-900 border-indigo-900" onClick={handleBookNowClick}>
         Book Tonight
       </Button>
     </Card>

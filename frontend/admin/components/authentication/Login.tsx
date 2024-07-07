@@ -7,9 +7,11 @@ import { FaLock } from "react-icons/fa";
 import { loginValidationRules } from './_utils/validationRules';
 
 import type { FormProps } from 'antd';
-import { openNotification } from './_utils/utils';
+import { Login, openNotification } from './_utils/utils';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import axios from 'axios';
+import { hashPass } from '@/lib/auth';
 
 export type LoginFieldType = {
     email?: string;
@@ -31,6 +33,7 @@ const LoginComponent = () => {
         if (result?.ok) {
             router.push('/admin')
         }
+        //await Login(values)
     };
 
     const onFinishFailed: FormProps<LoginFieldType>['onFinishFailed'] = (errorInfo) => {
