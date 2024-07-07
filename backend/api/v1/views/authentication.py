@@ -20,6 +20,7 @@ def login():
     
     email = credentials.get('email')
     password = credentials.get('password')
+
     if email is None or password is None:
         abort(404, "expecting email and password")
     for user in all_users:
