@@ -1,11 +1,10 @@
-// src/app/bookings/[restaurantId]/page.tsx
 'use client';
 import React from 'react';
-import { useParams,  useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { Button, Form, Input, DatePicker, TimePicker, InputNumber, message } from 'antd';
 import { mockRestaurants } from '@/components/data/restaurants';
 import Image from 'next/image';
-
+import axios from 'axios';
 
 const BookingPage: React.FC = () => {
   const { restaurantId } = useParams();
@@ -17,12 +16,20 @@ const BookingPage: React.FC = () => {
     return <div>Restaurant not found</div>;
   }
 
-  // handle the booking form submission
+  // Handle the booking form submission
   const handleBooking = async (values: any) => {
     try {
       console.log('handleBooking called with values:', values);
+      
+      // Send booking details to the backend
+      await axios.post('/api/booking', {
+        ...values,
+        restaurantId: id,
+      });
+
       // Simulate a successful booking without making a network request
       message.success('Booking successful');
+      
       // Redirect to the restaurant's page after booking
       router.push(`/restaurants/${id}?booking=success`);
     } catch (error) {
@@ -30,31 +37,6 @@ const BookingPage: React.FC = () => {
       message.error('Error booking');
     }
   };
-     // const response = await fetch('/api/booking', {
-      //  method: 'POST',
-      //  headers: {
-      //    'Content-Type': 'application/json',
-       // },
-      //  body: JSON.stringify({
-     //     ...values,
-      //    restaurantId: id,
-      //  }),
-     // });
-
-    //  if (response.ok) {
-        // Booking successful, you can display a success message or redirect the user to a confirmation page
-      //  console.log('Booking successful');
-      //  message.success('Booking successful'); // You can use a notification library like react-toastify or antd message
-     // } else {
-      //  console.error('Booking failed');
-       // message.error('Booking failed'); // You can use a notification library like react-toastify or antd message
-     // }
-  //  } catch (error) {
-    //  console.error('Error booking:', error);
-     // message.error('Error booking'); // You can use a notification library like react-toastify or antd message
-   // }
- // };
-
 
   return (
     <div className="flex justify-center mt-8">

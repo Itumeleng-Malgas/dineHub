@@ -1,13 +1,13 @@
-'use client';
-
 import React, { useState, useEffect } from 'react';
 import { Input, Row, Col, Select, Button } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import { Country, State, City } from 'country-state-city';
 import RestaurantList from './RestaurantList';
+import RestaurantModal from './restaurantModel';
 import { Restaurant } from './data/restaurants';
 import { mockRestaurants } from './data/restaurants';
 import axios from 'axios';
+import { useRouter } from 'next/navigation';
 
 const { Option } = Select;
 
@@ -33,13 +33,17 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
   const [states, setStates] = useState<any[]>([]);
   const [cities, setCities] = useState<any[]>([]);
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
+  const [selectedRestaurant, setSelectedRestaurant] = useState<Restaurant | null>(null);
+  const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+
+  const router = useRouter();
 
   // Fills the states dropdown with the states of the selected country
   useEffect(() => {
     setCountries(Country.getAllCountries());
   }, []);
 
-  // Fetches states when a country is selected
+   // Fetches states when a country is selected
   useEffect(() => {
     if (selectedCountry) {
       setStates(State.getStatesOfCountry(selectedCountry));
@@ -55,7 +59,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
 
   const checkBackendAvailability = async () => {
     try {
-      const response = await axios.get('/api/healthcheck'); // Replace with your backend health check endpoint
+      const response = await axios.get('/api/healthcheck'); 
       return response.status === 200;
     } catch (error) {
       console.error('Backend is not available:', error);
@@ -74,45 +78,40 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
 
     if (isBackendAvailable) {
       try {
-        // Send search criteria to the server
         const response = await axios.post('/api/search', searchCriteria);
         const filteredRestaurants = response.data;
-
-        setRestaurants(filteredRestaurants); // Update the state with the restaurants from the backend
-        onSearch(searchCriteria); // Trigger the onSearch callback with search criteria
+        setRestaurants(filteredRestaurants);
+        onSearch(searchCriteria);
       } catch (error) {
         console.error('Error fetching restaurants:', error);
       }
     } else {
       console.warn('Using mock data due to backend unavailability');
-      // Filter mock restaurants based on search criteria
       const filteredRestaurants = mockRestaurants.filter((restaurant) => {
-        const matchesNameCuisine = restaurant.name
-          .toLowerCase()
-          .includes(restaurantNameCuisine.toLowerCase()) ||
-          restaurant.cuisine.toLowerCase().includes(restaurantNameCuisine.toLowerCase());
-
-        const matchesLocation = restaurant.city === selectedCity ||
-          restaurant.state === selectedState ||
-          restaurant.country === selectedCountry;
-
+        const matchesNameCuisine = restaurant.name.toLowerCase().includes(restaurantNameCuisine.toLowerCase()) || restaurant.cuisine.toLowerCase().includes(restaurantNameCuisine.toLowerCase());
+        const matchesLocation = restaurant.city === selectedCity || restaurant.state === selectedState || restaurant.country === selectedCountry;
         return matchesNameCuisine && matchesLocation;
       });
-
-      setRestaurants(filteredRestaurants); // Update the state with the filtered mock restaurants
-      onSearch(searchCriteria); // Trigger the onSearch callback with search criteria
+      setRestaurants(filteredRestaurants);
+      onSearch(searchCriteria);
     }
   };
 
-  // Define the function to handle restaurant clicks
   const handleRestaurantClick = (restaurant: Restaurant) => {
-    console.log(`Restaurant with ID ${restaurant.id} clicked`);
-    // Implement the logic for handling restaurant clicks, e.g., navigating to a restaurant detail page
+    setSelectedRestaurant(restaurant);
+    setIsModalVisible(true);
+  };
+
+  const handleCloseModal = () => {
+    setSelectedRestaurant(null);
+    setIsModalVisible(false);
   };
 
   return (
-    <div className="max-w-4xl mx-auto">
-      <h1 className="text-3xl font-bold mb-4">From Casual Eats to Fine Dining: Reserve Your Perfect Spot!</h1>
+    <div className="max-w-4xl mx-auto search-container">
+      <h1 className="text-3xl text-black font-bold search-header ">
+        From Casual Eats to Fine Dining: Reserve Your Perfect Spot!
+      </h1>
       <Row gutter={[16, 16]} className="mt-5">
         <Col xs={24} md={12}>
           <Input
@@ -120,7 +119,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
             placeholder="Search for restaurants, cuisines, etc."
             value={restaurantNameCuisine}
             onChange={(e) => setRestaurantNameCuisine(e.target.value)}
-            className="w-full"
+            className="w-full search-input"
             prefix={<SearchOutlined />}
           />
         </Col>
@@ -131,7 +130,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
             size="large"
             value={selectedCountry}
             onChange={(value) => setSelectedCountry(value)}
-            className="w-full"
+            className="w-full search-select"
           >
             {countries.map((country) => (
               <Option key={country.isoCode} value={country.isoCode}>
@@ -147,7 +146,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
             size="large"
             value={selectedState}
             onChange={(value) => setSelectedState(value)}
-            className="w-full"
+            className="w-full search-select"
             disabled={!selectedCountry}
           >
             {states.map((state) => (
@@ -164,7 +163,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
             size="large"
             value={selectedCity}
             onChange={(value) => setSelectedCity(value)}
-            className="w-full"
+            className="w-full search-select"
             disabled={!selectedState}
           >
             {cities.map((city) => (
@@ -175,18 +174,24 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
           </Select>
         </Col>
       </Row>
-      <Button
-        type="primary"
-        size="large"
-        className="mt-5"
-        onClick={handleSearch}
-        icon={<SearchOutlined />}
-      >
-        Search
-      </Button>
+      <div className="search-button">
+        <Button
+          type="primary"
+          size="large"
+          onClick={handleSearch}
+          icon={<SearchOutlined />}
+        >
+          Search
+        </Button>
+      </div>
       <RestaurantList
         restaurants={restaurants}
         onRestaurantClick={handleRestaurantClick}
+      />
+      <RestaurantModal
+        restaurant={selectedRestaurant}
+        isVisible={isModalVisible}
+        onClose={handleCloseModal}
       />
     </div>
   );

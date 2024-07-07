@@ -1,21 +1,25 @@
-import { NextApiRequest, NextApiResponse } from 'next';
+import { NextRequest, NextResponse } from 'next/server';
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method === 'POST') {
-    try {
-      const { name, email, date, time, guests, restaurantId } = req.body;
+export async function POST(req: NextRequest) {
+  try {
+    const { name, email, date, time, guests, restaurantId } = await req.json();
 
-      // Here add code to save the booking to your database.
-      // This is just a placeholder example.
-      console.log('Booking details:', { name, email, date, time, guests, restaurantId });
+    // Here add code to save the booking to your database.
+    // This is just a placeholder example.
+    console.log('Booking details:', { name, email, date, time, guests, restaurantId });
 
-      res.status(200).json({ message: 'Booking successful' });
-    } catch (error) {
-      console.error('Booking error:', error);
-      res.status(500).json({ message: 'Booking failed' });
-    }
-  } else {
-    res.setHeader('Allow', ['POST']);
-    res.status(405).end(`Method ${req.method} Not Allowed`);
+    return NextResponse.json({ message: 'Booking successful' }, { status: 200 });
+  } catch (error) {
+    console.error('Booking error:', error);
+    return NextResponse.json({ message: 'Booking failed' }, { status: 500 });
   }
+}
+
+export async function OPTIONS() {
+  return new NextResponse(null, {
+    status: 204,
+    headers: {
+      'Allow': 'POST'
+    }
+  });
 }

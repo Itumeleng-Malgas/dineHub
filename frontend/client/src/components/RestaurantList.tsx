@@ -5,6 +5,7 @@ import { Row, Col } from 'antd';
 import RestaurantCard from '@/components/restaurantCard';
 import { Restaurant } from '@/components/data/restaurants';
 import { useUser } from '@clerk/nextjs';
+import axios from 'axios';
 
 interface RestaurantListProps {
   restaurants: Restaurant[];
@@ -19,22 +20,21 @@ const RestaurantList: React.FC<RestaurantListProps> = ({ restaurants, onRestaura
 
   // Fetch favorite restaurants from the server when the component mounts
   useEffect(() => {
-    fetch('http://127.0.0.1:3001/api/v1/favorites',{method:"GET"})
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.favorites && Array.isArray(data.favorites)) {
-          const favoriteIds = data.favorites.map((fav: Restaurant) => fav.id);
-          setFavorites(new Set(favoriteIds));
-        } else {
-          setFavorites(new Set());
-        }
-      })
-      .catch((error) => {
-        console.error('Error fetching favorites:', error);
+    axios.get('http://127.0.0.1:3001/api/v1/favorites',{method:"GET"})
+    .then((response) => {
+      const data = response.data;
+      if (data.favorites && Array.isArray(data.favorites)) {
+        const favoriteIds = data.favorites.map((fav: Restaurant) => fav.id);
+        setFavorites(new Set(favoriteIds));
+      } else {
         setFavorites(new Set());
-      });
-  }, []);
-
+      }
+    })
+    .catch((error) => {
+      console.error('Error fetching favorites:', error);
+      setFavorites(new Set());
+    });
+}, []);
   
   // Ensure restaurants is an array before mapping
   if (!Array.isArray(restaurants)) {
@@ -46,10 +46,9 @@ const RestaurantList: React.FC<RestaurantListProps> = ({ restaurants, onRestaura
 
     // If it is a favorite, send a DELETE request to remove it from favorites
     if (isFavorite) {
-      await fetch('http://127.0.0.1:3001/api/v1/favorites', {
-        method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 'id': `${restaurant.id}` }),
+      await axios.delete('http://127.0.0.1:3001/api/v1/favorites', {
+        data: { id: `${restaurant.id}` },
+        headers: { 'Content-Type': 'application/json' }
       });
       // Remove the restaurant from the favorite set
       setFavorites((prev) => {
@@ -59,10 +58,11 @@ const RestaurantList: React.FC<RestaurantListProps> = ({ restaurants, onRestaura
       });
     } else {
       // If it is not a favorite, send a POST request to add it to favorites
-      await fetch('http://127.0.0.1:3001/api/v1/favorites', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({"restaurantId":"65ec072d-5463-40d4-830e-11c6b267afe8", "userId":userId}), // remember you hardcoded this line
+      await axios.post('http://127.0.0.1:3001/api/v1/favorites', {
+        restaurantId: "id",
+        userId: userId
+      }, {
+        headers: { 'Content-Type': 'application/json' }
       });
       setFavorites((prev) => new Set(prev).add(restaurant.id));
     }

@@ -1,5 +1,7 @@
 'use client';
+
 import React, { useCallback, useEffect, useState } from 'react';
+import axios from 'axios';
 import { Row, Col } from 'antd';
 import RestaurantCard from '@/components/restaurantCard';
 import { Restaurant } from '@/components/data/restaurants';
@@ -25,20 +27,12 @@ const FavoritesPage: React.FC = () => {
   const fetchFavorites = useCallback(async () => {
     if (userId) {
       try {
-        const response = await fetch(`http://127.0.0.1:3001/api/v1/favorite/${userId}`, {
-          method: 'GET',
-        });
-  
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-  
-        const data = await response.json();
-        console.log('Fetched favorites:', data); // Log the response
-  
-        if (Array.isArray(data)) {
-          setFavorites(data);
-          saveFavoritesToLocal(data); // Save fetched favorites to local storage
+        const response = await axios.get(`http://127.0.0.1:3001/api/v1/favorite/${userId}`);
+        console.log('Fetched favorites:', response.data); // Log the response
+
+        if (Array.isArray(response.data)) {
+          setFavorites(response.data);
+          saveFavoritesToLocal(response.data); // Save fetched favorites to local storage
         } else {
           setFavorites([]);
         }
@@ -48,19 +42,15 @@ const FavoritesPage: React.FC = () => {
       }
     }
   }, [userId]);
-  
 
   // Function to add a restaurant to favorites
   const addToFavorites = async (restaurantId: number, userId: string) => {
     if (!userId) return;
 
     try {
-      await fetch('http://127.0.0.1:3001/api/v1/favorites', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ "restaurantId": restaurantId, "userId": userId }),
+      await axios.post('http://127.0.0.1:3001/api/v1/favorites', {
+        restaurantId,
+        userId,
       });
       await fetchFavorites(); // Refresh favorites after update
     } catch (error) {
@@ -79,12 +69,8 @@ const FavoritesPage: React.FC = () => {
       saveFavoritesToLocal(updatedFavorites); // Save updated favorites to local storage
 
       try {
-        await fetch('http://127.0.0.1:3001/api/v1/favorites', {
-          method: 'DELETE',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ id: restaurant.id }),
+        await axios.delete('http://127.0.0.1:3001/api/v1/favorites', {
+          data: { id: restaurant.id },
         });
       } catch (error) {
         console.error('Removing favorite failed:', error);
@@ -97,7 +83,7 @@ const FavoritesPage: React.FC = () => {
 
   useEffect(() => {
     if (userId) {
-    fetchFavorites();
+      fetchFavorites();
     }
   }, [userId, fetchFavorites]);
 

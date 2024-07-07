@@ -1,5 +1,3 @@
-// components/RestaurantModal.tsx
-
 import React, { useState } from 'react';
 import { Modal, Button } from 'antd';
 import { EnvironmentOutlined } from '@ant-design/icons';
@@ -7,6 +5,7 @@ import { Restaurant, Review } from '@/components/data/restaurants';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import ReviewForm from '@/components/ReviewForm';
+import axios from 'axios';
 
 interface RestaurantModalProps {
     restaurant: Restaurant | null;
@@ -28,29 +27,33 @@ const RestaurantModal: React.FC<RestaurantModalProps> = ({ restaurant, isVisible
 
     // Handle adding a new review
     const handleAddReview = async (review: Review) => {
-        // Send the new review to the backend
-        await fetch('/api/reviews', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ ...review, restaurantId: restaurant.id }),
-        });
+        try {
+            // Send the new review to the backend
+            await axios.post('/api/reviews', {
+                ...review,
+                restaurantId: restaurant.id
+            });
 
-        // Update the local state with the new review
-        setReviews([...reviews, { ...review, id: Date.now() }]);
-        setEditingReview(null);
+            // Update the local state with the new review
+            setReviews([...reviews, { ...review, id: Date.now() }]);
+            setEditingReview(null);
+        } catch (error) {
+            console.error('Error adding review:', error);
+        }
     };
 
     // Handle updating an existing review
     const handleUpdateReview = async (updatedReview: Review) => {
-        // Send the updated review to the backend
-        await fetch(`/api/reviews/${updatedReview.id}`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(updatedReview),
-        });
-        // Update the local state with the updated review
-        setReviews(reviews.map(review => review.id === updatedReview.id ? updatedReview : review));
-        setEditingReview(null);
+        try {
+            // Send the updated review to the backend
+            await axios.put(`/api/reviews/${updatedReview.id}`, updatedReview);
+
+            // Update the local state with the updated review
+            setReviews(reviews.map(review => review.id === updatedReview.id ? updatedReview : review));
+            setEditingReview(null);
+        } catch (error) {
+            console.error('Error updating review:', error);
+        }
     };
 
     // Handle clicking the "Edit" button for a review
