@@ -3,7 +3,10 @@
 
 from models.base_model import BaseModel
 from enum import Enum
+from sqlalchemy import Column, String, Integer
+import os
 
+storage_type = os.getenv('DINEHUB_TYPE_STORAGE', None)
 
 class MealCategory(Enum):
     """Enum class for meal category"""
