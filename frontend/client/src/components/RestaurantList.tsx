@@ -62,7 +62,7 @@ const RestaurantList: React.FC<RestaurantListProps> = ({ restaurants, onRestaura
       await fetch('http://127.0.0.1:3001/api/v1/favorites', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({"restaurantId":"65ec072d-5463-40d4-830e-11c6b267afe8", "userId":userId}),
+        body: JSON.stringify({"restaurantId":"65ec072d-5463-40d4-830e-11c6b267afe8", "userId":userId}), // remember you hardcoded this line
       });
       setFavorites((prev) => new Set(prev).add(restaurant.id));
     }

@@ -20,6 +20,9 @@ export interface Restaurant {
     county: string;
     state: string;
     city: string;
+    openingHours: string;
+    contact: string;
+    features: string[];
     imageUrl: string;
     gallery: string[];
     rating: number;
@@ -66,7 +69,10 @@ export const mockRestaurants: Restaurant[] = [
             },
         ],
         cuisine: "BBQ",
-        county: ""
+        county: "",
+        openingHours: "Mon-Fri: 9am - 10pm, Sat-Sun: 10am - 11pm",
+        contact: "+27110345632",
+        features: ['Outdoor Seating', 'Free Wi-Fi', 'Live Music']
     },
     {
         id: 2,
@@ -105,6 +111,9 @@ export const mockRestaurants: Restaurant[] = [
             },
         ],
         cuisine: "Italian",
+        openingHours: "Mon-Fri: 9am - 10pm, Sat-Sun: 10am - 11pm",
+        contact: "+27110345632",
+        features: ['Outdoor Seating', 'Free Wi-Fi', 'Live Music']
 
     },
     {
@@ -144,6 +153,9 @@ export const mockRestaurants: Restaurant[] = [
             },
         ],
         cuisine: "Pizza",
+        openingHours: "Mon-Fri: 9am - 10pm, Sat-Sun: 10am - 11pm",
+        contact: "+27110345632",
+        features: ['Outdoor Seating', 'Free Wi-Fi', 'Live Music']
 
     },
 
@@ -184,6 +196,9 @@ export const mockRestaurants: Restaurant[] = [
             },
         ],
         cuisine: 'Grill',
+        openingHours: "Mon-Fri: 9am - 10pm, Sat-Sun: 10am - 11pm",
+        contact: "+27110345632",
+        features: ['Outdoor Seating', 'Free Wi-Fi', 'Live Music']
     },
 
     {
@@ -223,6 +238,9 @@ export const mockRestaurants: Restaurant[] = [
             },
         ],
         cuisine: 'Nigerian',
+        openingHours: "Mon-Fri: 9am - 10pm, Sat-Sun: 10am - 11pm",
+        contact: "+27110345632",
+        features: ['Outdoor Seating', 'Free Wi-Fi', 'Live Music']
     },
 
 
@@ -263,6 +281,9 @@ export const mockRestaurants: Restaurant[] = [
             },
         ],
         cuisine: 'sushi',
+        openingHours: "Mon-Fri: 9am - 10pm, Sat-Sun: 10am - 11pm",
+        contact: "+27110345632",
+        features: ['Outdoor Seating', 'Free Wi-Fi', 'Live Music']
 
     },
     {
@@ -303,6 +324,9 @@ export const mockRestaurants: Restaurant[] = [
             },
         ],
         cuisine: "African",
+        openingHours: "Mon-Fri: 9am - 10pm, Sat-Sun: 10am - 11pm",
+        contact: "+27110345632",
+        features: ['Outdoor Seating', 'Free Wi-Fi', 'Live Music']
 
     },
     {
@@ -342,7 +366,10 @@ export const mockRestaurants: Restaurant[] = [
                 id: 0
             }
         ],
-        "cuisine": "Nigerian"
+        "cuisine": "Nigerian",
+        openingHours: "Mon-Fri: 9am - 10pm, Sat-Sun: 10am - 11pm",
+        contact: "+234110345632",
+        features: ['Outdoor Seating', 'Free Wi-Fi', 'Live Music']
     },
     {
         "id": 9,
@@ -381,7 +408,10 @@ export const mockRestaurants: Restaurant[] = [
                 id: 0
             }
         ],
-        "cuisine": "Moroccan"
+        "cuisine": "Moroccan",openingHours: "Mon-Fri: 9am - 10pm, Sat-Sun: 10am - 11pm",
+        contact: "+27110345632",
+        features: ['Outdoor Seating', 'Free Wi-Fi', 'Live Music']
+
     },
     {
         "id": 10,
@@ -420,7 +450,10 @@ export const mockRestaurants: Restaurant[] = [
                 id: 0
             }
         ],
-        "cuisine": "Egyptian"
+        "cuisine": "Egyptian",openingHours: "Mon-Fri: 9am - 10pm, Sat-Sun: 10am - 11pm",
+        contact: "555-0345632",
+        features: ['Outdoor Seating', 'Free Wi-Fi', 'Live Music']
+
     },
 
 
