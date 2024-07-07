@@ -8,6 +8,9 @@ rc  = {'email':'tekohpalma@gmail.com', 'telephone':'679800261', 'first_name':'te
 
 rcc  = {'email':'tekohpalma@gmail.com', 'telephone':'679800261', 'first_name':'tekoh', 'last_name':'Palma', 'password': "cyanide", 'diet_type' : Diet_Type.VEGAN.value, "meal_preference" : Meal_Preference.TRADITIONAL.value, "drink_preference" : Drink_Preference.NATURAL.value}
 
+restaurant
+restaurant = {"name":"Alibaba", "email":"alibaba@gmail.com", "password":"cyanide", "location":"downtown beach", "capacity":52, "type":"VIP", "status":"Closed"}
+
 
 
 
@@ -19,9 +22,29 @@ DINEHUB_MYSQL_HOST: the hostname of your MySQL
 DINEHUB_MYSQL_DB: the database name of your MySQL
 DINEHUB_TYPE_STORAGE: the type of storage used. It can be “file” (using FileStorage) or db (using DBStorage) or mongo_db(using MongoDBStorage)
 
+run in the root folder of backend
+start api server with db_stroage
+DINEHUB_MYSQL_PWD='dinehub_dev_pwd' DINEHUB_MYSQL_USER='dine_hub_dev' DINEHUB_TYPE_STORAGE='db' DINEHUB_MYSQL_DB='dineHub_dev_db' DINEHUB_MYSQL_HOST='localhost' python3 -m api.v1.app
+
+start api server with fs_storage
+DINEHUB_TYPE_STORAGE='fs' python3 -m api.v1.app
+ 
+ 
+# api POST parameters
+restaurants
+{"name":"Alibaba", "email":"alibaba@gmail.com", "password":"12345", "location":"downtown beach", "capacity":52, "type":"VIP", "status":"Closed", "role":"admin", "profileImageUrl": "http://example.com/images/john.jpg"}
+login
+{"email":"tekohpalma@gmail.com", "password":"12345"}
+verify
+{"email":"tekohpalma@gmail.com"}
 
 
- To do with emergency 
+
+- give back entire user or id for restaurant
+- on login give me the entire user
+
+
+To do with emergency 
 - endpoint to register restaurant, 
 {
   "restaurantId": "r123", 
@@ -32,6 +55,22 @@ DINEHUB_TYPE_STORAGE: the type of storage used. It can be “file” (using File
   "role": "restaurant_owner"
 }
 - login {email and password}
+from models.engine.file_storage import FileStorage
+from models.restaurant import Restaurant
+from models.normal_client import Normal_client
+from models.reservation import Reservation
+from models.restaurant import Restaurant
+
+fs = FileStorage()
+fs.reload()
+all_states = fs.all(Normal_client)
+print("All States: {}".format(len(all_states.keys())))
+for state_key in all_states.keys():
+    print(all_states[state_key])
+    
+res = Restaurant()
+fs.new(rs)
+fs.save()
  
  
  
