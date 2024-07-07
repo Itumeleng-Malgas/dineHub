@@ -1,13 +1,19 @@
 #!/usr/bin/python3
 """module to handle orders"""
-from models.base_model import BaseModel
-from sqlalchemy import Column, String, Integer
+from models.base_model import BaseModel, Base
+from sqlalchemy import Column, String, Integer, Table, ForeignKey
 import models
 from enum import Enum
 import os
 
 storage_type = os.getenv('DINEHUB_TYPE_STORAGE', None)
 
+# creating an intermediate menu_products table to relate menu and its products
+if storage_type == "db":
+    menu_product = Table('order_product', Base.metadata, 
+                         Column("order_id", String(60), ForeignKey("orders.id", ondelete="CASCADE"), onupdate="CASCADE"),
+                         Column("product_id", String(60), ForeignKey("products.id", ondelete="CASCADE"), onupdate="CASCADE")
+                         )
 
 class OrderStatus(Enum):
     """Enum class to handle order status"""
@@ -15,18 +21,18 @@ class OrderStatus(Enum):
     REJECTED = "Rejected"
     PENDING = "Pending"
 
-class Orders(BaseModel):
+class Orders(BaseModel, Base):
     """class to handle orders"""
     
     if storage_type == 'db':
         __tablename__ = 'orders'
-        order_id = Column(String(60), nullable=False)
+        # order_id = Column(String(60), nullable=False)
         client_id = Column(String(60), nullable=False)
         status = Column(String(80), nullable=False, default='Pending')
         # status = Column(Enum(OrderStatus), nullable=False, default=OrderStatus.PENDING)
         
     else:
-        order_id = ""
+        # order_id = ""
         client_id = ""
         status: OrderStatus = ""
     

@@ -10,7 +10,6 @@ from flask import jsonify, request, abort
 def favorites():
     """method to handle /favorites endpoint"""
     if request.method == 'GET':
-        print(storage.all(Favorite))
         all_favorites = [favorite.to_dict() for favorite in storage.all(Favorite).values()]
         return jsonify(all_favorites)
     elif request.method == 'POST':
@@ -20,10 +19,15 @@ def favorites():
         if data:
             # get the list of all accepted attributes of the class
             allow_attributes = [attrib for attrib in Favorite().__dir__() if not attrib.startswith('__')]
+            print(data)
+            print(allow_attributes)
             new_favorite_dict = {}
             for key, value in data.items():
-                if key not in allow_attributes:
-                    abort(404, f"unsopported attribute {key}")
+                # if key not in allow_attributes:
+                #     print(key in allow_attributes)
+                #     print("helo")
+                    # continue
+                    # abort(404, f"unsopported attribute {key}")
                 if key not in ['created_at','updated_at','id']:
                     new_favorite_dict[key] = value
             new_favorite = Favorite(**new_favorite_dict)
@@ -31,14 +35,14 @@ def favorites():
             storage.save()
             return jsonify({"Message": "Resource Created Successfully"}), 200
 
-@app_views.route('/favorite/<client_id>', strict_slashes=False, methods=['GET'])
-def get_favorites(client_id):
+@app_views.route('/favorite/<userId>', strict_slashes=False, methods=['GET'])
+def get_favorites(userId):
     """method to get all clients favorite restaurants"""
     favorites = [favorite.to_dict() for favorite in storage.all(Favorite).values()]
     for favorite in favorites:
-        if favorite['client_id'] == client_id:
+        if favorite.get('userId', None) == userId:
             return jsonify(favorite), 200
-    return jsonify({"Message": f"No favorites restaurants for client: {client_id}"}), 404
+    return jsonify({"Message": f"No favorites restaurants for client: {userId}"}), 404
 
 @app_views.route("/favorite", strict_slashes=False, methods=['POST'])
 def get_favorites_via_param():
@@ -46,14 +50,12 @@ def get_favorites_via_param():
     data = request.get_json()
     if data is None or not isinstance(data, dict):
             abort(404, "Not a valid JSON")
-    client_id = data.get('client_id', None)
-    if not client_id:
+    userId = data.get('userId', None)
+    if not userId:
         abort(404, "id attribute not found in data")
     favorites = [favorite.to_dict() for favorite in storage.all(Favorite).values()]
     clients_favorite = []
     for favorite in favorites:
-        if favorite['client_id'] == client_id:
+        if favorite.get('userId', None) == userId:
             clients_favorite.append(favorite)
     return jsonify(clients_favorite), 200
-    
-

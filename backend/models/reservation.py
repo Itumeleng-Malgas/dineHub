@@ -1,23 +1,24 @@
 #!/usr/bin/python3
 """module to handle reservations"""
 
-from models.base_model import BaseModel
+from models.base_model import BaseModel, Base
 # from models.restaurant import Status
-from sqlalchemy import Column, String, Integer
+from sqlalchemy import Column, String, Integer, ForeignKey
 import models
 import os
 
 storage_type = os.getenv('DINEHUB_TYPE_STORAGE', None)
 1
-class Reservation(BaseModel):
+class Reservation(BaseModel, Base):
     """class to handle reservations"""
     if storage_type == 'db':
-        reservation_id = Column(String(36), nullable=False, primary_key=True)
-        restaurant_id = Column(String(36), nullable=False)
+        __tablename__ = 'reservations'
+        # id = Column(String(36), nullable=False, primary_key=True)
+        restaurant_id = Column(String(36), ForeignKey("restaurants.restaurant_id"), nullable=False)
         status = Column(String(20), nullable=False)
     
     else:
-        reservation_id = ""
+        # id = ""
         restaurant_id = ""
         status = " "
     

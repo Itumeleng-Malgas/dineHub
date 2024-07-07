@@ -21,12 +21,18 @@ from models.restaurant import Restaurant
 from models.review import Review
 from models.user import User
 from models.table import Table
+from models.admin import Admin
 from models.favorite import Favorite
+from models.gallery import Gallery
+from models.image import Image
+from models.product import Product
+from models.booking import Booking
 
 classes = {"Normal_client": Normal_client, "Client": Client, "Registered_client": Registered_client,
             "Drink": Drink, "Meal": Meal, "Menu": Menu, "Orders": Orders, "Order_item": Order_item,
             "Payment": Payment, "Reservation": Reservation, "Restaurant": Restaurant, "Review": Review,
-            "User": User, "Table": Table}
+            "User": User, "Table": Table, "Admin":Admin, "Favorite":Favorite, "Gallery": Gallery, "Image":Image,
+            "Product": Product, "Booking": Booking}
 
 class DBStorage:
     """class to manage database storage"""

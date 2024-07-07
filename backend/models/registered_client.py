@@ -2,7 +2,8 @@
 """module to handle registered client"""
 
 from models.base_model import BaseModel, Base
-from sqlalchemy import Column, String, Integer
+from sqlalchemy import Column, String, Integer, ForeignKey
+from sqlalchemy.orm import relationship
 from models.client import Client
 from enum import Enum
 import uuid
@@ -34,27 +35,34 @@ class Drink_Preference(Enum):
     NON_ALCOHOLIC = "Non_alcoholic"
     COCKTAILS = "Cocktails"
 
-class Registered_client(BaseModel, Base):
+class Registered_client(Client, Base):
     """class to handle registered clinets"""
     if storage_type == 'db':
-        registered_client_id = Column(String(60), nullable=True, default=lambda: str(uuid.uuid4()))
-        email = Column(String(128), nullable=False)
+        __tablename__ = "registered_clients"
+        # registered_client_id = Column(String(60), nullable=True, default=lambda: str(uuid.uuid4()))
+        client_id = Column(String(60), ForeignKey('clients.client_id'), nullable=False, primary_key=True)
         telephone = Column(String(20), nullable=False)
         first_name = Column(String(128), nullable=False)
         last_name = Column(String(128), nullable=False)
+        email = Column(String(60), nullable=False)
         password = Column(String(128), nullable=False)
         diet_type = Column(String(20), nullable=True)
         meal_preference = Column(String(20), nullable=True)
         drink_preference = Column(String(20), nullable=True)
         
+        # Establish a relationship (optional)
+        # client = relationship("Client", back_populates="registered_clients")
+        
+        # Relationships
+        favorites = relationship("Favorite", backref="clients")
     else: 
-        registered_client_id = ""
+        registered_client_id = uuid.uuid4()
         # client_id = Client.client_id
-        email = ""
         telephone = ""
         first_name = ""
         last_name = ""
         password = ""
+        email = ""
         # diet_type = ""
         # meal_preference = ""
         # drink_preference = ""
