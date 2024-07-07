@@ -32,6 +32,8 @@ const HeaderComponent = () => {
   const { toggleState } = useToggle();
   const router = useRouter();
 
+  console.log(session?.user)
+
   return (
     <div className='flex justify-center md:justify-between items-center gap-1'>
       <div className='flex gap-2 items-center'>
@@ -43,7 +45,7 @@ const HeaderComponent = () => {
         {session && (
           <>
             <span className='hidden md:inline-block sm:text-sx lg:text-lg md:font-bold mr-2'>
-              {session.user?.name}
+              {session.user.email}
             </span>
             <Dropdown menu={menuProps}>
               <Button shape='round' icon={<LogoutOutlined />} />

@@ -1,4 +1,5 @@
-import React from 'react';
+"use client";
+import React, { useEffect, useState } from 'react';
 import OrdersTable from './OrdersTable';
 import { Order } from '@/types/orderTypes';
 
@@ -7,62 +8,79 @@ const hardcoded: Order[] = [
     order_no: 1,
     key: '1',
     customer: 'John Doe',
-    total: '100',
+    time: '15:00',
     status: 'Pending',
     items: [
       { name: 'Item 1', quantity: 1 },
       { name: 'Item 2', quantity: 2 },
     ],
+    booking_date: '2023-07-01',
+    num_guests: 4,
   },
   {
     order_no: 2,
     key: '2',
-    customer: 'John Doe',
-    total: '100',
+    customer: 'Jane Doe',
+    time: '15:00',
     status: 'Pending',
     items: [
-      { name: 'Item 1', quantity: 1 },
-      { name: 'Item 2', quantity: 2 },
+      { name: 'Item 3', quantity: 1 },
+      { name: 'Item 4', quantity: 2 },
     ],
+    booking_date: '2023-07-02',
+    num_guests: 2,
   },
 ];
 
-async function getOrders() {
+const getOrders = async () => {
   let orders: Order[] = [];
-  let loading = true;
-
   try {
     await new Promise((resolve) => setTimeout(resolve, 2000));
-    //const response = await axios.get('https://api.example.com/orders');
-    //orders = response.data.map((order: any, index: number) => ({
     orders = hardcoded.map((order: any, index: number) => ({
-      order_no: order.order_no,
+      ...order,
       key: String(index + 1),
-      customer: order.customer,
-      total: order.total,
-      status: order.status,
-      items: order.items,
     }));
-    loading = false;
-
   } catch (error) {
     console.error('Error fetching the orders:', error);
     orders = [];
-    loading = false;
   }
-  
-  return {
-    orders,
-    loading
-  }
-}
+  return orders;
+};
 
-const DashboardComponent = async () => {
-  const orders = await getOrders()
-  
-  return(<>
-  <OrdersTable data={orders.orders} loading={orders.loading} />
-  </>)
+const DashboardComponent: React.FC = () => {
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchOrders = async () => {
+      const ordersData = await getOrders();
+      setOrders(ordersData);
+      setLoading(false);
+    };
+
+    fetchOrders();
+  }, []);
+
+  const handleAcceptOrder = (order: Order) => {
+    console.log('Accepted order:', order);
+    // Add logic to handle accepting the order
+  };
+
+  const handleRejectOrder = (order: Order) => {
+    console.log('Rejected order:', order);
+    // Add logic to handle rejecting the order
+  };
+
+  return (
+    <>
+      <OrdersTable
+        data={orders}
+        loading={loading}
+        onAcceptOrder={handleAcceptOrder}
+        onRejectOrder={handleRejectOrder}
+      />
+    </>
+  );
 };
 
 export default DashboardComponent;

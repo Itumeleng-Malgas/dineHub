@@ -112,7 +112,7 @@ const RestaurantProfilePage: React.FC = () => {
   };
 
   return (
-    <Content>
+    <Content className="ml-4 mt-8 mx-auto">
       {initialValues && (
         <Form
           form={form}
