@@ -3,7 +3,8 @@
 import React from 'react';
 import { Card, Button } from 'antd';
 import Image from 'next/image';
-import { HeartFilled, HeartOutlined } from '@ant-design/icons';
+import { EnvironmentOutlined, HeartFilled, HeartOutlined } from '@ant-design/icons';
+import { FaMapMarkerAlt } from 'react-icons/fa'; 
 import { Restaurant } from '@/components/data/restaurants';
 import { useRouter } from 'next/navigation';
 
@@ -48,7 +49,7 @@ const RestaurantCard: React.FC<RestaurantCardProps> = ({ restaurant, onClick, is
         description={
           <div>
             <p className="text-gray-500">{restaurant.description}</p>
-            <p className="text-gray-500">{restaurant.location}</p>
+            <p className="text-gray-500 "><EnvironmentOutlined className="mr-1" /> {restaurant.location}</p>
           </div>
         }
       />

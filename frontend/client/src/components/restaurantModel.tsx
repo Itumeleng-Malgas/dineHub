@@ -81,6 +81,9 @@ const RestaurantModal: React.FC<RestaurantModalProps> = ({ restaurant, isVisible
                         <p className="text-gray-500">{restaurant.location}</p>
                     </div>
                     <p className="text-gray-500 mb-4">{restaurant.preview}</p>
+                    <p className="text-gray-500"><strong>Opening Hours:</strong> {restaurant.openingHours}</p>
+                    <p className="text-gray-500"><strong>Contact:</strong> {restaurant.contact}</p>
+                    <p className="text-gray-500"><strong>Features:</strong> {restaurant.features.join(', ')}</p>
                     <h3 className="text-lg font-bold mb-4">Restaurant Gallery</h3>
                     <div className="grid grid-cols-2 gap-4">
                         {restaurant.gallery.map((image, index) => (
