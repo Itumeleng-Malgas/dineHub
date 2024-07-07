@@ -20,7 +20,7 @@ class Admin(User, Base):
     if storage_type == "db":
         __tablename__ = "admins"
         admin_id = Column(String(60),ForeignKey('users.id'), nullable=False, primary_key=True)
-        status = Column(String(12), nullable=False)
+        status = Column(String(12), nullable=False, default="Active")
         email = Column(String(60), nullable=False)
         password = Column(String(128), nullable=False)
         first_name = Column(String(60), nullable=False)
