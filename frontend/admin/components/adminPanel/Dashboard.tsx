@@ -8,7 +8,7 @@ const hardcoded: Order[] = [
     order_no: 1,
     key: '1',
     customer: 'John Doe',
-    total: '100',
+    time: '15:00',
     status: 'Pending',
     items: [
       { name: 'Item 1', quantity: 1 },
@@ -21,7 +21,7 @@ const hardcoded: Order[] = [
     order_no: 2,
     key: '2',
     customer: 'Jane Doe',
-    total: '150',
+    time: '15:00',
     status: 'Pending',
     items: [
       { name: 'Item 3', quantity: 1 },

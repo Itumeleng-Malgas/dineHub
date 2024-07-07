@@ -8,7 +8,7 @@ import PasswordResetForm from '@/components/adminPanel/PasswordResetForm'
 const Settings = () => {
   return (
     <WithSuspense>
-      <Tabs style={{ height: '100%' }} defaultActiveKey="delete_account">
+      <Tabs style={{ height: '100%' }} defaultActiveKey="password_reset">
         <Tabs.TabPane tab="Password Reset" key="password_reset">
           <PasswordResetForm />
         </Tabs.TabPane>

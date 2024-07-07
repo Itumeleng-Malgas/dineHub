@@ -26,6 +26,7 @@ const LoginComponent = () => {
     const router = useRouter();
 
     const onFinish: FormProps<LoginFieldType>['onFinish'] = async (values) => {
+        console.log(values)
         setLoading(true);
         const result = await signIn("credentials", { ...values, redirect: false });
         setLoading(false);
@@ -65,7 +66,7 @@ const LoginComponent = () => {
                 >
                     <Input placeholder="Password" type="password" />
                 </Form.Item>
-                <Form.Item name="remember" valuePropName="checked">
+                <Form.Item name="rememberMe" valuePropName="checked">
                     <div className="flex justify-between">
                         <Checkbox>Remember me</Checkbox>
                         <Link href="/password">

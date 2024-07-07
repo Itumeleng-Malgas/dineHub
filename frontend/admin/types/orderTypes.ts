@@ -7,7 +7,7 @@ export interface Order {
     order_no: number;
     key: string;
     customer: string;
-    total: string;
+    time: string;
     status: string;
     items: OrderedItem[];
     booking_date: string;

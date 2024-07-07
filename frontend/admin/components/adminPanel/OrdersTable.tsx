@@ -2,6 +2,7 @@ import React from 'react';
 import { Table, Button, Dropdown, Menu, Space, Empty } from 'antd';
 import { Order } from '@/types/orderTypes';
 import { CheckOutlined, CloseOutlined, MoreOutlined } from '@ant-design/icons';
+import WithSuspense from '../WithSuspense';
 
 interface OrdersTableProps {
   data: Order[];
@@ -19,9 +20,9 @@ const OrdersTable: React.FC<OrdersTableProps> = ({ data, loading, onAcceptOrder,
       render: (booking_date: string) => booking_date,
     },
     {
-      title: 'Total',
-      dataIndex: 'total',
-      key: 'total',
+      title: 'Time',
+      dataIndex: 'time',
+      key: 'time',
     },
     {
       title: 'Number of Guests',
@@ -68,15 +69,17 @@ const OrdersTable: React.FC<OrdersTableProps> = ({ data, loading, onAcceptOrder,
   }
 
   return (
-    <Table
-      columns={columns}
-      dataSource={data}
-      pagination={{
-        defaultPageSize: 5,
-        showSizeChanger: true,
-        pageSizeOptions: ['5', '10', '15', '20'],
-      }}
-    />
+    <WithSuspense>
+      <Table
+        columns={columns}
+        dataSource={data}
+        pagination={{
+          defaultPageSize: 5,
+          showSizeChanger: true,
+          pageSizeOptions: ['5', '10', '15', '20'],
+        }}
+      />
+    </WithSuspense>
   );
 };
 

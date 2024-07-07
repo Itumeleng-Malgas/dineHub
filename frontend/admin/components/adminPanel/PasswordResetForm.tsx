@@ -31,7 +31,7 @@ const PasswordResetForm: React.FC = () => {
     <div className="max-w-md p-2">
       {isSocialLogin ? (
         <div className="text-center text-red-500">
-          You are logged in with {session?.user.provider}. Please change your password at the respective service.
+          You are logged in with social login. Please change your password at the respective service provider.
         </div>
       ) : (
         <Form
