@@ -34,7 +34,7 @@ DINEHUB_TYPE_STORAGE='fs' python3 -m api.v1.app
 restaurants
 {"name":"Alibaba", "email":"alibaba@gmail.com", "password":"12345", "location":"downtown beach", "capacity":52, "type":"VIP", "status":"Closed", "role":"admin", "profileImageUrl": "http://example.com/images/john.jpg"}
 login
-{"email":"tekohpalma@gmail.com", "password":"12345"}
+{"email":"hack@gmail.com", "password":"12345"}
 verify
 {"email":"tekohpalma@gmail.com"}
 
@@ -71,6 +71,66 @@ for state_key in all_states.keys():
 res = Restaurant()
 fs.new(rs)
 fs.save()
- 
- 
- 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# new test on Relational Database
+/admins 
+POST
+data = {
+            "status": "Open",
+            "email": "admin@gmail.com",
+            "password": "admin",
+            "first_name": "db",
+            "last_name": "admin"
+        }
+GET
+
+/restaurants
+POST 
+data = {
+        "email": "HomeResto@gmail.com",
+        "password": "1234",
+        "name": "Home Restaurant",
+        "country" : "Cameroon",
+        "city" : "Bamenda",
+        "state" : "North west"
+}
+
+GET
+
+/restaurant
+POST
+
+/registered_clients
+POST
+  data = {
+        "telephone" = 123456789
+        "first_name" = "Johnson"
+        "last_name" = "Mark"
+        "email" = "client@gmail.com"
+        "password" = "1234"
+    }
+  
+  
+/search
+POST
+data = {
+  "country": "Cameroon",
+  "state": "North West",
+  "city": "Bamenda"
+}

@@ -13,11 +13,11 @@ class Product(BaseModel, Base):
     if storage_type == 'db':
         __tablename__ = "products"
         name = Column(String(60), nullable=False)
-        description = Column(String(255), nullable=False)
+        description = Column(String(255), nullable=True)
         price  = Column(Float, default=0.0)
         menu_id = Column(String(60), ForeignKey('menus.id'), nullable=False)
         picture = Column(String(60), default="No imageURL")
-        cuisine = Column(String(60), nullable=False)
+        cuisine = Column(String(60), nullable=True, default="unknown Cuisine")
     
     elif storage_type == 'fs':
         name = ""

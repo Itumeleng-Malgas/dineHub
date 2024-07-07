@@ -17,15 +17,18 @@ def all_restaurants():
     
     if request.method == "POST":
         data = request.get_json(silent=True)
+        
         if data is None or not isinstance(data, dict):
             abort(404, "Not a valid JSON")
         if data:
             # get the list of all accepted attributes of the class
             allow_attributes = [attrib for attrib in Restaurant().__dir__() if not attrib.startswith('__')]
+            print(allow_attributes)
             new_restaurant_dict = {}
             for key, value in data.items():
                 if key not in allow_attributes:
-                    abort(404, f"unsopported attribute {key}")
+                    print({"Error": f"unsopported attribute {key} identified"})
+                    # return jsonify({"Error": f"unsopported attribute {key}"})
                 if key not in ['created_at','updated_at','id']:
                     if key == 'password':
                     # Encode the password and hash it
@@ -62,3 +65,29 @@ def get_restaurant_via_param():
         if restaurant['id'] == id:
             return jsonify(restaurant), 200
     return jsonify({"Message": f"No Restaurant found with that id {id}"}), 404
+
+
+@app_views.route("/search", strict_slashes=False, methods=["POST"])
+def search():
+    """search for a restaurant by country, state or city"""
+    restaurants = [restaurant.to_dict() for restaurant in storage.all(Restaurant).values()]
+    search_term = request.get_json()
+    search_result = []
+    # print(list(search_term.values()))
+    for keyword, term in search_term.items():
+        if keyword in ["country", "state", "city"]:
+            for restaurant in restaurants:
+                if keyword in  restaurant.keys():
+                    if restaurant.get(keyword) and term:
+                        if restaurant[keyword].strip().lower() == term.strip().lower():
+                            search_result.append(restaurant)
+                            
+    # eliminate duplicate results
+    cleaned_results = []
+    ids = list(set([restaurant.get("id") for restaurant in search_result if restaurant.get("id", None)]))
+    saved_restaurants = storage.all(Restaurant)
+    print(saved_restaurants)
+    for resto_id, resto in saved_restaurants.items():
+        if resto_id.split(".")[1]  in ids:
+            cleaned_results.append(resto.to_dict())
+    return jsonify(cleaned_results), 200
