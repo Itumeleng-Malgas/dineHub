@@ -7,3 +7,4 @@ from api.v1.views.registered_client import *
 from api.v1.views.authentication import *
 from api.v1.views.review import *
 from api.v1.views.favorite import *
+from api.v1.views.product import *

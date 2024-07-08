@@ -15,17 +15,21 @@ class Product(BaseModel, Base):
         name = Column(String(60), nullable=False)
         description = Column(String(255), nullable=True)
         price  = Column(Float, default=0.0)
+        cuisine = Column(String(60), nullable=True, default="unknown Cuisine")
         menu_id = Column(String(60), ForeignKey('menus.id'), nullable=False)
         picture = Column(String(60), default="No imageURL")
-        cuisine = Column(String(60), nullable=True, default="unknown Cuisine")
+        # userid = Column(String(60), ForeignKey('users.id'), nullable=False)
+        id = Column(String(60), ForeignKey('restaurants.restaurant_id'), nullable=False, primary_key=True)
     
     elif storage_type == 'fs':
         name = ""
         description = ""
         price  = 0.0
+        cuisine = ""
         menu_id = ""
         picture = ""
-        cuisine = ""
+        # userid = ""
+        id = ""
         
     def __init__(self, *args, **kwargs):
         """constructor for product"""
