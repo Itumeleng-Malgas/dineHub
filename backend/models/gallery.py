@@ -19,11 +19,13 @@ class Gallery(BaseModel, Base):
         # id = Column(String(60), nullable=False, primary_key=True)
         # restaurant_id = Column(String(60), ForeignKey('restaurants.restaurant_id'), nullable=True)
         description = Column(String(60), nullable=True)
+        restaurant_id = Column(String(60), ForeignKey('restaurants.restaurant_id'), nullable=False)
         
         # relationships
         images = relationship("Image", backref="gallery")
     elif storage_type == 'fs':
         description = ""
+        restaurant_id = ""
 
     def __init__(self, *args, **kwargs):
         """constructor for Gallery class"""
