@@ -28,7 +28,7 @@ const FavoritesPage: React.FC = () => {
     if (userId) {
       try {
         const response = await axios.get(`http://127.0.0.1:3001/api/v1/favorite/${userId}`);
-        console.log('Fetched favorites:', response.data); // Log the response
+        console.log('Fetched favorites:', response.data);
 
         if (Array.isArray(response.data)) {
           setFavorites(response.data);
@@ -62,22 +62,23 @@ const FavoritesPage: React.FC = () => {
   const handleFavoriteClick = async (restaurant: Restaurant) => {
     if (!userId) return;
 
-    const isFavorite = favorites.some(fav => fav.id === restaurant.id);
+    const isFavorite = favorites.some(fav => fav.restaurantId === restaurant.restaurantId);
+
     if (isFavorite) {
-      const updatedFavorites = favorites.filter(fav => fav.id !== restaurant.id);
+      const updatedFavorites = favorites.filter(fav => fav.restaurantId !== restaurant.restaurantId);
       setFavorites(updatedFavorites);
       saveFavoritesToLocal(updatedFavorites); // Save updated favorites to local storage
 
       try {
         await axios.delete('http://127.0.0.1:3001/api/v1/favorites', {
-          data: { id: restaurant.id },
+          data: { restaurantId: restaurant.restaurantId, userId },
         });
       } catch (error) {
         console.error('Removing favorite failed:', error);
         // Optionally, handle the error by notifying the user or retrying
       }
     } else {
-      await addToFavorites(restaurant.id, userId);
+      await addToFavorites(restaurant.restaurantId, userId);
     }
   };
 
@@ -96,11 +97,11 @@ const FavoritesPage: React.FC = () => {
       <h1 className="text-2xl font-bold mb-4">Favorite Restaurants</h1>
       <Row gutter={[16, 16]}>
         {favorites.map((restaurant) => (
-          <Col xs={24} sm={12} md={8} key={restaurant.id}>
+          <Col xs={24} sm={12} md={8} key={restaurant.restaurantId}>
             <RestaurantCard
               restaurant={restaurant}
               onClick={() => {}}
-              isFavorite={favorites.some(fav => fav.id === restaurant.id)}
+              isFavorite={favorites.some(fav => fav.restaurantId === restaurant.restaurantId)}
               onFavoriteClick={handleFavoriteClick}
             />
           </Col>

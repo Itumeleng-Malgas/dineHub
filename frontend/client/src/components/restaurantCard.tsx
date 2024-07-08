@@ -1,5 +1,5 @@
-// src/components/restaurantCard.tsx
 'use client';
+
 import React from 'react';
 import { Card, Button } from 'antd';
 import Image from 'next/image';
@@ -31,7 +31,13 @@ const RestaurantCard: React.FC<RestaurantCardProps> = ({ restaurant, onClick, is
       hoverable
       cover={
         <div className="relative">
-          <Image alt={restaurant.name} src={restaurant.imageUrl} width={100} height={200} className="w-full h-48 object-cover" />
+          <Image 
+            alt={restaurant.name} 
+            src={restaurant.imageUrl} 
+            width={100} 
+            height={200} 
+            className="w-full h-48 object-cover" 
+          />
           <div onClick={(e) => { e.stopPropagation(); onFavoriteClick(restaurant); }}>
             {isFavorite ? (
               <HeartFilled className="absolute top-2 right-2 text-white text-2xl bg-white bg-opacity-50 rounded-full p-2 cursor-pointer" />
@@ -49,11 +55,18 @@ const RestaurantCard: React.FC<RestaurantCardProps> = ({ restaurant, onClick, is
         description={
           <div>
             <p className="text-gray-500">{restaurant.description}</p>
-            <p className="text-gray-500 "><EnvironmentOutlined className="mr-1" /> {restaurant.location}</p>
+            <p className="text-gray-500">
+              <EnvironmentOutlined className="mr-1" />
+              {restaurant.location}
+            </p>
           </div>
         }
       />
-      <Button type="primary" className="mt-4 bg-indigo-900 border-indigo-900" onClick={handleBookNowClick}>
+      <Button 
+        type="primary" 
+        className="mt-4 bg-indigo-900 border-indigo-900" 
+        onClick={handleBookNowClick}
+      >
         Book Tonight
       </Button>
     </Card>

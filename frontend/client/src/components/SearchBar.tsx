@@ -59,7 +59,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
 
   const checkBackendAvailability = async () => {
     try {
-      const response = await axios.get('/api/healthcheck'); 
+      const response = await axios.get('http://127.0.0.1:3001/api/v1/search'); 
       return response.status === 200;
     } catch (error) {
       console.error('Backend is not available:', error);
@@ -78,7 +78,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
 
     if (isBackendAvailable) {
       try {
-        const response = await axios.post('/api/search', searchCriteria);
+        const response = await axios.post('http://127.0.0.1:3001/api/v1/search', searchCriteria);
         const filteredRestaurants = response.data;
         setRestaurants(filteredRestaurants);
         onSearch(searchCriteria);

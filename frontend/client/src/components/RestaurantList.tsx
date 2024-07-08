@@ -20,64 +20,76 @@ const RestaurantList: React.FC<RestaurantListProps> = ({ restaurants, onRestaura
 
   // Fetch favorite restaurants from the server when the component mounts
   useEffect(() => {
-    axios.get('http://127.0.0.1:3001/api/v1/favorites',{method:"GET"})
-    .then((response) => {
-      const data = response.data;
-      if (data.favorites && Array.isArray(data.favorites)) {
-        const favoriteIds = data.favorites.map((fav: Restaurant) => fav.id);
-        setFavorites(new Set(favoriteIds));
-      } else {
-        setFavorites(new Set());
-      }
-    })
-    .catch((error) => {
-      console.error('Error fetching favorites:', error);
-      setFavorites(new Set());
-    });
-}, []);
-  
+    if (userId) {
+      axios.get(`http://127.0.0.1:3001/api/v1/favorites/${userId}`)
+        .then((response) => {
+          const data = response.data;
+          if (Array.isArray(data.favorites)) {
+            //const favoriteIds = data.favorites.map((fav: Restaurant) => fav.restaurantId);
+            const favoriteIds = data.map((fav: { restaurantId: number }) => fav.restaurantId);
+            setFavorites(new Set(favoriteIds));
+          } else {
+            setFavorites(new Set());
+          }
+        })
+        .catch((error) => {
+          console.error('Error fetching favorites:', error);
+          setFavorites(new Set());
+        });
+    }
+  }, [userId]);
+
   // Ensure restaurants is an array before mapping
   if (!Array.isArray(restaurants)) {
     return <div>No restaurants available</div>; // Placeholder or error message
   }
 
   const handleFavoriteClick = async (restaurant: Restaurant) => {
-    const isFavorite = favorites.has(restaurant.id);
+    if (!userId) return; // Ensure userId is available
+
+    const isFavorite = favorites.has(restaurant.restaurantId);
 
     // If it is a favorite, send a DELETE request to remove it from favorites
     if (isFavorite) {
-      await axios.delete('http://127.0.0.1:3001/api/v1/favorites', {
-        data: { id: `${restaurant.id}` },
-        headers: { 'Content-Type': 'application/json' }
-      });
-      // Remove the restaurant from the favorite set
-      setFavorites((prev) => {
-        const newFavorites = new Set(prev);
-        newFavorites.delete(restaurant.id);
-        return newFavorites;
-      });
+      try {
+        await axios.delete('http://127.0.0.1:3001/api/v1/favorites', {
+          data: { restaurantId: restaurant.restaurantId, userId },   //
+          headers: { 'Content-Type': 'application/json' }
+        });
+        // Remove the restaurant from the favorite set
+        setFavorites((prev) => {
+          const newFavorites = new Set(prev);
+          newFavorites.delete(restaurant.restaurantId);
+          return newFavorites;
+        });
+      } catch (error) {
+        console.error('Error removing favorite:', error);
+      }
     } else {
       // If it is not a favorite, send a POST request to add it to favorites
-      await axios.post('http://127.0.0.1:3001/api/v1/favorites', {
-        restaurantId: "id",
-        userId: userId
-      }, {
-        headers: { 'Content-Type': 'application/json' }
-      });
-      setFavorites((prev) => new Set(prev).add(restaurant.id));
+      try {
+        await axios.post('http://127.0.0.1:3001/api/v1/favorites', {
+          restaurantId: restaurant.restaurantId, //
+          userId
+        }, {
+          headers: { 'Content-Type': 'application/json' }
+        });
+        setFavorites((prev) => new Set(prev).add(restaurant.restaurantId));
+      } catch (error) {
+        console.error('Error adding favorite:', error);
+      }
     }
   };
-
   return (
     // Render the restaurant list using antd's Row and Col components
     <Row gutter={[16, 16]} className="mt-10">
       {restaurants.map((restaurant) => (
-        <Col xs={24} sm={12} md={8} key={restaurant.id}>
+        <Col xs={24} sm={12} md={8} key={restaurant.restaurantId}>
           <RestaurantCard
             restaurant={restaurant}
             onClick={() => onRestaurantClick(restaurant)}
-            isFavorite={favorites.has(restaurant.id)}
-            onFavoriteClick={handleFavoriteClick}
+            isFavorite={favorites.has(restaurant.restaurantId)}
+            onFavoriteClick={() => handleFavoriteClick(restaurant)}
           />
         </Col>
       ))}
