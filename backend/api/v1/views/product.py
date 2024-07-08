@@ -7,11 +7,16 @@ from api.v1.views import app_views
 from flask import jsonify, request, abort
 
 
-@app_views.route('/products', strict_slashes=False, methods=['GET', 'POST'])
+@app_views.route('/products', strict_slashes=False, methods=['GET'])
 def products():
     """route to get all products"""
     if request.method == 'GET':
         return jsonify(storage.all(Product).values())
+    
+@app_views.route('/products/<menu_id>', strict_slashes=False, methods=['POST'])
+def products_menu(menu_id):
+    """route to add product to menu"""
+
 
     if request.method == 'POST':
         if not request.is_json:

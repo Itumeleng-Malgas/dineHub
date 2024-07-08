@@ -8,8 +8,8 @@ from models.restaurant import Restaurant
 from flask import jsonify, request, abort
 
 
-@app_views.route("/menus/<restaurant_id>", strict_slashes=False, methods=['GET', 'POST'])
-def all_menus(restaurant_id):
+@app_views.route("/menus", strict_slashes=False, methods=['GET', 'POST'])
+def all_menus():
     """route to get all the menus"""
     if request.method == "GET":
         # menus = [menu.to_dict() for menu in storage.all(Menu).values()]

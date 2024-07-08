@@ -145,5 +145,5 @@ data = {
   "cuisine": "Coca Cola",
   "menu_id": "m123",
   "picture": "http://example.com/images/john.jpg",
-  "restaurant_id": "r123",
+  "id": "r123",
 }
