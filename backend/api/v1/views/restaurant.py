@@ -4,9 +4,17 @@
 from api.v1.views import app_views
 from models import storage
 from models.restaurant import Restaurant
+from models.gallery import Gallery
+from models.image import Image
 from flask import jsonify, request, abort
 import bcrypt
 
+@app_views.route("/add_restaurants", strict_slashes=False, methods=['POST'])
+def register_restaurants():
+    """route to register a new restaurants with gallery information"""
+    pass
+    
+    
 
 @app_views.route("/restaurants", strict_slashes=False, methods=['GET', 'POST'])
 def all_restaurants():
@@ -25,22 +33,44 @@ def all_restaurants():
             allow_attributes = [attrib for attrib in Restaurant().__dir__() if not attrib.startswith('__')]
             
             new_restaurant_dict = {}
-            for key, value in data.items():
-                if key not in allow_attributes:
-                    print({"Error": f"unsopported attribute {key} identified"})
+            for key, value in data.items():   
+                clean_key = key.strip()
+                if clean_key.strip() not in allow_attributes:
+                    print({"Error": f"unsopported attribute {clean_key} identified"})
                     # return jsonify({"Error": f"unsopported attribute {key}"})
-                if key not in ['created_at','updated_at','id']:
-                    if key == 'password':
+                if clean_key not in ['created_at','updated_at','id','gallery']:
+                    if clean_key == 'password':
                     # Encode the password and hash it
                         encoded_password = value.encode('utf-8')
                         hashed_password = bcrypt.hashpw(encoded_password, bcrypt.gensalt())
-                        new_restaurant_dict[key] = hashed_password.decode('utf-8')
+                        new_restaurant_dict[clean_key] = hashed_password.decode('utf-8')
                     else:
-                        new_restaurant_dict[key] = value
+                        new_restaurant_dict[clean_key] = value
             new_restaurant = Restaurant(**new_restaurant_dict)
             storage.new(new_restaurant)
             storage.save()
-            return jsonify({"Message": "Resource Created Successfully"}), 200
+            imageUrls = data.get("gallery", None)
+            if imageUrls:
+                restaurant_id = new_restaurant.id
+                # create a new gallery
+                gallery_data = {"description": "No description", "restaurant_id":restaurant_id}
+                new_gallery = Gallery(**gallery_data)
+                storage.new(new_gallery)
+                storage.save()
+                gallery_id = new_gallery.id
+                # add images to the gallery
+                for image_url in imageUrls:
+                    img_data = {"url": image_url, "gallery_id":gallery_id, "restaurant_id": restaurant_id, "description":"No description"}
+                    new_image = Image(**img_data)
+                    storage.new(new_image)
+                    storage.save()
+            profileUrl = data.get("restaurantImage", None)
+            if profileUrl:
+                img_data = {"url": profileUrl, "gallery_id":gallery_id, "restaurant_id": restaurant_id, "description":"profile image of restaurant"}
+                new_image = Image(**img_data)
+                storage.new(new_image)
+                storage.save()
+            return jsonify(new_restaurant.to_dict()), 200
 
 @app_views.route("/restaurant/<id>", strict_slashes=False, methods=['GET'])
 def get_restaurant(id):
