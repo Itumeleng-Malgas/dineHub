@@ -51,8 +51,9 @@ def close_session(Exception):
 
 @app.errorhandler(404)
 def not_found(Exception):
-    """Returns Not found error for a request"""
-    return jsonify({"Error": "Not Found"}), Exception.code
+     """Returns Not found error for a request"""
+     return jsonify({"Error": "Not Found"}), Exception.code
+
 
 if __name__ == "__main__":
     dine_hub_host = getenv('DINEHUB_API_HOST')
