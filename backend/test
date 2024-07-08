@@ -111,6 +111,26 @@ data = {
         "state" : "North west"
 }
 
+{
+
+  "password": "1234",
+  "country" : "Cameroon",
+  "state" : "North west",
+  "name": "Diner",
+  "email": "e@email.com",
+  "city": "address",
+  "phone": "+2752",
+  "cuisine": "italian",
+  "description": "Description",
+  "gallery": [
+    "http://res.cloudinary.com/dr62gpvwd/image/upload/v1720389654/iiglmxzsht1032pu2eey.png",
+    "http://res.cloudinary.com/dr62gpvwd/image/upload/v1720391780/tgwvfklgivpkgqntzgqy.png",
+    "http://res.cloudinary.com/dr62gpvwd/image/upload/v1720391781/uofckqkd1ihqxzkpsnlp.png"
+  ],
+  "restaurantImage": "upload/v1720389651/kreu4kcvoemhfz8cfszy.png"
+}
+
+
 GET
 
 /restaurant
@@ -135,6 +155,22 @@ data = {
   "city": "Bamenda"
 }
 
+/add_image
+POST
+{
+  "url" : "http://theurlofthepic.com.jpeg",
+  "description" : "an image of our restaurant front view",
+  "gallery_id" : "eeb2cde6-5fe4-4902-8065-b05f3e2248f7",
+  "restaurant_id" : "ccb82ad9-4202-46ac-ae76-15380d062885"
+}
+
+/add_gallery
+POST
+{
+  "description" : "This is gallery on best images",
+  "restaurant_id" : "ccb82ad9-4202-46ac-ae76-15380d062885"
+}
+
 
 /products
 POST
@@ -147,3 +183,4 @@ data = {
   "picture": "http://example.com/images/john.jpg",
   "id": "r123",
 }
+
