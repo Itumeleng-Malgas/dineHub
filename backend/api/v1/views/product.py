@@ -21,16 +21,14 @@ def products_menu(menu_id):
     if menu:
         # get all products in storage
         # filter those whose menu_id match supplied menu_id
-        products_menu = [product for product in storage.all(Product).values() if product.id == menu_id]
-        # return the filtered results
+        products_menu = [product for product in storage.all(Product).values() if product.menu_id == menu_id]
+        products_menu = [product.to_dict() for product in products_menu]
         return jsonify(products_menu)
     return jsonify({"Error": f"no menu found with id {menu_id}"})
-@app_views.route('/products/<menu_id>', strict_slashes=False, methods=['POST'])
-def products_menu(menu_id):
+
+@app_views.route('/products', strict_slashes=False, methods=['POST'])
+def products_menus():
     """route to get products in a menu based on menu_id"""
-    pass
-
-
     if request.method == 'POST':
         if not request.is_json:
             return jsonify({"error": "Not a JSON"}), 400

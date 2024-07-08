@@ -144,6 +144,13 @@ data = {
   "price": 1.0,
   "cuisine": "Coca Cola",
   "menu_id": "m123",
-  "picture": "http://example.com/images/john.jpg",
-  "id": "r123",
+  "picture": "http://example.com/images/john.jpg"
+}
+
+
+/menus
+POST
+{
+  "restaurant_id":"aded1f24-35a7-4090-9319-e781c63bdc98",
+  "status":"open"
 }
