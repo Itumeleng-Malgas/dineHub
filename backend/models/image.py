@@ -13,11 +13,13 @@ class Image(BaseModel, Base):
         __tablename__ = "images"
         url = Column(String(255), nullable=False)
         description = Column(String(255), nullable=True)
-        gallery_id = Column(String(60), ForeignKey('galleries.id'), nullable=False)
+        gallery_id = Column(String(60), ForeignKey('galleries.id'), nullable=True)
+        restaurant_id = Column(String(60), ForeignKey('restaurants.restaurant_id'), nullable=True)
     elif storage_type == 'fs':
         url = ""
         description = ""
         gallery_id = ""
+        restaurant_id = " "
         
     def __init__(self, *args, **kwargs):
         """constructor for image class"""

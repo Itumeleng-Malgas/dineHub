@@ -25,8 +25,8 @@ class Restaurant(User, Base):
         # restaurant_id = Column(String(60), nullable=True)
         # restaurant_id = Column(String(60), nullable=True, default=lambda: str(uuid.uuid4()))
         name = Column(String(128), nullable=False)
-        description = Column(String(60), nullable=True)
-        preview = Column(String(60), nullable=True)
+        description = Column(String(255), nullable=True)
+        preview = Column(String(255), nullable=True)
         email = Column(String(60), nullable=False)
         password = Column(String(60), nullable=False)
         # location = Column(String(60), nullable=False)
@@ -39,10 +39,13 @@ class Restaurant(User, Base):
         status = Column(String(8), nullable=True, default="OPEN")
         cuisine = Column(String(26), nullable=True)
         role = Column(String(18), nullable=True)
-        profileImageUrl = Column(String(500), nullable=True)
+        phone = Column(Integer, nullable=True)
+        profileImageUrl = Column(String(1024), nullable=True)
         overall_rating = Column(Float)
-        gallery_id = Column(String(60), ForeignKey('galleries.id'), nullable=True)
+        # gallery_id = Column(String(60), ForeignKey('galleries.id'), nullable=True)
         #status = Column(Enum(Status), nullable=True, default=Status.OPEN.values())  # Using the Enum type here
+        restaurantImage  = Column(String(1024), nullable=True)
+        
         # relationships
         # - Menu, gallery, reviews
         reviews = relationship("Review", backref="restaurant")
@@ -57,15 +60,17 @@ class Restaurant(User, Base):
         capacity = ""
         type = ""
         status  = None
+        phone = 123456
         # location details
         state = ""
         country = ""
         city = ""
         role = ""
         cuisine = ""
+        restaurantImage = ""
         profileImageUrl = ""
         # galleryImage = [] # list of image urls
-        gallery_id = ""
+        # gallery_id = ""
         overall_rating = ""
     
     def __init__(self, *args, **kwargs):
