@@ -134,3 +134,16 @@ data = {
   "state": "North West",
   "city": "Bamenda"
 }
+
+
+/products
+POST
+data = {
+  "name": "Coca Cola",
+  "description": "Coca Cola",
+  "price": 1.0,
+  "cuisine": "Coca Cola",
+  "menu_id": "m123",
+  "picture": "http://example.com/images/john.jpg",
+  "restaurant_id": "r123",
+}
