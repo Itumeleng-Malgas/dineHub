@@ -9,4 +9,3 @@ from api.v1.views.review import *
 from api.v1.views.favorite import *
 from api.v1.views.menu import *
 from api.v1.views.product import *
-
