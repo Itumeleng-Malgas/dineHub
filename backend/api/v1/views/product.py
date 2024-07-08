@@ -3,6 +3,7 @@
 
 from models import storage
 from models.product import Product
+from models.menu import Menu
 from api.v1.views import app_views
 from flask import jsonify, request, abort
 
@@ -12,12 +13,22 @@ def products():
     """route to get all products"""
     if request.method == 'GET':
         return jsonify(storage.all(Product).values())
-    
-@app_views.route('/products/<menu_id>', strict_slashes=False, methods=['POST'])
+
+@app_views.route('/products/<menu_id>', strict_slashes=False, methods=['GET'])
 def products_menu(menu_id):
-    """route to add product to menu"""
+    """route to get products in a menu based on menu_id"""
+    menu = storage.get(Menu, menu_id)
+    if menu:
+        # get all products in storage
+        # filter those whose menu_id match supplied menu_id
+        products_menu = [product for product in storage.all(Product).values() if product.menu_id == menu_id]
+        products_menu = [product.to_dict() for product in products_menu]
+        return jsonify(products_menu)
+    return jsonify({"Error": f"no menu found with id {menu_id}"})
 
-
+@app_views.route('/products', strict_slashes=False, methods=['POST'])
+def products_menus():
+    """route to get products in a menu based on menu_id"""
     if request.method == 'POST':
         if not request.is_json:
             return jsonify({"error": "Not a JSON"}), 400
