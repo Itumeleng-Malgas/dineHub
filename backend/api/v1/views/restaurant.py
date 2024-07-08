@@ -23,7 +23,7 @@ def all_restaurants():
         if data:
             # get the list of all accepted attributes of the class
             allow_attributes = [attrib for attrib in Restaurant().__dir__() if not attrib.startswith('__')]
-            print(allow_attributes)
+            
             new_restaurant_dict = {}
             for key, value in data.items():
                 if key not in allow_attributes:
@@ -66,6 +66,21 @@ def get_restaurant_via_param():
             return jsonify(restaurant), 200
     return jsonify({"Message": f"No Restaurant found with that id {id}"}), 404
 
+@app_views.route("/restaurant/<id>", strict_slashes=False, methods=["DELETE", "UPDATE"])
+def manage_restaurant(id):
+    """endpoint to handle delete of restaurant"""
+    if request.method == "DELETE":
+        restaurant = storage.get(Restaurant, id)
+        if restaurant is None:
+            return jsonify({"Message": f"No Restaurant found with that id {id}"}), 404
+        storage.delete(restaurant)
+        storage.save()
+        return jsonify({"Message": "Restaurant deleted successfully"}), 200
+    # elif request.method == "UPDATE":
+    # id {other, }
+        
+        
+
 
 @app_views.route("/search", strict_slashes=False, methods=["POST"])
 def search():
@@ -75,7 +90,7 @@ def search():
     search_result = []
     # print(list(search_term.values()))
     for keyword, term in search_term.items():
-        if keyword in ["country", "state", "city"]:
+        if keyword in ["cuisine", "name","country", "state", "city"]:
             for restaurant in restaurants:
                 if keyword in  restaurant.keys():
                     if restaurant.get(keyword) and term:

@@ -20,6 +20,7 @@ def login():
     
     email = credentials.get('email')
     password = credentials.get('password')
+
     if email is None or password is None:
         abort(404, "expecting email and password")
     for user in all_users:
@@ -47,5 +48,6 @@ def verify_email():
     suplied_email = email.get('email')
     for user in all_users:
         if user.get('email') == suplied_email:
-            return jsonify({"code": 1, "message":"success", "userType":user.get('__class__', None)})
+            return jsonify(user)
+            # return jsonify({"code": 1, "message":"success", "userType":user.get('__class__', None)})
     return jsonify({"code": 0, "message":"verification failed"}), 404
