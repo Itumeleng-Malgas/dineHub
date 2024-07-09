@@ -1,21 +1,14 @@
 import GoogleProvider from 'next-auth/providers/google';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import NextAuth, { AuthOptions, DefaultSession } from 'next-auth';
+import NextAuth, { AuthOptions } from 'next-auth';
 import axios from 'axios';
 
 type UserProfile = {
   id: string;
   name: string;
   email: string;
-  expire?: string;
-  provider?: string;
+  role: string;
 };
-
-declare module 'next-auth' {
-  interface Session {
-    user: UserProfile & DefaultSession["user"];
-  }
-}
 
 export const authOptions: AuthOptions = {
   pages: {
@@ -57,15 +50,15 @@ export const authOptions: AuthOptions = {
   ],
   callbacks: {
     async jwt({ token, user, account }) {
-      if (account?.provider == "google") {
-        token.provider = "google"; // Example: 'google'
-  
-        // You can fetch additional user information
+      if (account?.provider === "google") {
+        token.provider = "google";
+        
       } else if (user) {
         // Credentials login
         token.id = user.id;
         token.email = user.email;
-        token.provider = 'credentials'; // Set a specific value for credentials login
+        token.provider = 'credentials';
+        token.role = user.role;
       }
       return token;
     },
@@ -74,22 +67,28 @@ export const authOptions: AuthOptions = {
         session.user = {
           ...session.user,
           provider: token.provider as string,
+          role: token.role as string,
+          id: token.id as string,
         };
-        session.expires = token.expires as string;
       }
+      //session.user.role = token.role as string;
       return session;
-    }, 
-  }, 
+    },
+    async redirect({ url, baseUrl }) {
+      return baseUrl;
+    },
+  },
 };
 
 // Function to fetch user from API using axios
-async function getUser(email: string, password: string): Promise<UserProfile | null> {
+async function getUser(email: string, password: string): Promise<any> {
   try {
     const response = await axios.post('http://localhost:3001/api/v1/auth/login', { email, password });
     const user: UserProfile = {
       id: response.data.id,
       name: response.data.name,
       email: response.data.email,
+      role: response.data.role,
     };
     return user;
   } catch (error) {

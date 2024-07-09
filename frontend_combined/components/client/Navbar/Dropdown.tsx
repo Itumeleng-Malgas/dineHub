@@ -1,22 +1,18 @@
 import { CheckOutlined, HeartOutlined, HomeOutlined, LogoutOutlined, MenuOutlined, PlusCircleOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Dropdown, MenuProps, Space } from 'antd';
-import { signOut } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React from 'react'
-import { AiOutlineAim } from 'react-icons/ai';
 
 const DropdownMenuIcon = () => {
+  const { data: session } = useSession();
     const router = useRouter();
 
     const items: MenuProps['items'] = [
       {
-        key: '/',
-        icon: <HomeOutlined size={15} className="mr-2" />,
-        label: 'Home',
-      },
-      {
         key: '/restaurants',
-        icon: <AiOutlineAim size={15} className="mr-2" />,
+        icon: <HomeOutlined size={15} className="mr-2" />,
         label: 'Restaurants',
       },
       {
@@ -51,11 +47,14 @@ const DropdownMenuIcon = () => {
     };
   
     return (
-      <Dropdown menu={{items, onClick}} >
-        <Button type="default" size="large">
-          <MenuOutlined />
-        </Button>
-      </Dropdown>
+      <div>
+        { session?.user.role == "restaurant_owner" ? <Link className='mx-2 text-blue-500' href="/admin/dashboard" >Admin Panel</Link>: ""}
+        <Dropdown menu={{items, onClick}} >
+          <Button type="text" size="large">
+            <MenuOutlined />
+          </Button>
+        </Dropdown>
+      </div>
     );
 }
 
