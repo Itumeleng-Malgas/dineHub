@@ -1,27 +1,53 @@
-import React, { Dispatch, SetStateAction } from 'react';
-import { Form, Input, Upload, Button, message, Select } from 'antd';
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { Form, Input, Upload, Button, message, Select, FormInstance } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import { useToggle } from '@/context/toggleContext';
 import { RcFile, UploadFile } from 'antd/lib/upload/interface';
 import { restaurantProfileValidationRules } from '@/utils/validationRules';
+import { BACKEND_URL } from '@/utils/configs';
+import { useSession } from 'next-auth/react';
+import { fetchMenuItems } from './_utilities';
 
 const { Option } = Select;
 
 interface AddProductFormProps {
-  form: any; // FormInstance type is not directly imported here
+  form: FormInstance;
   fileList: UploadFile<RcFile>[];
   setFileList: Dispatch<SetStateAction<UploadFile<RcFile>[]>>;
   email: string | undefined | null;
 }
 
+interface MenuItem {
+  id: string;
+  name: string;
+}
+
 const AddProductForm: React.FC<AddProductFormProps> = ({ form, fileList, setFileList, email }) => {
   const { toggleState } = useToggle();
+  const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
+  const { data: session } = useSession()
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const restaurant_id = session?.user?.id;
+
+      if (!restaurant_id) {
+        message.error('Restaurant ID not found.');
+        return;
+      }
+
+      const menuItems = await fetchMenuItems(restaurant_id);
+      setMenuItems(menuItems);
+    };
+
+    fetchData();
+  }, [session]);
 
   const uploadImage = async (file: RcFile): Promise<string> => {
     const formData = new FormData();
     formData.append('picture', file);
-    
+
     try {
       const uploadResponse = await axios.post('http://localhost:3001/upload', formData, {
         headers: {
@@ -40,7 +66,6 @@ const AddProductForm: React.FC<AddProductFormProps> = ({ form, fileList, setFile
       let imageUrl = '';
       if (fileList.length > 0) {
         imageUrl = await uploadImage(fileList[0].originFileObj as RcFile);
-        console.log("imageUrl", imageUrl)
       }
 
       // Prepare product data with imageUrl
@@ -124,10 +149,9 @@ const AddProductForm: React.FC<AddProductFormProps> = ({ form, fileList, setFile
             rules={[{ required: true, message: 'Please select an appropriate menu' }]}
           >
             <Select placeholder="Select a menu">
-              <Option value="breakfast">Breakfast</Option>
-              <Option value="lunch">Lunch</Option>
-              <Option value="dinner">Drink</Option>
-              <Option value="dessert">Dessert</Option>
+              {menuItems.map((menuItem) => (
+                <Option key={menuItem.id} value={menuItem.id}>{menuItem.name}</Option>
+              ))}
             </Select>
           </Form.Item>
           <Form.Item
