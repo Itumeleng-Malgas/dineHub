@@ -1,10 +1,9 @@
-// components/RestaurantModal.tsx
-
 import React, { useState } from 'react';
 import { Modal, Button } from 'antd';
 import { EnvironmentOutlined } from '@ant-design/icons';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 import { Restaurant, Review } from '@/data/restaurants';
 import ReviewForm from './ReviewForm';
 
@@ -16,44 +15,37 @@ interface RestaurantModalProps {
 
 const RestaurantModal: React.FC<RestaurantModalProps> = ({ restaurant, isVisible, onClose }) => {
     const router = useRouter();
+    const { data: session } = useSession();
     const [editingReview, setEditingReview] = useState<Review | null>(null);
     const [reviews, setReviews] = useState<Review[]>(restaurant ? restaurant.reviews : []);
 
     if (!restaurant) return null;
 
-    // Handle "Book Now" button click
     const handleBookNowClick = () => {
         router.push(`/booking/${restaurant.id}`);
     };
 
-    // Handle adding a new review
     const handleAddReview = async (review: Review) => {
-        // Send the new review to the backend
         await fetch('/api/reviews', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ ...review, restaurantId: restaurant.id }),
         });
 
-        // Update the local state with the new review
         setReviews([...reviews, { ...review, id: Date.now() }]);
         setEditingReview(null);
     };
 
-    // Handle updating an existing review
     const handleUpdateReview = async (updatedReview: Review) => {
-        // Send the updated review to the backend
         await fetch(`/api/reviews/${updatedReview.id}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(updatedReview),
         });
-        // Update the local state with the updated review
         setReviews(reviews.map(review => review.id === updatedReview.id ? updatedReview : review));
         setEditingReview(null);
     };
 
-    // Handle clicking the "Edit" button for a review
     const handleEditClick = (review: Review) => {
         setEditingReview(review);
     };
@@ -104,14 +96,16 @@ const RestaurantModal: React.FC<RestaurantModalProps> = ({ restaurant, isVisible
                             <div className="flex items-center mb-2">
                                 <p className="font-bold mr-2">{review.user}</p>
                                 <p className="text-gray-500">Rating: {review.rating}</p>
-                                <Button type="link" onClick={() => handleEditClick(review)}>Edit</Button>
+                                {session?.user?.email === review.userEmail && (
+                                    <Button type="link" onClick={() => handleEditClick(review)}>Edit</Button>
+                                )}
                             </div>
                             <p className="text-gray-500">{review.comment}</p>
                         </div>
                     ))}
                     <div className='flex space-x-4'>
                         <Button type="primary" className="mt-4 bg-indigo-900 border-indigo-900"
-                            onClick={() => setEditingReview({ id: 0, user: '', rating: 0, comment: '' })}
+                            onClick={() => setEditingReview({ id: 0, user: session?.user?.name || '', userEmail: session?.user?.email || '', rating: 0, comment: '' })}
                         >
                             Add Review
                         </Button>
