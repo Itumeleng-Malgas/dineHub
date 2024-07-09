@@ -35,7 +35,6 @@ const RegisterComponent = () => {
                 "email": values.email,
                 "password": values.password,
                 "role": values.role,
-                "restaurantName": values.name,
             });
             setLoading(false);
             if (response.data.Message) {
