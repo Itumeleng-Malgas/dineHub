@@ -13,7 +13,7 @@ import config
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
-app.register_blueprint(app_views)
+app.register_blueprint(app_views, url_prefix="/api/v1")
 
 # upload images
 @app.route('/upload', methods=['POST'])
@@ -52,6 +52,7 @@ def close_session(Exception):
 @app.errorhandler(404)
 def not_found(Exception):
      """Returns Not found error for a request"""
+     
      return jsonify({"Error": "Not Found"}), Exception.code
 
 
@@ -62,5 +63,5 @@ if __name__ == "__main__":
     if not dine_hub_host:
         dine_hub_host = "0.0.0.0"
     if not dine_hub_port:
-        dine_hub_port = 6000
+        dine_hub_port = 6001
     app.run(host=dine_hub_host, port=dine_hub_port, debug=True, threaded=True)
