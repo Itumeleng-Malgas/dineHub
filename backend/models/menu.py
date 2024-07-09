@@ -27,7 +27,7 @@ class Menu(BaseModel, Base):
         status = Column(String(60), nullable=False, default="OPEN")
 
     else:
-        id = ""
+        name = ""
         restaurant_id = ""
         status = ""
     

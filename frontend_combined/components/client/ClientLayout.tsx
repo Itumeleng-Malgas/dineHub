@@ -42,7 +42,7 @@ function ClientLayout({ children }: Readonly<{ children: React.ReactNode; }>) {
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
-        <Layout.Header style={{backgroundColor: "#fff", zIndex: "9999999"}} className='sticky top-0 bg-white'><ClientHeader/></Layout.Header>
+        <Layout.Header style={{backgroundColor: "#fff", zIndex: "999"}} className='sticky top-0 bg-white'><ClientHeader/></Layout.Header>
         <Content className="mx-12 my-4">
             {children}
         </Content>
