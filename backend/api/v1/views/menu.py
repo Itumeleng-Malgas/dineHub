@@ -31,10 +31,11 @@ def create_menus():
                 storage.save()
                 return jsonify(new_menu.to_dict()), 201
 
-@app_views.route("/menus/restaurant_id", strict_slashes=False, methods=['GET'])
+@app_views.route("/menus/<restaurant_id>", strict_slashes=False, methods=['GET'])
 def restaurant_menus(restaurant_id):
     """route to get all the menus"""
     if request.method == "GET":
+        print("hello")
         # menus = [menu.to_dict() for menu in storage.all(Menu).values()]
         restaurant = storage.get(Restaurant, restaurant_id)
         
@@ -44,8 +45,6 @@ def restaurant_menus(restaurant_id):
                 reviews.append(review.to_dict())
         return jsonify(reviews), 200
     
-    
-
 
 @app_views.route("/menu/<id>", strict_slashes=False, methods=["DELETE", "UPDATE"])
 def manage_menu(id):
