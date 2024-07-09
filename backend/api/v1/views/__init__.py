@@ -11,4 +11,7 @@ from api.v1.views.menu import *
 from api.v1.views.image import *
 from api.v1.views.gallery import *
 from api.v1.views.product import *
+from api.v1.views.table import *
+from api.v1.views.reservation import *
+
 
