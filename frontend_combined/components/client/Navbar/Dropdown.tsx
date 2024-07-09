@@ -16,7 +16,7 @@ const DropdownMenuIcon = () => {
         label: 'Restaurants',
       },
       {
-        key: '/bookings',
+        key: '/booking/1',
         icon: <CheckOutlined size={15} className="mr-2" />,
         label: 'Bookings',
       },
