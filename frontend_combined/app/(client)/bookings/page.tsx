@@ -2,8 +2,8 @@
 
 import React from 'react';
 import { useSearchParams } from 'next/navigation';
-import { mockRestaurants } from '@/components/data/restaurants';
-import RestaurantCard from '@/components/restaurantCard';
+import { mockRestaurants } from '@/data/restaurants';
+import RestaurantCard from '@/components/client/restaurantCard';
 
 const BookingsPage: React.FC = () => {
   const searchParams = useSearchParams();
