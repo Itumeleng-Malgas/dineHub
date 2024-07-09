@@ -13,17 +13,22 @@ class Booking(Base):
     """class to manage booking"""
     if storage_type == "db":
         __tablename__ = "bookings"
+
+        guest_name = Column(String(128), nullable=False)
+        guest_email = Column(String(128), nullable=False)
         client_id = Column(String(60), ForeignKey("clients.client_id"), nullable=False, primary_key=True)
         table_id = Column(String(60), ForeignKey("tables.id"), nullable=False, primary_key=True)
         booked_on = Column(DateTime, nullable=False, default=datetime.now())
-        # Accepted, Rejected, Pending
-        status = Column(String(60), nullable=False, default="pending")
+        status = Column(String(60), nullable=False, default="pending") # Accepted, Rejected, Pending
+    
+    
     elif storage_type == "fs":
+        guest_name = ""
+        guest_email = ""
         client_id = ""
         table_id = ""
         booked_on = datetime.now()
-        # Accepted, Rejected, Pending
-        status = ""
+        status = "" # Accepted, Rejected, Pending
     
     def __init__(self, *args, **kwargs):
         """ constructor class for booking"""
