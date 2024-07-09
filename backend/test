@@ -112,7 +112,6 @@ data = {
 }
 
 {
-
   "password": "1234",
   "country" : "Cameroon",
   "state" : "North west",
@@ -186,7 +185,8 @@ data = {
 /menus
 POST
 {
-  "restaurant_id":"aded1f24-35a7-4090-9319-e781c63bdc98",
+  "name":"Breakfast",
+  "restaurant_id":"92d90a6c-1bc5-4ccb-8d4e-247687bce7ac",
   "status":"open"
 }
 
