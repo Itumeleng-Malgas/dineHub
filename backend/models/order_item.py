@@ -25,8 +25,8 @@ class Order_item(BaseModel):
         order_item_id = ""
         order_id = ""
         item_id = ""
-        item_type: ItemType = None
+        item_type = ""
     
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs): 
         """constructor for Order_Items"""
         super().__init__(*args, **kwargs)

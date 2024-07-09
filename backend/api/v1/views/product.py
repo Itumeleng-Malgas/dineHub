@@ -21,8 +21,7 @@ def products_menu(menu_id):
     if menu:
         # get all products in storage
         # filter those whose menu_id match supplied menu_id
-        products_menu = [product for product in storage.all(Product).values() if product.menu_id == menu_id]
-        products_menu = [product.to_dict() for product in products_menu]
+        products_menu = [product.to_dict() for product in storage.all(Product).values() if product.menu_id == menu_id]
         return jsonify(products_menu)
     return jsonify({"Error": f"no menu found with id {menu_id}"})
 

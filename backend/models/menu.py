@@ -24,7 +24,7 @@ class Menu(BaseModel, Base):
         name = Column(String(60), nullable=False)
         restaurant_id = Column(String(60), ForeignKey('restaurants.restaurant_id'), nullable=False)
         # menu can be closed or open
-        status = Column(String(60), nullable=False, default="open")
+        status = Column(String(60), nullable=False, default="OPEN")
 
     else:
         name = ""
