@@ -38,7 +38,7 @@ class Restaurant(User, Base):
         type = Column(String(60), nullable=True, default="Standard")
         status = Column(String(8), nullable=True, default="OPEN")
         cuisine = Column(String(26), nullable=True)
-        role = Column(String(18), nullable=True)
+        role = Column(String(18), nullable=True, default="customer")
         phone = Column(Integer, nullable=True)
         profileImageUrl = Column(String(1024), nullable=True)
         overall_rating = Column(Float)
