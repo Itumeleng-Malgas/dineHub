@@ -5,8 +5,6 @@ import models
 from models.base_model import BaseModel
 from models.client import Client
 from models.normal_client import Normal_client
-from models.drink import Drink
-from models.meal import Meal
 from models.menu import Menu
 from models.order_item import Order_item
 from models.registered_client import Registered_client
@@ -18,11 +16,12 @@ from models.user import User
 from models.orders import Orders
 from models.payment import Payment
 from models.product import Product
+from models.admin import Admin
 
 classes = {"Normal_client": Normal_client, "Client": Client, "Registered_client": Registered_client,
-            "Drink": Drink, "Meal": Meal, "Menu": Menu, "Orders": Orders, "Order_item": Order_item,
+             "Menu": Menu, "Orders": Orders, "Order_item": Order_item,
             "Payment": Payment, "Reservation": Reservation, "Restaurant": Restaurant, "Review": Review,
-            "User": User, "Table": Table, "Product": Product}
+            "User": User, "Table": Table, "Product": Product, "Admin": Admin}
 
 
 @app_views.route('/status', strict_slashes=False, methods=['GET'])

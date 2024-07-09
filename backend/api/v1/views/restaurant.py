@@ -96,7 +96,7 @@ def get_restaurant_via_param():
             return jsonify(restaurant), 200
     return jsonify({"Message": f"No Restaurant found with that id {id}"}), 404
 
-@app_views.route("/restaurant/<id>", strict_slashes=False, methods=["DELETE", "UPDATE"])
+@app_views.route("/restaurant/<id>", strict_slashes=False, methods=["DELETE", "PUT"])
 def manage_restaurant(id):
     """endpoint to handle delete of restaurant"""
     if request.method == "DELETE":
@@ -106,8 +106,9 @@ def manage_restaurant(id):
         storage.delete(restaurant)
         storage.save()
         return jsonify({"Message": "Restaurant deleted successfully"}), 200
-    # elif request.method == "UPDATE":
-    # id {other, }
+    elif request.method == "PUT":
+        """handle update operation on restaurants"""
+        pass
         
         
 

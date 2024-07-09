@@ -37,11 +37,11 @@ def restaurant_menus(restaurant_id):
     if request.method == "GET":
         # menus = [menu.to_dict() for menu in storage.all(Menu).values()]
         restaurant = storage.get(Restaurant, restaurant_id)
+        
         reviews = []
         if restaurant:
             for review in restaurant.menus:
                 reviews.append(review.to_dict())
-
         return jsonify(reviews), 200
     
     

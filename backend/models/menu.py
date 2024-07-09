@@ -21,13 +21,13 @@ class Menu(BaseModel, Base):
     """class to handle Menu"""
     if storage_type == 'db':
         __tablename__ = "menus"
-        id = Column(String(60), nullable=False, primary_key=True)
+        name = Column(String(60), nullable=False)
         restaurant_id = Column(String(60), ForeignKey('restaurants.restaurant_id'), nullable=False)
         # menu can be closed or open
-        status = Column(String(60), nullable=False)
+        status = Column(String(60), nullable=False, default="OPEN")
 
     else:
-        id = ""
+        name = ""
         restaurant_id = ""
         status = ""
     
