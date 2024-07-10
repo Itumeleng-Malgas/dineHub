@@ -17,5 +17,5 @@ from api.v1.views.normal_client import *
 from api.v1.views.admin import *
 from api.v1.views.order import *
 from api.v1.views.payment import *
-
+from api.v1.views.order_product import *
 
