@@ -3,14 +3,15 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import axios from 'axios';
 import { Row, Col } from 'antd';
-import RestaurantCard from '@/components/restaurantCard';
-import { Restaurant } from '@/components/data/restaurants';
-import { useUser } from '@clerk/nextjs';
+import { Restaurant } from '@/data/restaurants';
+import { useSession } from 'next-auth/react';
+import RestaurantCard from '@/components/client/restaurantCard';
+
 
 const FavoritesPage: React.FC = () => {
   const [favorites, setFavorites] = useState<Restaurant[]>([]);
-  const { user } = useUser();
-  const userId = user?.id;
+  const { data: session } = useSession();
+  const userId = session?.user?.id;
 
   // Helper function to save favorites to local storage
   const saveFavoritesToLocal = (favorites: Restaurant[]) => {

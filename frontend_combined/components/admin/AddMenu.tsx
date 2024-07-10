@@ -95,8 +95,9 @@ const AddMenu = () => {
             dataSource={data}
             renderItem={item => (
               <List.Item
+                key={item.id}
                 actions={[
-                  <Button type="link" onClick={() => handleDelete(item.id)}>x</Button>
+                  <Button  key={item.id} type="link" onClick={() => handleDelete(item.id)}>x</Button>
                 ]}
               >
                 {item.name}

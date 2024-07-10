@@ -114,7 +114,7 @@ const PreviewPage = () => {
                 ))}
                 <div className='flex space-x-4'>
                     <Button type="primary" className="mt-4 bg-indigo-900 border-indigo-900"
-                        onClick={() => setEditingReview({ id: 0, user: '', rating: 0, comment: '' })}
+                        onClick={() => setEditingReview({ userEmail: '', id: 0, user: '', rating: 0, comment: '' })}
                     >
                         Add Review
                     </Button>

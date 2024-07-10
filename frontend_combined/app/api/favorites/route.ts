@@ -1,13 +1,15 @@
 
 import { NextRequest, NextResponse } from 'next/server';
-import { mockRestaurants } from '@/components/data/restaurants';
-import { auth } from '@clerk/nextjs/server';
+import { mockRestaurants } from '@/data/restaurants';
+import { useSession } from 'next-auth/react';
 
 let userFavorites: { [key: string]: Set<number> } = {}; // Object to store user favorites
 
 // 1. GET /api/favorites
 export async function GET(request: NextRequest) {
-  const { userId } = auth()
+  const { data: session } = useSession()
+  const userId = session?.user.id;
+
   if (!userId) {
     return NextResponse.json({ error: 'You must be logged in to view your favorites.' }, { status: 401 });
   }
@@ -19,8 +21,8 @@ export async function GET(request: NextRequest) {
 
 // 2. POST /api/favorites
 export async function POST(request: NextRequest) {
-
-  const { userId } = auth()
+  const { data: session } = useSession()
+  const userId = session?.user.id;
   if (!userId) {
     return NextResponse.json({ error: 'You must be logged in to add favorites.' }, { status: 401 });
   }
@@ -35,7 +37,8 @@ export async function POST(request: NextRequest) {
 }
 
 export async function DELETE(request: NextRequest) {
-  const { userId } = auth()
+  const { data: session } = useSession()
+  const userId = session?.user.id;
   if (!userId) {
     return NextResponse.json({ error: 'You must be logged in to remove favorites.' }, { status: 401 });
   }

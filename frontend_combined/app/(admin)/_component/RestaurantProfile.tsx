@@ -66,7 +66,7 @@ const RestaurantProfile: React.FC = () => {
     };
 
     fetchRestaurantData();
-  }, [form, id]);
+  }, [form, id, initialValues]);
 
   const onFinish = async (values: any) => {
     setLoading(true);

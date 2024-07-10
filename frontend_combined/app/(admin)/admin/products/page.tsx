@@ -45,7 +45,7 @@ const ProductManagement: React.FC = () => {
     };
 
     fetchProducts();
-  }, []);
+  }, [restaurant_id]);
 
   if (loading) {
     return <Empty />;

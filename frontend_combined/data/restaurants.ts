@@ -4,6 +4,7 @@ export interface Menu {
 }
 
 export interface Review {
+    userEmail: string | null | undefined;
     id: number;
     user: string;
     rating: number;
@@ -53,19 +54,23 @@ export const mockRestaurants: Restaurant[] = [
         reviews: [
             {
                 user: "Kennedy", rating: 5, comment: "Absolutely amazing! The best BBQ I've ever had.",
-                id: 0
+                id: 0,
+                userEmail: undefined
             },
             {
                 user: "Yolanda", rating: 4.5, comment: "The ribs were so tender and flavorful. Loved it!",
-                id: 0
+                id: 0,
+                userEmail: undefined
             },
             {
                 user: "Samantha", rating: 4, comment: "Great food, but the service could be better.",
-                id: 0
+                id: 0,
+                userEmail: undefined
             },
             {
                 user: "tekoh", rating: 4.5, comment: "Highly recommended for any meat lover!",
-                id: 0
+                id: 0,
+                userEmail: undefined
             },
         ],
         cuisine: "BBQ",
@@ -95,19 +100,23 @@ export const mockRestaurants: Restaurant[] = [
         reviews: [
             {
                 user: "Ken", rating: 5, comment: "Absolutely amazing! The best BBQ I've ever had.",
-                id: 0
+                id: 0,
+                userEmail: undefined
             },
             {
                 user: "Yol", rating: 4.9, comment: "The maxican pizza was super tasty and flavorful. Loved it!",
-                id: 0
+                id: 0,
+                userEmail: undefined
             },
             {
                 user: "Sam", rating: 4, comment: "Great food, but the service could be better.",
-                id: 0
+                id: 0,
+                userEmail: undefined
             },
             {
                 user: "Ike", rating: 4.5, comment: "Highly recommended for any meaty pizza lover!",
-                id: 0
+                id: 0,
+                userEmail: undefined
             },
         ],
         cuisine: "Italian",
@@ -137,19 +146,23 @@ export const mockRestaurants: Restaurant[] = [
         reviews: [
             {
                 user: "Kuhle", rating: 5, comment: "Absolutely amazing! The best BBQ I've ever had.",
-                id: 0
+                id: 0,
+                userEmail: undefined
             },
             {
                 user: "Themba", rating: 4.9, comment: "The boerewors sausage is the best I've ever tasted, just like back home in South Africa!",
-                id: 0
+                id: 0,
+                userEmail: undefined
             },
             {
                 user: "Nicole", rating: 4, comment: "Great food, but the service could be better.",
-                id: 0
+                id: 0,
+                userEmail: undefined
             },
             {
                 user: "Inno", rating: 4.5, comment: "The grilled ostrich steak was a delightful surprise. The flavors are truly authentic.",
-                id: 0
+                id: 0,
+                userEmail: undefined
             },
         ],
         cuisine: "Pizza",
@@ -180,19 +193,23 @@ export const mockRestaurants: Restaurant[] = [
         reviews: [
             {
                 user: "Kennedy", rating: 5, comment: "Absolutely amazing! The best BBQ I've ever had.",
-                id: 0
+                id: 0,
+                userEmail: undefined
             },
             {
                 user: "Yolanda", rating: 4.5, comment: "The ribs were so tender and flavorful. Loved it!",
-                id: 0
+                id: 0,
+                userEmail: undefined
             },
             {
                 user: "Samantha", rating: 4, comment: "Great food, but the service could be better.",
-                id: 0
+                id: 0,
+                userEmail: undefined
             },
             {
                 user: "tekoh", rating: 4.5, comment: "Highly recommended for any meat lover!",
-                id: 0
+                id: 0,
+                userEmail: undefined
             },
         ],
         cuisine: 'Grill',
@@ -222,19 +239,23 @@ export const mockRestaurants: Restaurant[] = [
         reviews: [
             {
                 user: "Chioma", rating: 5, comment: "Absolutely amazing! The best local dishes I've ever had.",
-                id: 0
+                id: 0,
+                userEmail: undefined
             },
             {
                 user: "Tayo", rating: 4.5, comment: "The okro was so tender and flavorful. Loved it!",
-                id: 0
+                id: 0,
+                userEmail: undefined
             },
             {
                 user: "Lola", rating: 4, comment: "Great food, but the service could be better.",
-                id: 0
+                id: 0,
+                userEmail: undefined
             },
             {
                 user: "Uche", rating: 4.5, comment: "Highly recommended for any spicy meat lover!",
-                id: 0
+                id: 0,
+                userEmail: undefined
             },
         ],
         cuisine: 'Nigerian',
@@ -265,19 +286,23 @@ export const mockRestaurants: Restaurant[] = [
         reviews: [
             {
                 user: "Ebuka", rating: 5, comment: "This is the best Italian food I've had outside of Italy. The pasta is cooked to perfection!",
-                id: 0
+                id: 0,
+                userEmail: undefined
             },
             {
                 user: "Noble", rating: 4.5, comment: "The tiramisu was absolutely divine. I will be back for more!",
-                id: 0
+                id: 0,
+                userEmail: undefined
             },
             {
                 user: "Nonku", rating: 4, comment: "Great food, but the service could be better.",
-                id: 0
+                id: 0,
+                userEmail: undefined
             },
             {
                 user: "Amanda", rating: 4.5, comment: "The atmosphere is so cozy and authentic. The service was also top-notch.",
-                id: 0
+                id: 0,
+                userEmail: undefined
             },
         ],
         cuisine: 'sushi',
@@ -308,19 +333,23 @@ export const mockRestaurants: Restaurant[] = [
         reviews: [
             {
                 user: "Ayomide", rating: 5, comment: "The flavors at Afro Fusion are simply divine. It's like a culinary journey through Africa.",
-                id: 0
+                id: 0,
+                userEmail: undefined
             },
             {
                 user: "Simie", rating: 4, comment: "Great food and service. Highly recommend Egusi soup!",
-                id: 0
+                id: 0,
+                userEmail: undefined
             },
             {
                 user: "Ebube", rating: 4.5, comment: "This place captures the essence of African cuisine perfectly. Highly recommended!",
-                id: 0
+                id: 0,
+                userEmail: undefined
             },
             {
                 user: "Joe", rating: 4, comment: "The atmosphere is warm and inviting, and the staff is extremely knowledgeable and helpful.",
-                id: 0
+                id: 0,
+                userEmail: undefined
             },
         ],
         cuisine: "African",
@@ -351,19 +380,23 @@ export const mockRestaurants: Restaurant[] = [
         "reviews": [
             {
                 "user": "Amina", "rating": 5, "comment": "The best Nigerian food I've had outside of my own home. Spice Lounge is a must-visit!",
-                id: 0
+                id: 0,
+                userEmail: undefined
             },
             {
                 "user": "Tayo", "rating": 4.5, "comment": "Authentic flavors and excellent service. Highly recommended for a taste of Nigeria.",
-                id: 0
+                id: 0,
+                userEmail: undefined
             },
             {
                 "user": "Bimbo", "rating": 4.7, "comment": "Spice Lounge has quickly become my go-to spot for Nigerian cuisine. Consistently delicious!",
-                id: 0
+                id: 0,
+                userEmail: undefined
             },
             {
                 "user": "Lola", "rating": 4.3, "comment": "The ambiance and attention to detail make Spice Lounge a truly remarkable dining experience.",
-                id: 0
+                id: 0,
+                userEmail: undefined
             }
         ],
         "cuisine": "Nigerian",
@@ -393,19 +426,23 @@ export const mockRestaurants: Restaurant[] = [
         "reviews": [
             {
                 "user": "Fatima", "rating": 5, "comment": "Riad Maison Bleue offers an unparalleled Moroccan culinary experience. The atmosphere and flavors are absolutely captivating.",
-                id: 0
+                id: 0,
+                userEmail: undefined
             },
             {
                 "user": "Ahmed", "rating": 4.8, "comment": "Exceptional Moroccan cuisine in a stunning, traditional riad setting. I highly recommend this place.",
-                id: 0
+                id: 0,
+                userEmail: undefined
             },
             {
                 "user": "Yasmin", "rating": 4.6, "comment": "The Tagine and Couscous dishes were out of this world. A true taste of Morocco.",
-                id: 0
+                id: 0,
+                userEmail: undefined
             },
             {
                 "user": "Samir", "rating": 4.4, "comment": "Wonderful, authentic Moroccan fare in a serene and beautiful environment. The staff was also very attentive and knowledgeable.",
-                id: 0
+                id: 0,
+                userEmail: undefined
             }
         ],
         "cuisine": "Moroccan",openingHours: "Mon-Fri: 9am - 10pm, Sat-Sun: 10am - 11pm",
@@ -435,19 +472,23 @@ export const mockRestaurants: Restaurant[] = [
         "reviews": [
             {
                 "user": "Amira", "rating": 5, "comment": "Nile View is an absolute gem! The food is exceptional, and the view of the Nile is simply breathtaking.",
-                id: 0
+                id: 0,
+                userEmail: undefined
             },
             {
                 "user": "Khaled", "rating": 4.7, "comment": "A truly authentic Egyptian dining experience. The Koshary and Molokhia were out of this world.",
-                id: 0
+                id: 0,
+                userEmail: undefined
             },
             {
                 "user": "Hoda", "rating": 4.5, "comment": "Nile View has quickly become my go-to spot for Egyptian cuisine in Cairo. Highly recommended!",
-                id: 0
+                id: 0,
+                userEmail: undefined
             },
             {
                 "user": "Mahmoud", "rating": 4.3, "comment": "The staff was incredibly friendly and knowledgeable. The food was delicious, and the Nile view was the perfect backdrop.",
-                id: 0
+                id: 0,
+                userEmail: undefined
             }
         ],
         "cuisine": "Egyptian",openingHours: "Mon-Fri: 9am - 10pm, Sat-Sun: 10am - 11pm",
