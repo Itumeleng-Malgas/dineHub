@@ -21,11 +21,12 @@ export interface Product {
 const ProductManagement: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const restaurant_id = useSession().data?.user.id;
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get(`${BACKEND_URL}/products/${useSession().data?.user.id}`);
+        const response = await axios.get(`${BACKEND_URL}/all_products/${restaurant_id}`);
         if (response.status === 200) {
           const fetchedProducts = response.data.map((product: any) => ({
             ...product,
