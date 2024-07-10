@@ -1,6 +1,10 @@
+"use client"
 import WithSuspense from '@/components/WithSuspense';
-import React from 'react'
+import React, { useEffect, useState } from 'react';
 import ProductsTable from '../../_component/ProductsTable';
+import axios from 'axios';
+import { BACKEND_URL } from '@/utils/configs';
+import { Empty, message } from 'antd';
 
 export interface Product {
   id: string;
@@ -13,41 +17,43 @@ export interface Product {
   createdAt: Date;
 }
 
-// Function to generate random string (for id)
-const generateRandomString = (length: number) => {
-  return Math.random().toString(36).substring(2, 2 + length);
-};
+const ProductManagement: React.FC = () => {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
-// Sample data generation
-const products: Product[] = [
-  /*{
-    id: generateRandomString(10),
-    key: generateRandomString(10),
-    name: "Product 1",
-    price: Math.floor(Math.random() * 10000), // price in cents
-    imagePath: "/images/product1.jpg",
-    description: "Description for Product 1",
-    isAvailableForPurchase: Math.random() < 0.5,
-    createdAt: new Date(),
-  },
-  {
-    id: generateRandomString(10),
-    key: generateRandomString(10),
-    name: "Product 2",
-    price: Math.floor(Math.random() * 10000), // price in cents
-    imagePath: "/images/product2.jpg",
-    description: "Description for Product 2",
-    isAvailableForPurchase: Math.random() < 0.5,
-    createdAt: new Date(),
-  }*/
-];
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await axios.get(`${BACKEND_URL}/products/9151309c-d9f7-466b-bb41-eb44331c7ce6`);
+        if (response.status === 200) {
+          const fetchedProducts = response.data.map((product: any) => ({
+            ...product,
+            key: product.id,
+          }));
+          setProducts(fetchedProducts);
+        } else {
+          message.error('Failed to fetch products');
+        }
+      } catch (error) {
+        console.error('Error fetching products:', error);
+        message.error('Error fetching products');
+      } finally {
+        setLoading(false);
+      }
+    };
 
-const ProductManagement = async () => {
-  return ( 
+    fetchProducts();
+  }, []);
+
+  if (loading) {
+    return <Empty />;
+  }
+
+  return (
     <WithSuspense>
       <ProductsTable products={products} />
     </WithSuspense>
-  )
+  );
 }
 
-export default ProductManagement
+export default ProductManagement;
