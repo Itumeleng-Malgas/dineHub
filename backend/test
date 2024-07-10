@@ -207,6 +207,7 @@ data = {
 }
 
 /table
+
 POST
 {
         "table_type" : "VIP",
@@ -220,3 +221,15 @@ POST
   "order_id" : "d19afc77-b126-48cf-ac94-6654e9e8fddf ",
   "product_id ": ""
 }
+
+
+/bookings
+{
+  "guest_name": "John Doe",
+  "guest_email": "john@example.com",
+  "client_id": "5145",
+  "table_id": "123",
+  "booked_on": "2024-07-09T12:00:00",
+  "status": "pending"
+}
+

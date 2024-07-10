@@ -17,11 +17,13 @@ from models.orders import Orders
 from models.payment import Payment
 from models.product import Product
 from models.admin import Admin
+from models.item import Item
+from models.booking import Booking
 
 classes = {"Normal_client": Normal_client, "Client": Client, "Registered_client": Registered_client,
              "Menu": Menu, "Orders": Orders, "Order_product": Order_product,
             "Payment": Payment, "Reservation": Reservation, "Restaurant": Restaurant, "Review": Review,
-            "User": User, "Table": Table, "Product": Product, "Admin": Admin}
+            "User": User, "Table": Table, "Product": Product, "Admin": Admin, "Item": Item, "Booking": Booking}
 
 
 @app_views.route('/status', strict_slashes=False, methods=['GET'])
