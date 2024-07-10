@@ -13,7 +13,7 @@ const { TextArea } = Input;
 const { Option } = Select;
 
 interface InitialValues {
-  restaurantName: string;
+  name: string;
   email: string;
   address: string;
   phone: string;
@@ -25,7 +25,7 @@ const RestaurantProfile: React.FC = () => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const [initialValues, setInitialValues] = useState<InitialValues>({
-    restaurantName: '',
+    name: '',
     email: '',
     address: '',
     phone: '',
@@ -35,7 +35,8 @@ const RestaurantProfile: React.FC = () => {
   const [fileList, setFileList] = useState<UploadFile<RcFile>[]>([]);
   const [restaurantImage, setRestaurantImage] = useState<string | null>(null);
   const [gallery, setGallery] = useState<string[]>([]);
-  const restaurantId = useSession().data?.user.id;
+  const { data: session } = useSession();
+  const restaurantId = session?.user?.id;
 
   const uploadButton = (
     <button style={{ border: 0, background: 'none' }} type="button">
@@ -46,19 +47,26 @@ const RestaurantProfile: React.FC = () => {
 
   useEffect(() => {
     const fetchRestaurantData = async () => {
+      if (!restaurantId) return;
+
       try {
-        const response = await axios.get('/api/getProfile');
-        setInitialValues(response.data);
-        form.setFieldsValue(response.data);
-        setRestaurantImage(response.data.restaurantImage);
-        setGallery(response.data.gallery);
+        const response = await axios.get(`${BACKEND_URL}/restaurants?id=${restaurantId}`);
+        if (response.data.length > 0) {
+          const fetchedData = response.data[0];
+          setInitialValues(fetchedData);
+          form.setFieldsValue(fetchedData);
+          setRestaurantImage(fetchedData.restaurantImage);
+          setGallery(fetchedData.gallery);
+        }
+        console.log("Updated Init Values", initialValues)
       } catch (error) {
         console.error('Error fetching restaurant data:', error);
+        message.error('Error fetching restaurant data');
       }
     };
 
     fetchRestaurantData();
-  }, [form]);
+  }, [form, restaurantId]);
 
   const onFinish = async (values: any) => {
     setLoading(true);
@@ -70,13 +78,13 @@ const RestaurantProfile: React.FC = () => {
     };
     console.log('Payload:', payload);
     try {
-      const response = await axios.post(`${BACKEND_URL}/restaurants`, payload);
+      const response = await axios.put(`${BACKEND_URL}/restaurants/${restaurantId}`, payload);
       console.log('Profile updated successfully:', response.data);
       message.success('Profile updated successfully');
-      setLoading(false);
     } catch (error) {
       console.error('Error updating profile:', error);
       message.error('Error updating profile');
+    } finally {
       setLoading(false);
     }
   };
@@ -107,7 +115,7 @@ const RestaurantProfile: React.FC = () => {
         console.error('Error uploading file:', error);
       }
     }
-    
+
     if (type === 'gallery') {
       setFileList(info.fileList);
     }
@@ -126,7 +134,7 @@ const RestaurantProfile: React.FC = () => {
           <Row gutter={24}>
             <Col xs={24} md={12}>
               <Form.Item
-                name="restaurantName"
+                name="name"
                 label="Restaurant Name"
                 rules={restaurantProfileValidationRules.restaurantName}
               >
