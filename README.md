@@ -4,6 +4,7 @@
 # Table of Contents
 * Introduction
 * Features
+* Data Model
 * Installation
 * Usage
 * Screenshots
@@ -23,12 +24,15 @@
  * Analytics Dashboard: Gain insights into restaurant performance with detailed analytics.
  * Multi-Platform Support: Available on both iOS and Android devices.
 
+# Data Model
+
+
 # Installation and setup
 To successfully use DineHub you will need to install both and setup both Front-end and Back-end components. 
 This section will guide you on that.
 ## Back-end 
 To install and setup the backend REST_API server build with flask you need to follow these steps:
-### git clone DineHub Repository
+### Git clone DineHub Repository
 ---
 ### Clone the DineHub Repository
 To get started, you need to clone the DineHub repository. Follow these steps:
@@ -75,8 +79,7 @@ The backend is built with Python, so you need to install Python3 to proceed. Fol
 
 After installing Python, you can proceed with next step.
 
-### install python3 libraries
----
+
 ### Install Python Libraries
 To install the required Python libraries for the backend, follow these steps:
 
@@ -92,7 +95,66 @@ To install the required Python libraries for the backend, follow these steps:
 
 This will install all the necessary Python libraries for the DineHub backend.
 
+### DineHub Database Setup
+---
+### DineHub Database Setup
 
+To set up the DineHub database, follow these steps:
+
+NB: you need to have any relational database management software installed such as MySQL, Postgres etc. for our case we will use MySQL
+
+1. Open your terminal or command prompt.
+2. Change your current directory to the backend setup folder by running the following command:
+    ```
+    cd /home/cyanide/dineHub/backend/setup
+    ```
+3. Once you are inside the setup folder, run the following command to import the database schema:
+    ```
+    cat setup_mysql_dev.sql | mysql -u username -p
+    ```
+   Replace `username` with your MySQL username.
+4. You will be prompted to enter the password for your MySQL account. Enter the password and press Enter.
+
+This command will import the DineHub database schema into your MySQL server and create a new dinehub user which will be used as the main point of interacting with the database.
+
+
+### starting DineHub Rest API Server
+---
+To start the DineHub REST API server, run the following command:
+
+```
+DINEHUB_MYSQL_PWD='dinehub_dev_pwd' DINEHUB_MYSQL_USER='dine_hub_dev' DINEHUB_TYPE_STORAGE='db' DINEHUB_MYSQL_DB='dineHub_dev_db' DINEHUB_MYSQL_HOST='localhost' python3 -m api.v1.app
+
+```
+
+This command will start the DineHub REST API server and allow you to interact with the backend functionality of the application.
+
+### Environmental Variables
+
+Before starting the DineHub REST API server, make sure you have the following environmental variables set up correctly:
+
+1. `DINEHUB_MYSQL_PWD`: The password for your MySQL account.
+2. `DINEHUB_MYSQL_USER`: The username for your MySQL account.
+3. `DINEHUB_TYPE_STORAGE`: The type of storage to be used (e.g., `db` for database).
+4. `DINEHUB_MYSQL_DB`: The name of the MySQL database for DineHub.
+5. `DINEHUB_MYSQL_HOST`: The host address for your MySQL server.
+
+Ensure that these environmental variables are properly configured before running the command to start the DineHub REST API server.
+
+
+
+Remember to make sure you have all the necessary environment variables set up correctly before running the command.
+
+### Interact with DineHub Rest API Server via Endpoints
+---
+
+Interaction with the DineHub Rest API server via API Endpoints
+
+for the full documentation of Dine Hub Rest API its Endpoints and methods consult the following endpoints
+
+- [DineHub REST API Documentation](https://documenter.getpostman.com/view/15626998/2sA3e48TYY
+)📝
+ 
 ## Front-end
 
 # Usage
@@ -147,9 +209,7 @@ The license for DineHub is:
 - [MIT License](https://opensource.org/licenses/MIT) 📜
 - [GNU General Public License (GPL)](https://www.gnu.org/licenses/gpl-3.0.en.html) 🐧
 
-DineHub is licensed under the:
-- [MIT License](https://opensource.org/licenses/MIT)
-- [GNU General Public License (GPL)](https://www.gnu.org/licenses/gpl-3.0.en.html).
+
 
 
 
