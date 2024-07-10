@@ -1,59 +1,99 @@
-import React, { Dispatch, SetStateAction } from 'react';
-import { Form, Input, Upload, Button, message, Select } from 'antd';
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { Form, Input, Upload, Button, message, Select, FormInstance } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import { useToggle } from '@/context/toggleContext';
-import { RcFile, UploadFile } from 'antd/lib/upload/interface';
+import { RcFile, UploadFile, UploadChangeParam } from 'antd/lib/upload/interface';
 import { restaurantProfileValidationRules } from '@/utils/validationRules';
+import { BACKEND_URL } from '@/utils/configs';
+import { useSession } from 'next-auth/react';
+import { fetchMenuItems } from './_utilities';
 
 const { Option } = Select;
 
 interface AddProductFormProps {
-  form: any; // FormInstance type is not directly imported here
+  form: FormInstance;
   fileList: UploadFile<RcFile>[];
   setFileList: Dispatch<SetStateAction<UploadFile<RcFile>[]>>;
-  email: string | undefined | null;
 }
 
-const AddProductForm: React.FC<AddProductFormProps> = ({ form, fileList, setFileList, email }) => {
-  const { toggleState } = useToggle();
+interface MenuItem {
+  id: string;
+  name: string;
+}
 
-  const uploadImage = async (file: RcFile): Promise<string> => {
-    const formData = new FormData();
-    formData.append('picture', file);
-    
-    try {
-      const uploadResponse = await axios.post('http://localhost:3001/upload', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-      return uploadResponse.data.url;
-    } catch (error) {
-      console.error('Error uploading image:', error);
-      throw new Error('Failed to upload image');
+const AddProductForm: React.FC<AddProductFormProps> = ({ form, fileList, setFileList }) => {
+  const { toggleState } = useToggle();
+  const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
+  const { data: session } = useSession();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const restaurant_id = session?.user?.id;
+
+      if (!restaurant_id) {
+        message.error('Restaurant ID not found.');
+        return;
+      }
+
+      const menuItems = await fetchMenuItems(restaurant_id);
+      setMenuItems(menuItems);
+    };
+
+    fetchData();
+  }, [session]);
+
+  const handleUploadChange = async (info: UploadChangeParam<UploadFile<RcFile>>) => {
+    if (info.file.status === 'done' && info.file.originFileObj) {
+      const formData = new FormData();
+      formData.append('file', info.file.originFileObj);
+
+      try {
+        const response = await axios.post(`http://localhost:3001/upload`, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+        console.log('Upload response:', response.data); // Debug log
+        const uploadedFileUrl = response.data.url;
+        setFileList(info.fileList);
+        return uploadedFileUrl;
+      } catch (error) {
+        console.error('Error uploading file:', error);
+        throw new Error('Failed to upload file');
+      }
     }
+    setFileList(info.fileList);
+    return '';
   };
 
   const onFinish = async (values: any) => {
     try {
       let imageUrl = '';
       if (fileList.length > 0) {
-        imageUrl = await uploadImage(fileList[0].originFileObj as RcFile);
-        console.log("imageUrl", imageUrl)
+        const info = {
+          file: fileList[0],
+          fileList
+        } as UploadChangeParam<UploadFile<RcFile>>;
+        imageUrl = await handleUploadChange(info);
       }
+
+      console.log("imageUrl", imageUrl)
 
       // Prepare product data with imageUrl
       const productData = {
         ...values,
+        restaurant_id: session?.user?.id,
         picture: imageUrl,
-        userEmail: email,
+        price: parseFloat(values.price),
       };
 
-      // Send productData to saveProduct API endpoint
-      const saveResponse = await axios.post('/api/saveProduct', productData);
+      console.log("Product Data", productData);
 
-      if (saveResponse.status === 200) {
+      // Send productData to saveProduct API endpoint
+      const saveResponse = await axios.post(`${BACKEND_URL}/products`, productData);
+
+      if (saveResponse.status === 201) {
         message.success('Product added successfully');
         form.resetFields();
         setFileList([]);
@@ -67,23 +107,6 @@ const AddProductForm: React.FC<AddProductFormProps> = ({ form, fileList, setFile
     }
   };
 
-  const beforeUploadHandler = (file: RcFile): boolean => {
-    setFileList([file as UploadFile<RcFile>]);
-    return false; // Prevent default upload behavior
-  };
-
-  const props = {
-    onRemove: (file: UploadFile<RcFile>) => {
-      const index = fileList.indexOf(file);
-      const newFileList = [...fileList];
-      newFileList.splice(index, 1);
-      setFileList(newFileList);
-    },
-    beforeUpload: beforeUploadHandler,
-    fileList,
-    multiple: false,
-  };
-
   return (
     <Form form={form} onFinish={onFinish} layout="vertical">
       <Form.Item
@@ -93,7 +116,7 @@ const AddProductForm: React.FC<AddProductFormProps> = ({ form, fileList, setFile
       >
         <Input placeholder="Product Name" />
       </Form.Item>
-      <Form.Item name="desc" label="Description">
+      <Form.Item name="description" label="Description">
         <Input.TextArea placeholder="Input product description" />
       </Form.Item>
       <div className='flex gap-1'>
@@ -119,24 +142,28 @@ const AddProductForm: React.FC<AddProductFormProps> = ({ form, fileList, setFile
         </div>
         <div className='flex-1'>
           <Form.Item
-            name="menu"
+            name="menu_id"
             label="Menu"
             rules={[{ required: true, message: 'Please select an appropriate menu' }]}
           >
             <Select placeholder="Select a menu">
-              <Option value="breakfast">Breakfast</Option>
-              <Option value="lunch">Lunch</Option>
-              <Option value="dinner">Drink</Option>
-              <Option value="dessert">Dessert</Option>
+              {menuItems.map((menuItem) => (
+                <Option key={menuItem.id} value={menuItem.id}>{menuItem.name}</Option>
+              ))}
             </Select>
           </Form.Item>
           <Form.Item
             name="picture"
             label="Product Picture"
             valuePropName="fileList"
-            getValueFromEvent={e => Array.isArray(e) ? e : e && e.fileList}
+            getValueFromEvent={(e) => (Array.isArray(e) ? e : e && e.fileList)}
           >
-            <Upload {...props} >
+            <Upload
+              name="image"
+              listType="picture"
+              maxCount={1}
+              onChange={(info) => handleUploadChange(info)}
+            >
               <Button icon={<UploadOutlined />}>Click to Upload</Button>
             </Upload>
           </Form.Item>
