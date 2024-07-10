@@ -30,7 +30,7 @@
 # Installation and setup
 To successfully use DineHub you will need to install both and setup both Front-end and Back-end components. 
 This section will guide you on that.
-## Back-end 
+## Dine Hub Back-end installation and setup
 To install and setup the backend REST_API server build with flask you need to follow these steps:
 ### Git clone DineHub Repository
 ---
@@ -97,7 +97,6 @@ This will install all the necessary Python libraries for the DineHub backend.
 
 ### DineHub Database Setup
 ---
-### DineHub Database Setup
 
 To set up the DineHub database, follow these steps:
 
@@ -155,34 +154,178 @@ for the full documentation of Dine Hub Rest API its Endpoints and methods consul
 - [DineHub REST API Documentation](https://documenter.getpostman.com/view/15626998/2sA3e48TYY
 )📝
  
-## Front-end
+## DineHub Frontend installation and Setup
+
+This guide will walk you through setting up the frontend of the DineHub application.
+
+## Prerequisites
+
+Before you begin, ensure you have the following software installed on your machine:
+
+- [Node.js](https://nodejs.org/) (v14.x or later)
+- [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/)
+
+## Getting Started
+
+Follow these steps to set up and run the frontend locally.
+
+### 1. Clone the Repository
+
+First, clone the repository to your local machine:
+
+```bash
+git clone https://github.com/Itumeleng-Malgas/dineHub.git
+cd dineHub
+```
+
+
+### 2. Navigate to the Frontend Directory
+
+```bash
+cd frontend
+```
+
+
+### 3. Install Dependencies
+
+Install the project dependencies using npm or yarn:
+
+Using npm:
+
+```bash
+npm install
+```
+
+
+Using yarn:
+
+```bash
+yarn install
+```
+
+
+### 4. Configure Environment Variables
+
+Create a .env.local file in the root of the frontend directory and add the necessary environment variables. You can use the provided .env.example as a template.
+
+```bash
+cp .env.example .env.local
+```
+
+
+Then, edit the .env.local file with your preferred text editor and set the appropriate values.
+
+### 5. Run the Development Server
+
+Start the development server to run the frontend locally:
+
+Using npm:
+
+```bash
+npm run dev
+```
+
+
+Using yarn:
+
+```bash
+yarn dev
+```
+
+
+The application should now be running on [http://localhost:3000](http://localhost:3000).
+
+### 6. Build for Production
+
+To create a production build of the frontend, run:
+
+Using npm:
+
+```bash
+npm run build
+```
+
+
+Using yarn:
+
+```bash
+yarn build
+```
+
+
+This will generate optimized static files in the out directory.
+
+### 7. Testing
+
+To run the tests, use:
+
+Using npm:
+
+```bash
+npm test
+```
+
+
+Using yarn:
+
+```bash
+yarn test
+```
+
+
+### 8. Linting
+
+To lint the project files, use:
+
+Using npm:
+
+```bash
+npm run lint
+```
+
+
+Using yarn:
+
+```bash
+yarn lint
+```
+### 8. Dine Hub platform
+* #### Home Page
+
+![homepage](https://github.com/Itumeleng-Malgas/dineHub/blob/main/imgs/home.jpg?raw=true)
+
+* #### Meal navigation
+![homepage](https://github.com/Itumeleng-Malgas/dineHub/blob/main/imgs/meals.jpg?raw=true)
+
+* #### Ordering a meal
+![homepage](https://github.com/Itumeleng-Malgas/dineHub/blob/main/imgs/meal.jpg?raw=true)
 
 # Usage
 
 * Registration
-1. Open the DineHub app.
-2. Tap on the "Register" button.
-3. Fill in the required details such as restaurant name, address, contact information, and operating hours.
-4. Submit the form to complete the registration process.
+    1. Open the DineHub app.
+    2. Tap on the "Register" button.
+    3. Fill in the required details such as restaurant name, address, contact information, and operating hours.
+    4. Submit the form to complete the registration process.
 
 * Menu Management
-1. Navigate to the "Menu" section from the dashboard.
-2. Add new menu items by tapping the "Add Item" button.
-3. Edit or remove existing items as needed.
+    1. Navigate to the "Menu" section from the dashboard.
+    2. Add new menu items by tapping the "Add Item" button.
+    3. Edit or remove existing items as needed.
 
-* Reservation System
-1. Access the "Reservations" section.
-2. View upcoming reservations and manage them accordingly.
-3. Confirm, cancel, or reschedule reservations as per customer requests.
+    * Reservation System
+    1. Access the "Reservations" section.
+    2. View upcoming reservations and manage them accordingly.
+    3. Confirm, cancel, or reschedule reservations as per customer requests.
 
 * Order Management
-1. Go to the "Orders" tab.
-2. Track real-time orders and update their status (e.g., preparing, ready, delivered).
-3. Ensure timely and efficient order fulfillment.
+    1. Go to the "Orders" tab.
+    2. Track real-time orders and update their status (e.g., preparing, ready, delivered).
+    3. Ensure timely and efficient order fulfillment.
 
 * Customer Interaction
-1. Use the "Feedback" feature to receive and respond to customer reviews.
-2. Send promotions and special offers through the "Promotions" tab.
+    1. Use the "Feedback" feature to receive and respond to customer reviews.
+    2. Send promotions and special offers through the "Promotions" tab.
 
 # Contributing
 🤝 We welcome contributions to enhance the DineHub app. To contribute:
