@@ -6,7 +6,7 @@ from models.reservation import Reservation
 from api.v1.views import app_views
 from flask import jsonify, request, abort
 
-@app_views.route("/reservation", strict_slashes=False, methods=["GET","POST"])
+@app_views.route("/reservations", strict_slashes=False, methods=["GET","POST"])
 def get_all_reservations():
     if request.method == "GET":
         """method to get all reservations"""
@@ -15,7 +15,6 @@ def get_all_reservations():
     elif request.method == "POST":
         """method to create a new reservation"""
         reservation_data = request.get_json(silent=True)
-        print("helo world")
         print(reservation_data)
         if reservation_data is None or not isinstance(reservation_data, dict):
             return jsonify({"Error":"Not a valid JSON"}), 401
@@ -35,4 +34,4 @@ def get_all_reservations():
             print(new_reservation)
             storage.new(new_reservation)
             storage.save()
-        return jsonify(new_reservation.to_dict())
+        return jsonify(new_reservation.to_dict()), 201
