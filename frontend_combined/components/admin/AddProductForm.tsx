@@ -44,7 +44,6 @@ const AddProductForm: React.FC<AddProductFormProps> = ({ form, fileList, setFile
   }, [session]);
 
   const handleUploadChange = async (info: UploadChangeParam<UploadFile<RcFile>>) => {
-    console.log('Upload info:', info); // Debug log
     if (info.file.status === 'done' && info.file.originFileObj) {
       const formData = new FormData();
       formData.append('file', info.file.originFileObj);
@@ -85,7 +84,8 @@ const AddProductForm: React.FC<AddProductFormProps> = ({ form, fileList, setFile
       const productData = {
         ...values,
         restaurant_id: session?.user?.id,
-        picture: "imageUrl",
+        picture: imageUrl,
+        price: parseFloat(values.price),
       };
 
       console.log("Product Data", productData);
@@ -93,7 +93,7 @@ const AddProductForm: React.FC<AddProductFormProps> = ({ form, fileList, setFile
       // Send productData to saveProduct API endpoint
       const saveResponse = await axios.post(`${BACKEND_URL}/products`, productData);
 
-      if (saveResponse.status === 200) {
+      if (saveResponse.status === 201) {
         message.success('Product added successfully');
         form.resetFields();
         setFileList([]);
@@ -116,7 +116,7 @@ const AddProductForm: React.FC<AddProductFormProps> = ({ form, fileList, setFile
       >
         <Input placeholder="Product Name" />
       </Form.Item>
-      <Form.Item name="desc" label="Description">
+      <Form.Item name="description" label="Description">
         <Input.TextArea placeholder="Input product description" />
       </Form.Item>
       <div className='flex gap-1'>
@@ -162,17 +162,13 @@ const AddProductForm: React.FC<AddProductFormProps> = ({ form, fileList, setFile
               name="image"
               listType="picture"
               maxCount={1}
-              beforeUpload={() => false} // Prevent auto upload
-              onChange={handleUploadChange}
+              onChange={(info) => handleUploadChange(info)}
             >
               <Button icon={<UploadOutlined />}>Click to Upload</Button>
             </Upload>
           </Form.Item>
         </div>
       </div>
-      <Form.Item>
-        <Button type="primary" htmlType="submit">Add Product</Button>
-      </Form.Item>
     </Form>
   );
 };

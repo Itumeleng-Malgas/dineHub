@@ -5,6 +5,7 @@ from models.base_model import BaseModel, Base
 from sqlalchemy import Column, String, Float, ForeignKey
 from sqlalchemy.orm import relationship
 import os
+from uuid import uuid4
 
 storage_type = os.getenv('DINEHUB_TYPE_STORAGE', None)
 
@@ -12,14 +13,15 @@ class Product(BaseModel, Base):
     """class to handle products"""
     if storage_type == 'db':
         __tablename__ = "products"
+        product_id = Column(String(60), nullable=False, primary_key=True, default=uuid4())
         name = Column(String(60), nullable=False)
         description = Column(String(255), nullable=True)
         price  = Column(Float, default=0.0)
         cuisine = Column(String(60), nullable=True, default="unknown Cuisine")
         menu_id = Column(String(60), ForeignKey('menus.id'), nullable=False)
-        picture = Column(String(60), default="No imageURL")
+        picture = Column(String(200), default="No imageURL")
         # userid = Column(String(60), ForeignKey('users.id'), nullable=False)
-        id = Column(String(60), ForeignKey('restaurants.restaurant_id'), nullable=False, primary_key=True)
+        restaurant_id = Column(String(60), ForeignKey('restaurants.restaurant_id'), nullable=False, primary_key=True)
     
     elif storage_type == 'fs':
         name = ""
