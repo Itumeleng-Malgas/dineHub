@@ -5,6 +5,7 @@ import ProductsTable from '../../_component/ProductsTable';
 import axios from 'axios';
 import { BACKEND_URL } from '@/utils/configs';
 import { Empty, message } from 'antd';
+import { useSession } from 'next-auth/react';
 
 export interface Product {
   id: string;
@@ -24,7 +25,7 @@ const ProductManagement: React.FC = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get(`${BACKEND_URL}/products/9151309c-d9f7-466b-bb41-eb44331c7ce6`);
+        const response = await axios.get(`${BACKEND_URL}/products/${useSession().data?.user.id}`);
         if (response.status === 200) {
           const fetchedProducts = response.data.map((product: any) => ({
             ...product,
