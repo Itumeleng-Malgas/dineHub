@@ -1,17 +1,31 @@
 "use client";
 import { useToggle } from '@/context/toggleContext';
 import { Modal, Button, Form, UploadFile } from 'antd';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import AddProductForm from './AddProductForm';
+import { Product } from '@/app/(admin)/admin/products/page';
 
-const AddFormModal = () => {
+interface AddFormModalProps {
+  editMode?: boolean;
+  initialValues?: Product | null;
+}
+
+const AddFormModal: React.FC<AddFormModalProps> = ({ editMode = false, initialValues = null }) => {
   const { isTrue, toggleState } = useToggle();
-
-
   const [fileList, setFileList] = useState<UploadFile[]>([]);
-  const { data: session } = useSession()
+  const { data: session } = useSession();
   const [form] = Form.useForm();
+
+  useEffect(() => {
+    if (editMode && initialValues) {
+      form.setFieldsValue(initialValues);
+      // Populate fileList with the existing picture if necessary
+    } else {
+      form.resetFields();
+      setFileList([]);
+    }
+  }, [editMode, initialValues, form]);
 
   const handleCancel = () => {
     form.resetFields();
@@ -21,7 +35,7 @@ const AddFormModal = () => {
 
   return (
     <Modal
-      title="ADD NEW PRODUCT"
+      title={editMode ? "EDIT PRODUCT" : "ADD NEW PRODUCT"}
       open={isTrue}
       onCancel={handleCancel}
       width={'800px'}
@@ -34,11 +48,11 @@ const AddFormModal = () => {
           key="submit"
           onClick={() => form.submit()}
         >
-          Save
+          {editMode ? "Save Changes" : "Save"}
         </Button>,
       ]}
     >
-      <AddProductForm email={session?.user.email} form={form} fileList={fileList} setFileList={setFileList} />
+      <AddProductForm form={form} fileList={fileList} setFileList={setFileList} />
     </Modal>
   );
 };

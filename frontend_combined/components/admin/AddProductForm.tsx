@@ -1,5 +1,5 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { Form, Input, Upload, Button, message, Select, FormInstance } from 'antd';
+import { Form, Input, Upload, Button, message, Select, FormInstance, Modal } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import { useToggle } from '@/context/toggleContext';
@@ -15,6 +15,9 @@ interface AddProductFormProps {
   form: FormInstance;
   fileList: UploadFile<RcFile>[];
   setFileList: Dispatch<SetStateAction<UploadFile<RcFile>[]>>;
+  editMode?: boolean;
+  initialValues?: any;
+  onClose?: () => void;
 }
 
 interface MenuItem {
@@ -22,7 +25,7 @@ interface MenuItem {
   name: string;
 }
 
-const AddProductForm: React.FC<AddProductFormProps> = ({ form, fileList, setFileList }) => {
+const AddProductForm: React.FC<AddProductFormProps> = ({ form, fileList, setFileList, editMode = false, initialValues, onClose }) => {
   const { toggleState } = useToggle();
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
   const { data: session } = useSession();
@@ -43,6 +46,12 @@ const AddProductForm: React.FC<AddProductFormProps> = ({ form, fileList, setFile
     fetchData();
   }, [session]);
 
+  useEffect(() => {
+    if (editMode && initialValues) {
+      form.setFieldsValue(initialValues);
+    }
+  }, [editMode, initialValues, form]);
+
   const handleUploadChange = async (info: UploadChangeParam<UploadFile<RcFile>>) => {
     if (info.file.status === 'done' && info.file.originFileObj) {
       const formData = new FormData();
@@ -54,7 +63,6 @@ const AddProductForm: React.FC<AddProductFormProps> = ({ form, fileList, setFile
             'Content-Type': 'multipart/form-data',
           },
         });
-        console.log('Upload response:', response.data); // Debug log
         const uploadedFileUrl = response.data.url;
         setFileList(info.fileList);
         return uploadedFileUrl;
@@ -78,9 +86,6 @@ const AddProductForm: React.FC<AddProductFormProps> = ({ form, fileList, setFile
         imageUrl = await handleUploadChange(info);
       }
 
-      console.log("imageUrl", imageUrl)
-
-      // Prepare product data with imageUrl
       const productData = {
         ...values,
         restaurant_id: session?.user?.id,
@@ -88,22 +93,22 @@ const AddProductForm: React.FC<AddProductFormProps> = ({ form, fileList, setFile
         price: parseFloat(values.price),
       };
 
-      console.log("Product Data", productData);
+      const apiUrl = editMode ? `${BACKEND_URL}/products/${initialValues.id}` : `${BACKEND_URL}/products`;
+      const method = editMode ? 'put' : 'post';
+      const saveResponse = await axios[method](apiUrl, productData);
 
-      // Send productData to saveProduct API endpoint
-      const saveResponse = await axios.post(`${BACKEND_URL}/products`, productData);
-
-      if (saveResponse.status === 201) {
-        message.success('Product added successfully');
+      if (saveResponse.status === 201 || saveResponse.status === 200) {
+        message.success(editMode ? 'Product updated successfully' : 'Product added successfully');
         form.resetFields();
         setFileList([]);
         toggleState();
+        if (onClose) onClose();
       } else {
-        message.error('Failed to add product');
+        message.error(editMode ? 'Failed to update product' : 'Failed to add product');
       }
     } catch (error) {
-      console.error('Error adding product:', error);
-      message.error('Failed to add product');
+      console.error('Error adding/updating product:', error);
+      message.error(editMode ? 'Failed to update product' : 'Failed to add product');
     }
   };
 
