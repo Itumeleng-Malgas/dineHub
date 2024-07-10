@@ -37,7 +37,7 @@ const RegisterComponent = () => {
                 "role": values.role,
             });
             setLoading(false);
-            if (response.data.Message) {
+            if (response.status == 200) {
                 successNotification("Registered", response.data.Message);
                 router.push('/')
             }

@@ -36,7 +36,7 @@ const RestaurantProfile: React.FC = () => {
   const [restaurantImage, setRestaurantImage] = useState<string | null>(null);
   const [gallery, setGallery] = useState<string[]>([]);
   const { data: session } = useSession();
-  const restaurantId = session?.user?.id;
+  const id = session?.user?.id;
 
   const uploadButton = (
     <button style={{ border: 0, background: 'none' }} type="button">
@@ -47,10 +47,10 @@ const RestaurantProfile: React.FC = () => {
 
   useEffect(() => {
     const fetchRestaurantData = async () => {
-      if (!restaurantId) return;
+      if (!id) return;
 
       try {
-        const response = await axios.get(`${BACKEND_URL}/restaurants?id=${restaurantId}`);
+        const response = await axios.get(`${BACKEND_URL}/restaurants?id=${id}`);
         if (response.data.length > 0) {
           const fetchedData = response.data[0];
           setInitialValues(fetchedData);
@@ -66,7 +66,7 @@ const RestaurantProfile: React.FC = () => {
     };
 
     fetchRestaurantData();
-  }, [form, restaurantId]);
+  }, [form, id]);
 
   const onFinish = async (values: any) => {
     setLoading(true);
@@ -74,12 +74,12 @@ const RestaurantProfile: React.FC = () => {
       ...values,
       restaurantImage,
       gallery,
-      restaurantId,
+      id,
     };
     console.log('Payload:', payload);
     try {
-      const response = await axios.put(`${BACKEND_URL}/restaurants/${restaurantId}`, payload);
-      console.log('Profile updated successfully:', response.data);
+      const response = await axios.put(`${BACKEND_URL}/restaurant`, payload);
+      console.log('Profile updated successfully:', payload);
       message.success('Profile updated successfully');
     } catch (error) {
       console.error('Error updating profile:', error);
@@ -109,7 +109,7 @@ const RestaurantProfile: React.FC = () => {
         if (type === 'restaurantImage') {
           setRestaurantImage(uploadedFileUrl);
         } else {
-          setGallery((prevGallery) => [...prevGallery, uploadedFileUrl]);
+          setGallery((prevGallery) => (prevGallery ? [...prevGallery, uploadedFileUrl] : [uploadedFileUrl]));
         }
       } catch (error) {
         console.error('Error uploading file:', error);
@@ -148,11 +148,25 @@ const RestaurantProfile: React.FC = () => {
                 <Input placeholder="Email" type="email" />
               </Form.Item>
               <Form.Item
-                name="address"
-                label="Address"
-                rules={restaurantProfileValidationRules.address}
+                name="country"
+                label="Country"
+                rules={restaurantProfileValidationRules.country}
               >
-                <Input placeholder="Address" type="text" />
+                <Input placeholder="Country" type="text" />
+              </Form.Item>
+              <Form.Item
+                name="state"
+                label="State"
+                rules={restaurantProfileValidationRules.state}
+              >
+                <Input placeholder="State" type="text" />
+              </Form.Item>
+              <Form.Item
+                name="city"
+                label="City"
+                rules={restaurantProfileValidationRules.city}
+              >
+                <Input placeholder="City" type="text" />
               </Form.Item>
               <Form.Item
                 name="phone"

@@ -54,12 +54,17 @@ export const restaurantProfileValidationRules: ValidationRules = {
         { required: true, message: 'Please input your Email!' },
         { type: 'email', message: 'The input is not valid E-mail!' },
     ],
-    address: [
-        { required: true, message: 'Please input your Address!' },
+    country: [
+        { required: true, message: 'Please input your Country!' },
+    ],
+    state: [
+        { required: true, message: 'Please input your State!' },
+    ],
+    city: [
+        { required: true, message: 'Please input your City!' },
     ],
     phone: [
         { required: true, message: 'Please input your Phone Number!' },
-        { pattern: /^\+\d{1,3}\d{1,14}$/, message: 'Please input a valid phone number in the format +27636994946!' },
     ],
     cuisine: [
         { required: true, message: 'Please select the cuisine type!' },
