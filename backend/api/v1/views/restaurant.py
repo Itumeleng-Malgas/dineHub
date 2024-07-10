@@ -74,7 +74,7 @@ def all_restaurants():
 
 @app_views.route("/restaurant/<id>", strict_slashes=False, methods=['GET'])
 def get_restaurant(id):
-    """route to get all the restaurants"""
+    """route to get restaurant by id"""
     restaurants = [restaurant.to_dict() for restaurant in storage.all(Restaurant).values()]
     for restaurant in restaurants:
         if restaurant['id'] == id:
@@ -83,7 +83,7 @@ def get_restaurant(id):
 
 @app_views.route("/restaurant", strict_slashes=False, methods=['POST'])
 def get_restaurant_via_param():
-    """route to get all the restaurants"""
+    """route to create a restaurant via param recieved from POST"""
     data = request.get_json()
     if data is None or not isinstance(data, dict):
             abort(404, "Not a valid JSON")
@@ -106,11 +106,33 @@ def manage_restaurant(id):
         storage.delete(restaurant)
         storage.save()
         return jsonify({"Message": "Restaurant deleted successfully"}), 200
-    elif request.method == "PUT":
-        """handle update operation on restaurants"""
-        pass
-        
-        
+
+
+
+@app_views.route("/restaurant", strict_slashes=False, methods=["PUT"])
+def update_restaurant_with_id_param():
+    """this method handles update operations on restaurant with id supplied """
+    if request.method == "PUT":
+        """endpoint to handle update of restaurant"""
+        update_data = request.get_json(silent=True)
+        if update_data is None:
+            # The request data is not valid JSON
+            return jsonify({"error": "Invalid JSON sent"}), 400
+        if "id" not in update_data.keys():
+            return jsonify({"Error": f"No {id} object supplied"})
+        id = update_data.get("id", None)
+        restaurant_obj = None
+        restaurant_obj = storage.get(cls=Restaurant, id=id)
+        if restaurant_obj:
+            allowed_attribs = [attrib for attrib in Restaurant().__dir__()]
+            attributes = update_data.keys()
+            for attrib in attributes:
+                cleaned_attrib = attrib.strip()
+                if cleaned_attrib in allowed_attribs:
+                    setattr(restaurant_obj, cleaned_attrib, update_data[attrib])
+            restaurant_obj.save()
+            return jsonify(restaurant_obj.to_dict()), 200
+        return jsonify({"Error": f"No Restaurant object found"}), 404
 
 
 @app_views.route("/search", strict_slashes=False, methods=["POST"])
