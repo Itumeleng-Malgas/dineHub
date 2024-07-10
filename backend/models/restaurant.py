@@ -50,7 +50,7 @@ class Restaurant(User, Base):
         # - Menu, gallery, reviews
         reviews = relationship("Review", backref="restaurant")
         menus = relationship("Menu", backref="restaurant")
-        
+        reservations = relationship("Reservation", backref="restaurant")
     else:
         restaurant_id = ""
         name = ""

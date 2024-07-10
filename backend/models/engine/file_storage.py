@@ -9,7 +9,7 @@ from models.normal_client import Normal_client
 from models.registered_client import Registered_client
 from models.menu import Menu
 from models.orders import Orders
-from models.order_item import Order_item
+from models.order_product import Order_product
 from models.payment import Payment
 from models.reservation import Reservation
 from models.restaurant import Restaurant
@@ -24,7 +24,7 @@ from models.product import Product
 from models.booking import Booking
 
 classes = {"Normal_client": Normal_client, "Client": Client, "Registered_client": Registered_client,
-           "Menu": Menu, "Orders": Orders, "Order_item": Order_item,
+           "Menu": Menu, "Orders": Orders, "Order_product": Order_product,
             "Payment": Payment, "Reservation": Reservation, "Restaurant": Restaurant, "Review": Review,
             "User": User, "Table": Table, "Admin":Admin, "Favorite":Favorite, "Gallery": Gallery, "Image":Image,
             "Product": Product, "Booking": Booking}

@@ -19,8 +19,9 @@ class Product(BaseModel, Base):
         menu_id = Column(String(60), ForeignKey('menus.id'), nullable=False)
         picture = Column(String(60), default="No imageURL")
         # userid = Column(String(60), ForeignKey('users.id'), nullable=False)
-        id = Column(String(60), ForeignKey('restaurants.restaurant_id'), nullable=False, primary_key=True)
-    
+        # id = Column(String(60), ForeignKey('restaurants.restaurant_id'), nullable=False, primary_key=True)
+        # Define the relationship, using the association table
+        # orders = relationship("Order", secondary=order_product, back_populates="products")
     elif storage_type == 'fs':
         name = ""
         description = ""
@@ -29,7 +30,7 @@ class Product(BaseModel, Base):
         menu_id = ""
         picture = ""
         # userid = ""
-        id = ""
+        #id = ""
         
     def __init__(self, *args, **kwargs):
         """constructor for product"""
