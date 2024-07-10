@@ -4,9 +4,26 @@
 from models import storage
 from models.product import Product
 from models.menu import Menu
+from models.restaurant import Restaurant
 from api.v1.views import app_views
 from flask import jsonify, request, abort
 
+@app_views.route('/all_products/<restaurant_id>', strict_slashes=False, methods=['GET'])
+def products_restaurant(restaurant_id):
+    """route to get products in a restaurant based on restaurant_id"""
+    restaurant = storage.get(Restaurant, restaurant_id)
+    if restaurant:
+        all_products = []
+        print(restaurant.menus)
+        for product in storage.all(Product):
+            print(product)
+        for menu in restaurant.menus:
+            if menu:
+                print(menu.id)
+                products_menu = [product.to_dict() for product in storage.all(Product).values() if product.menu_id == menu.id]
+                all_products.extend(products_menu)
+        return jsonify(all_products), 200
+    return jsonify({"Error": f"no menu found with id {restaurant_id}"})
 
 @app_views.route('/products', strict_slashes=False, methods=['GET'])
 def products():
@@ -19,8 +36,6 @@ def products_menu(menu_id):
     """route to get products in a menu based on menu_id"""
     menu = storage.get(Menu, menu_id)
     if menu:
-        # get all products in storage
-        # filter those whose menu_id match supplied menu_id
         products_menu = [product.to_dict() for product in storage.all(Product).values() if product.menu_id == menu_id]
         return jsonify(products_menu)
     return jsonify({"Error": f"no menu found with id {menu_id}"})
