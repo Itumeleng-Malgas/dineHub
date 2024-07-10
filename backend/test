@@ -138,11 +138,11 @@ POST
 /registered_clients
 POST
   data = {
-        "telephone" = 123456789
-        "first_name" = "Johnson"
-        "last_name" = "Mark"
-        "email" = "client@gmail.com"
-        "password" = "1234"
+        "telephone" : 123456789,
+        "first_name" : "Johnson",
+        "last_name" : "Mark",
+        "email" : "client@gmail.com",
+        "password" : "1234"
     }
   
   
@@ -171,6 +171,14 @@ POST
 }
 
 
+/menus
+POST
+{
+  "name":"Breakfast",
+  "restaurant_id":"cfdad306-71c6-4784-8266-a0eb82bd258f",
+  "status":"open"
+}
+
 /products
 POST
 data = {
@@ -178,25 +186,41 @@ data = {
   "description": "Coca Cola",
   "price": 1.0,
   "cuisine": "Coca Cola",
-  "menu_id": "m123",
+  "menu_id": "913538c5-8d52-4d2f-86e0-4f9db8b6fdb1",
   "picture": "http://example.com/images/john.jpg"
 }
 
-/menus
-POST
+/orders
 {
-  "name":"Breakfast",
-  "restaurant_id":"92d90a6c-1bc5-4ccb-8d4e-247687bce7ac",
-  "status":"open"
+    "client_id" : "403a194c-3fed-4c9d-9295-774c849f5425",
+    "status": "Pending"
+}
+/order_product
+{
+  
 }
 
 /reservation
 {
-  "restaurant_id":"aded1f24-35a7-4090-9319-e781c63bdc98",
+  "restaurant_id":"92d90a6c-1bc5-4ccb-8d4e-247687bce7ac",
   "status":"Pending"
 }
 
 /table
+
+POST
+{
+        "table_type" : "VIP",
+        "reservation_id" : "004d288c-807c-4711-87c4-763625ba7fad",
+        "number_of_seats" : 0,
+        "table_number" :  0
+}
+
+/product_order
+{
+  "order_id" : "d19afc77-b126-48cf-ac94-6654e9e8fddf ",
+  "product_id ": ""
+}
 
 
 /bookings
@@ -208,3 +232,4 @@ POST
   "booked_on": "2024-07-09T12:00:00",
   "status": "pending"
 }
+

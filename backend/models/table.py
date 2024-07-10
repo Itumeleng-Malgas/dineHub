@@ -17,7 +17,7 @@ class Table(BaseModel, Base):
         __tablename__ = 'tables'  # Add this line to specify the table name in the database
         # table_id = Column(String(62), primary_key=True)
         # table types: VIP, Standard
-        table_type = Column(String(60))  # Assuming TableType is an Enum
+        table_type = Column(String(60), default="Standard")  # Assuming TableType is an Enum
         reservation_id = Column(String(60), ForeignKey("reservations.id"), nullable=False)
         number_of_seats = Column(Integer, nullable=False, default=0)
         table_number = Column(Integer, default=0)
